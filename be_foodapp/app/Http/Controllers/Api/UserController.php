@@ -139,4 +139,70 @@ class UserController extends Controller
         $success['image']=$user->image;
         return response()->json($success,200);
     }
+
+// Lấy toàn bộ user
+    public function getUsers()
+{
+    $users = User::all();
+    return response()->json($users, 200);
+}
+// Xóa user
+public function deleteUser($id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    $user->delete();
+
+    return response()->json(['message' => 'User deleted successfully'], 200);
+}
+public function updateUser(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'fname' => 'sometimes',
+        'lname' => 'sometimes',
+        'email' => 'sometimes|email|unique:users,email,' . $id,
+        'phone' => 'sometimes',
+        'address' => 'sometimes',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 401);
+    }
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    if ($request->has('fname')) {
+        $user->fname = $request->fname;
+    }
+
+    if ($request->has('lname')) {
+        $user->lname = $request->lname;
+    }
+
+    if ($request->has('email')) {
+        $user->email = $request->email;
+    }
+
+    if ($request->has('phone')) {
+        $user->phone = $request->phone;
+    }
+
+    if ($request->has('address')) {
+        $user->address = $request->address;
+    }
+
+    $user->save();
+
+    return response()->json(['message' => 'User updated successfully'], 200);
+}
+
+
 }
