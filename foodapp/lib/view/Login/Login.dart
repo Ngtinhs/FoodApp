@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/AuthApi.dart';
 import 'package:foodapp/config/apihelper.dart';
+import 'package:foodapp/view/Admin/HomeAdmin/HomeAdmin.dart';
 import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,9 +128,9 @@ class _Login extends State<Login> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.only(
                                   top: 10, bottom: 10, left: 50, right: 50),
-                              primary: Colors.white,
                               backgroundColor: Color.fromRGBO(243, 98, 105, 1),
                               shape: StadiumBorder())),
                     ),
@@ -168,20 +167,28 @@ class _Login extends State<Login> {
         await http.post(Uri.parse('${Apihelper.url_base}/login'), body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      if (jsonResponse != null) {}
-      // print(jsonResponse['token']);
-      pref.setString('token', jsonResponse['token']);
-      pref.setString('name', jsonResponse['name']);
-      pref.setString('phone', jsonResponse['phone']);
-      pref.setString('email', jsonResponse['email']);
-      pref.setString('address', jsonResponse['address']);
-      pref.setInt('id', jsonResponse['id']);
-      pref.setInt('role', jsonResponse['role']); //role = 1 :admin
-      pref.setString('image', jsonResponse['image']); //role = 1 :admin
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => WelcomePage()), (Route<dynamic> route) => false);
+      if (jsonResponse != null) {
+        pref.setString('token', jsonResponse['token']);
+        pref.setString('name', jsonResponse['name']);
+        pref.setString('phone', jsonResponse['phone']);
+        pref.setString('email', jsonResponse['email']);
+        pref.setString('address', jsonResponse['address']);
+        pref.setInt('id', jsonResponse['id']);
+        pref.setInt(
+            'role', jsonResponse['role']); // role = 1: admin, role = 2: user
+        pref.setString('image', jsonResponse['image']);
+
+        if (jsonResponse['role'] == 1) {
+          // Nếu role là 1, chuyển hướng đến trang HomeAdmin
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+        } else {
+          // Nếu role là 2 hoặc bất kỳ giá trị khác, chuyển hướng đến trang Home
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      }
     } else {
-      print("dsa");
       setState(() {});
       _showDialog();
     }
