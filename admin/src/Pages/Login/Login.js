@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from './../../components/Auth/AuthContext';
 
@@ -6,6 +6,16 @@ function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
+
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const accessToken = localStorage.getItem('accessToken');
+        const userData = JSON.parse(localStorage.getItem('userData'));
+
+        if (isAuthenticated && accessToken && userData) {
+            login({ isAuthenticated, accessToken, userData });
+        }
+    }, [login]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -22,10 +32,7 @@ function LoginForm() {
                 localStorage.setItem('isAuthenticated', JSON.stringify(isAuthenticated));
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('userData', JSON.stringify(userData));
-                // Gọi hàm login từ AuthContext để thiết lập thông tin xác thực và isAuthenticated
                 login({ isAuthenticated, accessToken, userData });
-                localStorage.setItem('accessToken', accessToken);
-
             })
             .catch((error) => {
                 console.error(error);
