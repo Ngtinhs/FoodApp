@@ -4,6 +4,8 @@ import 'package:foodapp/view/Admin/Manager/Foods.dart';
 import 'package:foodapp/view/Admin/Manager/ManageOrders.dart';
 import 'package:foodapp/view/Admin/Manager/Users.dart';
 import 'package:foodapp/view/Admin/Manager/Revenue.dart';
+import 'package:foodapp/view/Login/Login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeAdmin extends StatefulWidget {
   @override
@@ -22,11 +24,31 @@ class _HomeAdminState extends State<HomeAdmin> {
     setState(() {});
   }
 
+  Future<void> _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Clear the stored user information
+    await prefs.remove('userId');
+
+    // Navigate to the login page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Login()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HomeAdmin'),
+        automaticallyImplyLeading: false,
+        title: Text('Trang quản trị'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
