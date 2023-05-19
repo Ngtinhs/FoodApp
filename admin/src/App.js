@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom';
 import OrderList from './components/OderFood/OrderList';
 import FoodList from './components/Food/FoodList';
 import UserList from './components/User/UserList';
@@ -7,10 +7,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import CategoriesList from './components/Category/Categories';
 import Revenue from './components/Doanhthu/Doanhthu';
+import { AuthContext } from './components/Auth/AuthContext';
+import LoginForm from './Pages/Login/Login';
 
 const App = () => {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+  };
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
+
   return (
-    <Router>
+
+    <div>
       <ToastContainer />
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,7 +42,7 @@ const App = () => {
                 <NavLink to="/orders" className="nav-link" activeClassName="active">Order Management</NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/Categories" className="nav-link" activeClassName="active">Cate Management</NavLink>
+                <NavLink to="/categories" className="nav-link" activeClassName="active">Category Management</NavLink>
               </li>
             </ul>
           </div>
@@ -49,10 +61,13 @@ const App = () => {
                 <Link to="/orders" className="text-decoration-none text-dark">Order List</Link>
               </li>
               <li className="list-group-item">
-                <Link to="/Categories" className="text-decoration-none text-dark">Cate List</Link>
+                <Link to="/categories" className="text-decoration-none text-dark">Category List</Link>
               </li>
               <li className="list-group-item">
-                <Link to="/Revenue" className="text-decoration-none text-dark">Revenue</Link>
+                <Link to="/revenue" className="text-decoration-none text-dark">Revenue</Link>
+              </li>
+              <li className="list-group-item">
+                <button onClick={handleLogout} className="btn btn-link text-decoration-none text-dark">Logout</button>
               </li>
             </ul>
           </div>
@@ -62,13 +77,13 @@ const App = () => {
               <Route path="/products" element={<FoodList />} />
               <Route path="/users" element={<UserList />} />
               <Route path="/orders" element={<OrderList />} />
-              <Route path="/Categories" element={<CategoriesList />} />
-              <Route path="/Revenue" element={<Revenue />} />
+              <Route path="/categories" element={<CategoriesList />} />
+              <Route path="/revenue" element={<Revenue />} />
             </Routes>
           </div>
         </div>
       </div>
-    </Router>
+    </div>
   );
 };
 

@@ -1,251 +1,248 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Modal } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Form, FormGroup, FormLabel, FormControl } from 'react-bootstrap';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
 
 const FoodList = () => {
     const [foods, setFoods] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [selectedFood, setSelectedFood] = useState(null);
-    const [selectedFoodToDelete, setSelectedFoodToDelete] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false); // Biến mới cho form chỉnh sửa
-    const [showDeleteModal, setShowDeleteModal] = useState(false); // Biến cho form xóa
+    const [selectedFoodId, setSelectedFoodId] = useState(null);
+    const [newFood, setNewFood] = useState({
+        name: '',
+        image: null,
+        price: 0,
+        detail: '',
+        quantity: 0,
+    });
 
     useEffect(() => {
-        fetchFoodList();
-        fetchCategoryList();
+        fetchFoods();
     }, []);
 
-    const fetchFoodList = () => {
-        axios
-            .get('http://localhost:8000/api/food')
-            .then((response) => {
-                setFoods(response.data.food);
-            })
-            .catch((error) => {
-                console.error('Error fetching food list:', error);
-            });
-    };
-
-    const fetchCategoryList = () => {
-        axios
-            .get('http://localhost:8000/api/categories')
-            .then((response) => {
-                const categories = response.data.categories.map((category) => ({
-                    ...category,
-                    slug: category.title.toLowerCase().replace(/ /g, '-'),
-                }));
-                setCategories(categories);
-            })
-            .catch((error) => {
-                console.error('Error fetching category list:', error);
-            });
-    };
-
-    const handleAddFood = () => {
-        setSelectedFood({
-            title: '',
-            description: '',
-            price: '',
-            image: null,
-            quantity: '',
-            categoryId: categories.length > 0 ? categories[0]._id : '',
-        });
-        setIsEditing(false);
-        setShowModal(true);
-    };
-
-    const handleSaveFood = () => {
-        const { title, description, price, image, quantity, categoryId } = selectedFood;
-
-        if (title && description && price && image && categoryId) {
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('price', price);
-            formData.append('image', image);
-            formData.append('quantity', quantity);
-            formData.append('categoryId', categoryId);
-
-            if (isEditing) {
-                // Perform update logic
-                axios
-                    .put(`http://localhost:8000/api/food/${selectedFood._id}`, formData)
-                    .then((response) => {
-                        const updatedFood = response.data;
-                        setFoods(
-                            foods.map((food) => (food._id === selectedFood._id ? updatedFood : food))
-                        );
-                        toast.success('Cập nhật món ăn thành công');
-                        setShowModal(false);
-                    })
-                    .catch((error) => {
-                        console.error('Error updating food:', error);
-                        toast.error('Cập nhật món ăn thất bại');
-                    });
-            } else {
-                // Perform create logic
-                axios
-                    .post('http://localhost:8000/api/food', formData)
-                    .then((response) => {
-                        const newFood = response.data;
-                        setFoods([...foods, newFood]);
-                        toast.success('Thêm món ăn thành công');
-                        setShowModal(false);
-                    })
-                    .catch((error) => {
-                        console.error('Error creating food:', error);
-                        toast.error('Thêm món ăn thất bại');
-                    });
-            }
-        } else {
-            toast.error('Vui lòng nhập đầy đủ thông tin món ăn');
+    const fetchFoods = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/product/tatcasanpham');
+            setFoods(response.data);
+        } catch (error) {
+            console.log(error);
         }
     };
 
-    const handleEditFood = (food) => {
-        setSelectedFood(food);
-        setIsEditing(true);
-        setShowEditModal(true); // Hiển thị form chỉnh sửa
+    const handleInputChange = (e) => {
+        setNewFood({
+            ...newFood,
+            [e.target.name]: e.target.value,
+        });
     };
 
-
-    const handleDeleteFood = (food) => {
-        setSelectedFoodToDelete(food);
-        setShowDeleteModal(true); // Hiển thị form xóa
+    const handleFileChange = (e) => {
+        setNewFood({
+            ...newFood,
+            image: e.target.files[0],
+        });
     };
 
-    const handleConfirmDelete = () => {
-        axios
-            .delete(`http://localhost:8000/api/food/${selectedFoodToDelete._id}`)
-            .then((response) => {
-                setFoods(foods.filter((f) => f._id !== selectedFoodToDelete._id));
-                toast.success('Xóa món ăn thành công');
-                setSelectedFoodToDelete(null);
-                setShowDeleteModal(false); // Ẩn form xóa sau khi xác nhận xóa
-            })
-            .catch((error) => {
-                console.error('Error deleting food:', error);
-                toast.error('Xóa món ăn thất bại');
+    const handleCreateFood = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('name', newFood.name);
+            formData.append('image', newFood.image);
+            formData.append('price', newFood.price);
+            formData.append('detail', newFood.detail);
+            formData.append('quantity', newFood.quantity);
+            await axios.post('http://localhost:8000/api/product/create', formData);
+            setNewFood({
+                name: '',
+                image: null,
+                price: 0,
+                detail: '',
+                quantity: 0,
             });
+            setShowModal(false);
+            fetchFoods(); // Fetch foods after the request is completed
+        } catch (error) {
+            console.log(error);
+        }
     };
+
+    const handleEditFood = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('name', newFood.name);
+            formData.append('image', newFood.image);
+            formData.append('price', newFood.price);
+            formData.append('detail', newFood.detail);
+            formData.append('quantity', newFood.quantity);
+            await axios.put(`http://localhost:8000/api/product/update/${selectedFoodId}`, formData);
+            setNewFood({
+                name: '',
+                image: null,
+                price: 0,
+                detail: '',
+                quantity: 0,
+            });
+            setShowModal(false);
+            setSelectedFoodId(null);
+            const updatedFoods = foods.map((food) => {
+                if (food.id === selectedFoodId) {
+                    return {
+                        ...food,
+                        name: newFood.name,
+                    };
+                }
+                return food;
+            });
+            setFoods(updatedFoods);
+            await axios.put(`http://localhost:8000/api/product/update/${selectedFoodId}`, {
+                name: newFood.name,
+            });
+            fetchFoods(); // Fetch foods after the update is completed
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+    const handleDeleteFood = async (foodId) => {
+        try {
+            await axios.delete(`http://localhost:8000/api/product/delete/${foodId}`);
+            fetchFoods();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleShowModal = (foodId = null) => {
+        const selectedFood = foods.find((food) => food.id === foodId);
+
+        setNewFood({
+            name: selectedFood ? selectedFood.name : '',
+            image: null,
+            price: selectedFood ? selectedFood.price : 0,
+            detail: selectedFood ? selectedFood.detail : '',
+            quantity: selectedFood ? selectedFood.quantity : 0,
+        });
+
+        setSelectedFoodId(foodId);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedFoodId(null);
+    };
+
     return (
         <div>
-            <Button variant="success" onClick={handleAddFood}>
-                Thêm món ăn
-            </Button>
-            <ul className="list-group">
-                {foods.map((food) => (
-                    <li key={food._id} className="list-group-item">
-                        <strong>Title:</strong> {food.title}
-                        <br />
-                        <strong>Description:</strong> {food.description}
-                        <br />
-                        <strong>Image:</strong> {food.image}
-                        <br />
-                        <strong>Price:</strong> {food.price}
-                        <br />
-                        <strong>quantity:</strong> {food.quantity}
-                        <br />
-                        <strong>category:</strong> {food.category.title}
-                        <br />
-                        <br />
-                        <Button variant="warning" onClick={() => handleEditFood(food)}>Sửa</Button> {/* Thêm nút sửa */}
-                        <Button variant="danger" onClick={() => handleDeleteFood(food)}>
-                            Xóa
-                        </Button>
-                    </li>
-                ))}
-            </ul>
+            <h1>Food List</h1>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Button onClick={() => handleShowModal()}>Create Food</Button>
+
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{isEditing ? 'Edit Food' : 'Add Food'}</Modal.Title>
+                    <Modal.Title>{selectedFoodId ? 'Edit Food' : 'Create Food'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <FormGroup>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl
+                    <Form onSubmit={selectedFoodId ? handleEditFood : handleCreateFood}>
+                        <Form.Group>
+                            <Form.Label>Name:</Form.Label>
+                            <Form.Control
                                 type="text"
-                                value={selectedFood ? selectedFood.title : ''}
-                                onChange={(e) => setSelectedFood({ ...selectedFood, title: e.target.value })}
+                                name="name"
+                                value={newFood.name}
+                                onChange={handleInputChange}
                             />
-                        </FormGroup>
-                        <FormGroup>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl
-                                type="text"
-                                value={selectedFood ? selectedFood.description : ''}
-                                onChange={(e) => setSelectedFood({ ...selectedFood, description: e.target.value })}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <FormLabel>Price</FormLabel>
-                            <FormControl
-                                type="text"
-                                value={selectedFood ? selectedFood.price : ''}
-                                onChange={(e) => setSelectedFood({ ...selectedFood, price: e.target.value })}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <FormLabel>Image</FormLabel>
-                            <FormControl
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Image:</Form.Label>
+                            <Form.Control
                                 type="file"
+                                name="image"
                                 accept="image/*"
-                                onChange={(e) => setSelectedFood({ ...selectedFood, image: e.target.files[0] })}
+                                onChange={handleFileChange}
                             />
-                        </FormGroup>
-                        <FormGroup>
-                            <FormLabel>Quantity</FormLabel>
-                            <FormControl
-                                type="text"
-                                value={selectedFood ? selectedFood.quantity : ''}
-                                onChange={(e) => setSelectedFood({ ...selectedFood, quantity: e.target.value })}
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Price:</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="price"
+                                value={newFood.price}
+                                onChange={handleInputChange}
                             />
-                        </FormGroup>
-                        <FormGroup>
-                            <FormLabel>Category</FormLabel>
-                            <FormControl
-                                as="select"
-                                value={selectedFood ? selectedFood.categoryId : ''}
-                                onChange={(e) => setSelectedFood({ ...selectedFood, categoryId: e.target.value })}
-                            >
-                                {categories.map((category) => (
-                                    <option key={category._id} value={category._id}>
-                                        {category.title}
-                                    </option>
-                                ))}
-                            </FormControl>
-                        </FormGroup>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Detail:</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                name="detail"
+                                value={newFood.detail}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Quantity:</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="quantity"
+                                value={newFood.quantity}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            {selectedFoodId ? 'Update Food' : 'Create Food'}
+                        </Button>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => setShowModal(false)}>Cancel</Button>
-                    <Button onClick={handleSaveFood} variant="primary">
-                        Save
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Delete Food</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Are you sure you want to delete this food?</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
-                    <Button onClick={handleConfirmDelete} variant="danger">Delete</Button>
-                </Modal.Footer>
-            </Modal>
-
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Detail</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foods.map((food) => (
+                        <tr key={food.id}>
+                            <td>{food.id}</td>
+                            <td>{food.name}</td>
+                            <td>
+                                <img
+                                    src={`/upload/foods/${food.image}`}
+                                    alt={food.name}
+                                    style={{ width: '100px' }}
+                                />
+                            </td>
+                            <td>{food.price}</td>
+                            <td>{food.detail}</td>
+                            <td>{food.quantity}</td>
+                            <td>
+                                <Button variant="primary" onClick={() => handleShowModal(food.id)}>
+                                    Edit
+                                </Button>
+                                <Button variant="danger" onClick={() => handleDeleteFood(food.id)}>
+                                    Delete
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
         </div>
     );
-}
+};
+
 export default FoodList;

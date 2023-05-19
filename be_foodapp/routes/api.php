@@ -105,6 +105,10 @@ Route::group(['prefix' => 'product'], function () {
 
     // Get products by category ID
     Route::get('/danhmuc/{id}', [\App\Http\Controllers\Api\ProductController::class, 'searchdanhmuc']);
+
+    Route::put('/edit/{id}', [\App\Http\Controllers\Api\ProductController::class, 'edit']);
+    
+    Route::delete('/delete/{id}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
 });
 
 // Routes protected by authentication middleware

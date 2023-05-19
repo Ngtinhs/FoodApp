@@ -78,51 +78,60 @@ class ProductController extends Controller
 
    }
 
-   public function  update(Request $request,$id){
-       $validator = Validator::make($request->all(),[
-           'title'=>'required',
-           'detail'=>'required',
-           'image'=>'required',
-           'price' =>'required',
-           'discount'=>'required',
+   public function edit(Request $request, $id)
+   {
+       $validator = Validator::make($request->all(), [
+           'name' => 'sometimes',
+           'categories_id' => 'sometimes',
+           'price' => 'sometimes',
+           'detail' => 'sometimes',
+           'quantity' => 'sometimes',
        ]);
-       $product = Product::find($id);
-       if (!$request->has('title')&&!$request->has('detail')&& !$request->has('price')&&!$request->has('discount')&& !$request->hasFile('image')){
-           return response()->json(['errors'=>"Khong hop le"],401);
-       }
-       if ($request->has('title')){
-           $product->title = $request->title;
-       }
-       if ($request->has('detail')){
-           $product->detail = $request->detail;
-       }
-       if ($request->has('price')){
-           $product->price = $request->price;
-       }
-       if ($request->has('discount')){
-           $product->discount = $request->discount;
-       }
-       if($request->hasFile('image')){
-           $image = $request->file('image');
-           $name = time().'-'.$image->getClientOriginalName();
-           $path = public_path('upload/products');
-           $image->move($path,$name);
-           if($product->image!="" && file_exists(public_path('upload/products/'.$product->image))){
-               unlink(public_path('upload/products/'.$product->image));
-           }
-           $product->image= $name;
-       }
-       $product->save();
-       return response()->json(['success'=>'Thành công','data'=>$product],200);
 
-   }
-   public function delete($id){
-       $product = Product::find($id);
-       if($product->image!="" && file_exists(public_path('upload/products/'.$product->image))){
-           unlink(public_path('upload/products/'.$product->image));
+       if ($validator->fails()) {
+           return response()->json(['error' => $validator->errors()], 401);
        }
+
+       $product = Product::find($id);
+
+       if (!$product) {
+           return response()->json(['error' => 'Product not found'], 404);
+       }
+
+       $product->name = $request->input('name');
+       $product->categories_id = $request->input('categories_id');
+       $product->price = $request->input('price');
+       $product->detail = $request->input('detail');
+       $product->quantity = $request->input('quantity');
+
+       if ($request->hasFile('image')) {
+           $image = $request->file('image');
+           $name = time() . '-' . $image->getClientOriginalName();
+           $path = public_path('upload/product');
+           $image->move($path, $name);
+           $product->image = $name;
+       }
+
+       $product->save();
+
+       return response()->json($product, 200);
+   }
+
+   public function delete($id)
+   {
+       $product = Product::find($id);
+
+       if (!$product) {
+           return response()->json(['error' => 'Product not found'], 404);
+       }
+
+       if ($product->image != "" && file_exists(public_path('upload/product/' . $product->image))) {
+           unlink(public_path('upload/product/' . $product->image));
+       }
+
        $product->delete();
-       return response()->json(['success'=>'Thành công','data'=>$product],200);
+
+       return response()->json(['success' => 'Product deleted successfully'], 200);
    }
    public function detail($id){
        $product = Product::find($id);
