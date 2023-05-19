@@ -62,6 +62,9 @@ Route::group(['prefix' => 'cart'], function () {
      //Cập nhật status
      Route::put('updatestatus/{id}', [\App\Http\Controllers\ShoppingController::class, 'updateStatus']);
 
+     // Tính tổng doanh thu
+    Route::get('revenue', [\App\Http\Controllers\ShoppingController::class, 'calculateTotalRevenue']);
+
 
 
 });

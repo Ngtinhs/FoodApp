@@ -241,6 +241,11 @@ class ShoppingController extends Controller
     
         return response()->json(['message' => 'Status updated successfully']);
     }
-    
+     // Tính tổng doanh thu
+     public function calculateTotalRevenue()
+     {
+         $totalRevenue = Order::where('status', 2)->sum('total_price');
+         return response()->json(['totalRevenue' => $totalRevenue], 200);
+     }
 
 }

@@ -7,7 +7,7 @@ const Revenue = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/orders/doanhthu')
+        axios.get('http://localhost:8000/api/cart/revenue')
             .then(response => {
                 setTotalRevenue(response.data.totalRevenue);
             })
