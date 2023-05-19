@@ -12,16 +12,28 @@ const FoodList = () => {
         price: 0,
         detail: '',
         quantity: 0,
+        categories_id: 0,
     });
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetchFoods();
+        fetchCategories();
     }, []);
 
     const fetchFoods = async () => {
         try {
             const response = await axios.get('http://localhost:8000/api/product/tatcasanpham');
             setFoods(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/categories');
+            setCategories(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -45,13 +57,13 @@ const FoodList = () => {
         e.preventDefault();
         try {
             const accessToken = localStorage.getItem('accessToken');
-            console.log(`Bearer ${accessToken}`)
             const formData = new FormData();
             formData.append('name', newFood.name);
             formData.append('image', newFood.image);
             formData.append('price', newFood.price);
             formData.append('detail', newFood.detail);
             formData.append('quantity', newFood.quantity);
+            formData.append('categories_id', newFood.categories_id);
             await axios.post('http://localhost:8000/api/product/create', formData, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -63,6 +75,7 @@ const FoodList = () => {
                 price: 0,
                 detail: '',
                 quantity: 0,
+                categories_id: 0,
             });
             setShowModal(false);
             fetchFoods();
@@ -81,8 +94,9 @@ const FoodList = () => {
             formData.append('price', newFood.price);
             formData.append('detail', newFood.detail);
             formData.append('quantity', newFood.quantity);
+            formData.append('categories_id', newFood.categories_id);
             await axios.put(
-                `http://localhost:8000/api/product/update/${selectedFoodId}`,
+                `http://localhost:8000/api/product/edit/${selectedFoodId}`,
                 formData,
                 {
                     headers: {
@@ -96,6 +110,7 @@ const FoodList = () => {
                 price: 0,
                 detail: '',
                 quantity: 0,
+                categories_id: 0,
             });
             setShowModal(false);
             setSelectedFoodId(null);
@@ -103,24 +118,12 @@ const FoodList = () => {
                 if (food.id === selectedFoodId) {
                     return {
                         ...food,
-                        name: newFood.name,
+                        ...newFood,
                     };
                 }
                 return food;
             });
             setFoods(updatedFoods);
-            await axios.put(
-                `http://localhost:8000/api/product/update/${selectedFoodId}`,
-                {
-                    name: newFood.name,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            fetchFoods();
         } catch (error) {
             console.log(error);
         }
@@ -140,35 +143,75 @@ const FoodList = () => {
         }
     };
 
-    const handleShowModal = (foodId = null) => {
-        const selectedFood = foods.find((food) => food.id === foodId);
-
-        setNewFood({
-            name: selectedFood ? selectedFood.name : '',
-            image: null,
-            price: selectedFood ? selectedFood.price : 0,
-            detail: selectedFood ? selectedFood.detail : '',
-            quantity: selectedFood ? selectedFood.quantity : 0,
-        });
-
-        setSelectedFoodId(foodId);
+    const handleOpenModal = (foodId) => {
         setShowModal(true);
+        setSelectedFoodId(foodId);
+        const selectedFood = foods.find((food) => food.id === foodId);
+        setNewFood({
+            name: selectedFood.name,
+            image: null,
+            price: selectedFood.price,
+            detail: selectedFood.detail,
+            quantity: selectedFood.quantity,
+            categories_id: selectedFood.categories_id,
+        });
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedFoodId(null);
+        setNewFood({
+            name: '',
+            image: null,
+            price: 0,
+            detail: '',
+            quantity: 0,
+            categories_id: 0,
+        });
     };
 
     return (
         <div>
-            <h1>Food List</h1>
-
-            <Button onClick={() => handleShowModal()}>Create Food</Button>
+            <Button variant="primary" onClick={() => setShowModal(true)}>
+                Add Food
+            </Button>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Detail</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foods.map((food) => (
+                        <tr key={food.id}>
+                            <td>{food.name}</td>
+                            <td>
+                                <img src={food.image} alt={food.name} width="100" height="100" />
+                            </td>
+                            <td>{food.price}</td>
+                            <td>{food.detail}</td>
+                            <td>{food.quantity}</td>
+                            <td>
+                                <Button variant="primary" onClick={() => handleOpenModal(food.id)}>
+                                    Edit
+                                </Button>
+                                <Button variant="danger" onClick={() => handleDeleteFood(food.id)}>
+                                    Delete
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{selectedFoodId ? 'Edit Food' : 'Create Food'}</Modal.Title>
+                    <Modal.Title>{selectedFoodId ? 'Edit Food' : 'Add Food'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={selectedFoodId ? handleEditFood : handleCreateFood}>
@@ -183,12 +226,7 @@ const FoodList = () => {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Image:</Form.Label>
-                            <Form.Control
-                                type="file"
-                                name="image"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                            />
+                            <Form.Control type="file" onChange={handleFileChange} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Price:</Form.Label>
@@ -203,6 +241,7 @@ const FoodList = () => {
                             <Form.Label>Detail:</Form.Label>
                             <Form.Control
                                 as="textarea"
+                                rows={3}
                                 name="detail"
                                 value={newFood.detail}
                                 onChange={handleInputChange}
@@ -217,57 +256,27 @@ const FoodList = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Category:</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="categories_id"
+                                value={newFood.categories_id}
+                                onChange={handleInputChange}
+                            >
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
                         <Button variant="primary" type="submit">
-                            {selectedFoodId ? 'Update Food' : 'Create Food'}
+                            {selectedFoodId ? 'Save Changes' : 'Create Food'}
                         </Button>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
-
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Price</th>
-                        <th>Detail</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foods.map((food) => (
-                        <tr key={food.id}>
-                            <td>{food.id}</td>
-                            <td>{food.name}</td>
-                            <td>
-                                <img
-                                    src={`/upload/foods/${food.image}`}
-                                    alt={food.name}
-                                    style={{ width: '100px' }}
-                                />
-                            </td>
-                            <td>{food.price}</td>
-                            <td>{food.detail}</td>
-                            <td>{food.quantity}</td>
-                            <td>
-                                <Button variant="primary" onClick={() => handleShowModal(food.id)}>
-                                    Edit
-                                </Button>
-                                <Button variant="danger" onClick={() => handleDeleteFood(food.id)}>
-                                    Delete
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
         </div>
     );
 };
