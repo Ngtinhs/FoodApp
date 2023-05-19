@@ -24,6 +24,8 @@ function LoginForm() {
                 localStorage.setItem('userData', JSON.stringify(userData));
                 // Gọi hàm login từ AuthContext để thiết lập thông tin xác thực và isAuthenticated
                 login({ isAuthenticated, accessToken, userData });
+                localStorage.setItem('accessToken', accessToken);
+
             })
             .catch((error) => {
                 console.error(error);

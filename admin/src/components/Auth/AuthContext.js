@@ -17,6 +17,10 @@ export const AuthProvider = ({ children }) => {
         // Xử lý logic đăng xuất và thiết lập isAuthenticated thành false
         setIsAuthenticated(false);
         setAuthData(null); // Xóa thông tin xác thực
+        // Xóa dữ liệu trong localStorage
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userData');
     };
 
     return (
