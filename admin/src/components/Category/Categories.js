@@ -128,7 +128,6 @@ const CategoriesList = () => {
 
     return (
         <div>
-            <h1>Categories List</h1>
 
             <Button onClick={() => handleShowModal()}>Create Category</Button>
 

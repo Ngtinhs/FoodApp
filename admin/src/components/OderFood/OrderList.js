@@ -80,7 +80,7 @@ const OrderList = () => {
 
     return (
         <div>
-            <h1>Order List</h1>
+            <h1>Danh sách đơn</h1>
             <Table striped bordered hover>
                 <thead>
                     <tr>

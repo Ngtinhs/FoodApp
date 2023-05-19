@@ -94,7 +94,7 @@ const UserList = () => {
 
     return (
         <div>
-            <h1>User List</h1>
+            <h1>Danh sách người dùng</h1>
             <Table>
                 <thead>
                     <tr>
