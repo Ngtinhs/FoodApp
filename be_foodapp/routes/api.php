@@ -58,6 +58,12 @@ Route::group(['prefix' => 'cart'], function () {
 
      // Get all orders
      Route::get('allorders', [\App\Http\Controllers\ShoppingController::class, 'getAllOrders']);
+
+     //Cập nhật status
+     Route::put('updatestatus/{id}', [\App\Http\Controllers\ShoppingController::class, 'updateStatus']);
+
+
+
 });
 
 // List orders

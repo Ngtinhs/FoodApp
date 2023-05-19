@@ -5,63 +5,115 @@ const OrderList = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/orders')
-            .then(response => {
-                // Cập nhật state 'orders' với dữ liệu đơn hàng từ API
-                setOrders(response.data.orders);
-            })
-            .catch(error => {
-                console.error('Error fetching order list:', error);
-            });
+        fetchOrders();
     }, []);
 
-    // Hàm xác nhận xóa đơn hàng
-    const handleDelete = (orderId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this order?");
-        if (confirmDelete) {
-            axios.delete(`http://localhost:8000/api/orders/${orderId}`)
-                .then(response => {
-                    // Xóa đơn hàng khỏi danh sách
-                    const updatedOrders = orders.filter(order => order._id !== orderId);
-                    setOrders(updatedOrders);
-                })
-                .catch(error => {
-                    console.error(`Error deleting order ${orderId}:`, error);
-                });
+    const fetchOrders = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/cart/allorders');
+            setOrders(response.data);
+        } catch (error) {
+            console.log(error);
         }
-    }
+    };
+
+    const handleUpdateStatus = async (orderId, newStatus) => {
+        try {
+            await axios.put(`http://localhost:8000/api/cart/updatestatus/${orderId}`, { status: newStatus });
+            fetchOrders(); // Fetch orders again to update the list
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 0:
+                return 'Đang xử lý';
+            case 1:
+                return 'Đang giao hàng';
+            case 2:
+                return 'Thành công';
+            case 3:
+                return 'Đã hủy';
+            default:
+                return '';
+        }
+    };
+
+    const renderActions = (order) => {
+        const { id, status } = order;
+
+        switch (status) {
+            case 0:
+                return (
+                    <div>
+                        <button onClick={() => handleUpdateStatus(id, 1)}>Giao hàng</button>
+                        <button onClick={() => handleUpdateStatus(id, 3)}>Hủy đơn</button>
+                    </div>
+                );
+            case 1:
+                return (
+                    <div>
+                        <button onClick={() => handleUpdateStatus(id, 2)}>Hoàn thành</button>
+                    </div>
+                );
+            case 2:
+                return (
+                    <div>
+                        <p>Đã hoàn thành</p>
+                        <button>Xem chi tiết</button>
+                    </div>
+                );
+            case 3:
+                return (
+                    <div>
+                        <p>Đơn hàng đã hủy</p>
+                        <button onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</button>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
 
     return (
         <div>
-            <ul className="list-group">
-                {Array.isArray(orders) && orders.length > 0 ? (
-                    orders.map(order => (
-                        <li key={order._id} className="list-group-item">
-                            <strong>Username:</strong> {order.username}<br />
-                            <strong>Address:</strong> {order.address}<br />
-                            <strong>Total:</strong> {order.total}<br />
-                            {/* <strong>Status:</strong> {order.status}<br /> */}
-                            <strong>Details:</strong>
-                            {Array.isArray(order.orderDetails) && order.orderDetails.length > 0 ? (
-                                <ul>
-                                    {order.orderDetails.map(product => (
-                                        <li key={product._id}>
-                                            <strong>{product.title}</strong><br />
-                                            <strong>Description:</strong> {product.description}<br />
-                                            <strong>Price:</strong> {product.price}<br />
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No order details available.</p>
-                            )}
-                            <button onClick={() => handleDelete(order._id)}>Delete Order</button>
-                        </li>
-                    ))
-                ) : (
-                    <p>No orders available.</p>
-                )}
-            </ul>
+            <h1>Order List</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>User ID</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {orders.map((order) => (
+                        <tr key={order.id}>
+                            <td>{order.id}</td>
+                            <td>{order.name}</td>
+                            <td>{order.phone}</td>
+                            <td>{order.address}</td>
+                            <td>{order.total_price}</td>
+                            <td>{getStatusLabel(order.status)}</td>
+                            <td>{order.user_id}</td>
+                            <td>{order.created_at}</td>
+                            <td>{order.updated_at}</td>
+                            <td>{order.note}</td>
+                            <td>{renderActions(order)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

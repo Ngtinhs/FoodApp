@@ -31,13 +31,6 @@ class ShoppingController extends Controller
         return response()->json("giohangrong",404);
     }
 
-    //Get ra tất cả order
-    public function getAllOrders()
-    {
-        $orders = Order::all();
-
-        return response()->json($orders, 200);
-    }
 
 
     public function insert(Request $request){
@@ -212,4 +205,42 @@ class ShoppingController extends Controller
         }
         return response()->json([$order_detai,$total],200);
     }
+    
+    //Get ra tất cả order
+    public function getAllOrders()
+    {
+        $orders = Order::all();
+
+        return response()->json($orders, 200);
+    }
+
+    //updateStatus
+
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::find($id);
+    
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+    
+        $status = $request->input('status');
+    
+        // Kiểm tra giá trị của status và cập nhật trạng thái đơn hàng
+        switch ($status) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                $order->status = $status;
+                $order->save();
+                break;
+            default:
+                return response()->json(['message' => 'Invalid status'], 400);
+        }
+    
+        return response()->json(['message' => 'Status updated successfully']);
+    }
+    
+
 }
