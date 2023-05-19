@@ -44,13 +44,19 @@ const FoodList = () => {
     const handleCreateFood = async (e) => {
         e.preventDefault();
         try {
+            const accessToken = localStorage.getItem('accessToken');
+            console.log(`Bearer ${accessToken}`)
             const formData = new FormData();
             formData.append('name', newFood.name);
             formData.append('image', newFood.image);
             formData.append('price', newFood.price);
             formData.append('detail', newFood.detail);
             formData.append('quantity', newFood.quantity);
-            await axios.post('http://localhost:8000/api/product/create', formData);
+            await axios.post('http://localhost:8000/api/product/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
             setNewFood({
                 name: '',
                 image: null,
@@ -59,7 +65,7 @@ const FoodList = () => {
                 quantity: 0,
             });
             setShowModal(false);
-            fetchFoods(); // Fetch foods after the request is completed
+            fetchFoods();
         } catch (error) {
             console.log(error);
         }
@@ -68,13 +74,22 @@ const FoodList = () => {
     const handleEditFood = async (e) => {
         e.preventDefault();
         try {
+            const accessToken = localStorage.getItem('accessToken');
             const formData = new FormData();
             formData.append('name', newFood.name);
             formData.append('image', newFood.image);
             formData.append('price', newFood.price);
             formData.append('detail', newFood.detail);
             formData.append('quantity', newFood.quantity);
-            await axios.put(`http://localhost:8000/api/product/update/${selectedFoodId}`, formData);
+            await axios.put(
+                `http://localhost:8000/api/product/update/${selectedFoodId}`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
             setNewFood({
                 name: '',
                 image: null,
@@ -94,19 +109,31 @@ const FoodList = () => {
                 return food;
             });
             setFoods(updatedFoods);
-            await axios.put(`http://localhost:8000/api/product/update/${selectedFoodId}`, {
-                name: newFood.name,
-            });
-            fetchFoods(); // Fetch foods after the update is completed
+            await axios.put(
+                `http://localhost:8000/api/product/update/${selectedFoodId}`,
+                {
+                    name: newFood.name,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            fetchFoods();
         } catch (error) {
             console.log(error);
         }
     };
 
-
     const handleDeleteFood = async (foodId) => {
         try {
-            await axios.delete(`http://localhost:8000/api/product/delete/${foodId}`);
+            const accessToken = localStorage.getItem('accessToken');
+            await axios.delete(`http://localhost:8000/api/product/delete/${foodId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
             fetchFoods();
         } catch (error) {
             console.log(error);

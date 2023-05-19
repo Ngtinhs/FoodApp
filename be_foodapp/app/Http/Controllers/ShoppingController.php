@@ -30,6 +30,16 @@ class ShoppingController extends Controller
         }
         return response()->json("giohangrong",404);
     }
+
+    //Get ra tất cả order
+    public function getAllOrders()
+    {
+        $orders = Order::all();
+
+        return response()->json($orders, 200);
+    }
+
+
     public function insert(Request $request){
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',

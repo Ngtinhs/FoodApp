@@ -55,6 +55,9 @@ Route::group(['prefix' => 'cart'], function () {
 
     // Order
     Route::post('/order', [\App\Http\Controllers\ShoppingController::class, 'order']);
+
+     // Get all orders
+     Route::get('allorders', [\App\Http\Controllers\ShoppingController::class, 'getAllOrders']);
 });
 
 // List orders
