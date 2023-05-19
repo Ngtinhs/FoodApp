@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from './../../components/Auth/AuthContext';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 
 function LoginForm() {
     const [email, setEmail] = useState('');
@@ -40,34 +46,37 @@ function LoginForm() {
     };
 
     return (
-        <div>
-            <h1>Trang Đăng nhập</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <br />
-                <br />
-                <label htmlFor="password">Mật khẩu:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <br />
-                <br />
-                <button type="submit">Đăng nhập</button>
-            </form>
-        </div>
+        <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <Row style={{ background: '#f7f7f7', padding: '20px', }}>
+                <Col>
+                    <h1>Trang Đăng nhập</h1>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="email">
+                            <Form.Label>Email:</Form.Label>
+                            <Form.Control
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="password">
+                            <Form.Label>Mật khẩu:</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <br />
+                        <Button variant="primary" type="submit">
+                            Đăng nhập
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
