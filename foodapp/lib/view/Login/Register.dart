@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/view/Home/home.dart';
@@ -297,7 +295,7 @@ class _Register extends State<Register> {
     } else {
       print("dsa");
       setState(() {});
-      _showDialog("Không thành công");
+      _showDialog("Thành công");
     }
   }
 
