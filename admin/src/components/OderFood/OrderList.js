@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
 
 const OrderList = () => {
     const [orders, setOrders] = useState([]);
@@ -48,28 +49,28 @@ const OrderList = () => {
             case 0:
                 return (
                     <div>
-                        <button onClick={() => handleUpdateStatus(id, 1)}>Giao hàng</button>
-                        <button onClick={() => handleUpdateStatus(id, 3)}>Hủy đơn</button>
+                        <Button variant="primary" onClick={() => handleUpdateStatus(id, 1)}>Giao hàng</Button>
+                        <Button variant="danger" onClick={() => handleUpdateStatus(id, 3)}>Hủy đơn</Button>
                     </div>
                 );
             case 1:
                 return (
                     <div>
-                        <button onClick={() => handleUpdateStatus(id, 2)}>Hoàn thành</button>
+                        <Button variant="primary" onClick={() => handleUpdateStatus(id, 2)}>Hoàn thành</Button>
                     </div>
                 );
             case 2:
                 return (
                     <div>
                         <p>Đã hoàn thành</p>
-                        <button>Xem chi tiết</button>
+                        <Button variant="primary">Xem chi tiết</Button>
                     </div>
                 );
             case 3:
                 return (
                     <div>
                         <p>Đơn hàng đã hủy</p>
-                        <button onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</button>
+                        <Button variant="primary" onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</Button>
                     </div>
                 );
             default:
@@ -80,7 +81,7 @@ const OrderList = () => {
     return (
         <div>
             <h1>Order List</h1>
-            <table>
+            <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -113,7 +114,7 @@ const OrderList = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
         </div>
     );
 };
