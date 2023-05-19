@@ -28,6 +28,12 @@ Route::group(['prefix' => 'categories'], function () {
 
     // Get all categories
     Route::get('/', [\App\Http\Controllers\Api\CategoriesController::class, 'index']);
+
+    // Update a category
+    Route::put('update/{id}', [\App\Http\Controllers\Api\CategoriesController::class, 'update']);
+
+    // Delete a category
+    Route::delete('delete/{id}', [\App\Http\Controllers\Api\CategoriesController::class, 'delete']);
 });
 
 // Cart

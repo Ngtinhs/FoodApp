@@ -35,4 +35,42 @@ class CategoriesController extends Controller
         $categories = Categories::all();
         return response()->json($categories,200);
     }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes',
+            'image' => 'sometimes',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+    
+        $category = Categories::findOrFail($id);
+    
+        if ($request->has('name')) {
+            $category->name = $request->name;
+        }
+    
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time() . '-' . $image->getClientOriginalName();
+            $path = public_path('upload/categories');
+            $image->move($path, $name);
+            $category->image = $name;
+        }
+    
+        $category->save();
+    
+        return response()->json($category, 200);
+    }
+    
+    public function delete($id)
+    {
+        $category = Categories::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted successfully'], 200);
+    }
 }
