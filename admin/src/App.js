@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import OrderList from './components/OderFood/OrderList';
 import FoodList from './components/Food/FoodList';
 import UserList from './components/User/UserList';
@@ -10,6 +10,8 @@ import Revenue from './components/Doanhthu/Doanhthu';
 import { AuthContext } from './components/Auth/AuthContext';
 import LoginForm from './Pages/Login/Login';
 import Home from './Pages/Home/Home.js';
+import { FaUserCog } from 'react-icons/fa';
+
 
 const App = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
@@ -27,7 +29,7 @@ const App = () => {
       <ToastContainer />
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <Link to="/" className="navbar-brand">Trang quản trị</Link>
+          <Link to="/" className="navbar-brand">Trang quản trị <FaUserCog /></Link>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
