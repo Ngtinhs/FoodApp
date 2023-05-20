@@ -90,22 +90,22 @@ class _ManageOrdersState extends State<ManageOrders> {
         return Column(
           children: [
             Text('Đã hoàn thành'),
-            TextButton(
-              onPressed: () {
-                // Perform action
-              },
-              child: Text('Xem chi tiết'),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     // Perform action
+            //   },
+            //   child: Text('Xem chi tiết'),
+            // ),
           ],
         );
       case 3:
         return Column(
           children: [
             Text('Đơn hàng đã hủy'),
-            TextButton(
-              onPressed: () => handleUpdateStatus(id, 0),
-              child: Text('Đặt lại'),
-            ),
+            // TextButton(
+            //   onPressed: () => handleUpdateStatus(id, 0),
+            //   child: Text('Đặt lại'),
+            // ),
           ],
         );
       default:

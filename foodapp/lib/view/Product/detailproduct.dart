@@ -244,93 +244,89 @@ class _ProductDetailState extends State<ProductDetail> {
         //   Navigator.pop(context);
         // },),
       ),
-      body: Container(
-          child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          Container(
-            height: 630,
-            child: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                        child: Image.network(
-                            "${Apihelper.image_base}/product/${product.image}")),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        product.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 5),
-                      child: Text(
-                        Apihelper.money(product.price),
-                        style: TextStyle(
-                            fontSize: 24, color: Colors.deepOrangeAccent),
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                        child: Row(
-                          children: [
-                            Text("Danh mục: "),
-                            Text(product.category)
-                          ],
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 15),
-                      child: Text(
-                        "Chi tiết sản phẩm:",
-                        style: TextStyle(fontSize: 22),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(product.detail),
-                    ),
-                  ]),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              color: Colors.white,
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              child: TextButton.icon(
-                icon: Icon(
-                  Icons.add_shopping_cart,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  CartApi.insert(product.id, context);
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(243, 98, 105, 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-                label: Text(
-                  "Thêm vào giỏ",
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Image.network(
+                    "${Apihelper.image_base}/product/${product.image}"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  product.name,
                   style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Raleway',
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
                   ),
                 ),
               ),
-            ),
-          )
-        ],
-      )),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 5),
+                child: Text(
+                  Apihelper.money(product.price),
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.deepOrangeAccent,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
+                child: Row(
+                  children: [
+                    Text("Danh mục món ăn: "),
+                    Text(product.category),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
+                child: Row(
+                  children: [
+                    Text("Chi tiết món ăn: "),
+                    Text(product.detail),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  height: 60,
+                  child: ElevatedButton.icon(
+                    icon: Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      CartApi.insert(product.id, context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromRGBO(243, 98, 105, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                    label: Text(
+                      "Thêm vào giỏ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Raleway',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
