@@ -12,13 +12,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         tabBarTheme: TabBarTheme(
-            labelColor: Color.fromRGBO(243, 98, 105, 1),
+            labelColor: Color.fromRGBO(59, 185, 52, 1),
             // labelStyle: TextStyle(color: Colors.red[800]),
-            // labelColor: Color.fromRGBO(243, 98, 105, 1),
+            // labelColor: Color.fromRGBO(59, 185, 52, 1),
             indicator: UnderlineTabIndicator(
                 // color for indicator (underline)
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(243, 98, 105, 1)))),
+                borderSide: BorderSide(color: Color.fromRGBO(59, 185, 52, 1)))),
         // primaryColor: Colors.blue[800], // outdated and has no effect to Tabbar
         // accentColor: Colors.blue[600] // deprecated,
       ),
@@ -28,4 +27,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-// primaryColor: Color.fromRGBO(243, 98, 105, 1)
+// primaryColor: Color.fromRGBO(59, 185, 52, 1)

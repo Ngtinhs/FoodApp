@@ -203,7 +203,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                              color: Color.fromRGBO(243, 98, 105, 1),
+                              color: Color.fromRGBO(59, 185, 52, 1),
                               width: 1.0),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
@@ -240,7 +240,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
 
         backgroundColor: Colors.white,
-        // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(243, 98, 105, 1),),onPressed: (){
+        // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(59, 185, 52, 1),),onPressed: (){
         //   Navigator.pop(context);
         // },),
       ),
@@ -311,7 +311,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       CartApi.insert(product.id, context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(243, 98, 105, 1),
+                      backgroundColor: Color.fromRGBO(59, 185, 52, 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),

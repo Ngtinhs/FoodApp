@@ -69,7 +69,7 @@ class _Welcome extends State<Welcome> {
                   ],
                 ),
                 decoration:
-                    BoxDecoration(color: Color.fromRGBO(243, 98, 105, 1)),
+                    BoxDecoration(color: Color.fromRGBO(59, 185, 52, 1)),
               )),
         ],
       ),

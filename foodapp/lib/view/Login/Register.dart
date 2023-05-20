@@ -36,7 +36,7 @@ class _Register extends State<Register> {
                   },
                   icon: Icon(
                     Icons.arrow_back_ios,
-                    color: Color.fromRGBO(243, 98, 105, 1),
+                    color: Color.fromRGBO(59, 185, 52, 1),
                   ),
                 ),
               ),
@@ -81,7 +81,7 @@ class _Register extends State<Register> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                    color: Color.fromRGBO(243, 98, 105, 1),
+                                    color: Color.fromRGBO(59, 185, 52, 1),
                                     width: 2.0),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -111,7 +111,7 @@ class _Register extends State<Register> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                    color: Color.fromRGBO(243, 98, 105, 1),
+                                    color: Color.fromRGBO(59, 185, 52, 1),
                                     width: 2.0),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -144,7 +144,7 @@ class _Register extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -175,7 +175,7 @@ class _Register extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -206,7 +206,7 @@ class _Register extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -242,7 +242,7 @@ class _Register extends State<Register> {
                               foregroundColor: Colors.white,
                               padding: EdgeInsets.only(
                                   top: 10, bottom: 10, left: 50, right: 50),
-                              backgroundColor: Color.fromRGBO(243, 98, 105, 1),
+                              backgroundColor: Color.fromRGBO(59, 185, 52, 1),
                               shape: StadiumBorder())),
                     ),
                     TextButton(

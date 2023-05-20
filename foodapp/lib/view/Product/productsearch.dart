@@ -213,7 +213,7 @@ class _SearchProductState extends State<SearchProduct> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                              color: Color.fromRGBO(243, 98, 105, 1),
+                              color: Color.fromRGBO(59, 185, 52, 1),
                               width: 1.0),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
@@ -250,7 +250,7 @@ class _SearchProductState extends State<SearchProduct> {
         ),
 
         backgroundColor: Colors.white,
-        // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(243, 98, 105, 1),),onPressed: (){
+        // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(59, 185, 52, 1),),onPressed: (){
         //   Navigator.pop(context);
         // },),
       ),

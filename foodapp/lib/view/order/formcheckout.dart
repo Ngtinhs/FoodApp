@@ -220,7 +220,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 1.0),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
@@ -257,7 +257,7 @@ class _CheckoutState extends State<Checkout> {
           ),
 
           backgroundColor: Colors.white,
-          // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(243, 98, 105, 1),),onPressed: (){
+          // leading: IconButton(icon:Icon( Icons.arrow_back_ios,color: Color.fromRGBO(59, 185, 52, 1),),onPressed: (){
           //   Navigator.pop(context);
           // },),
         ),
@@ -272,7 +272,7 @@ class _CheckoutState extends State<Checkout> {
                   width: MediaQuery.of(context).size.width,
                   height: 50,
                   decoration:
-                      BoxDecoration(color: Color.fromRGBO(243, 98, 105, 1)),
+                      BoxDecoration(color: Color.fromRGBO(59, 185, 52, 1)),
                   child: Center(
                       child: Text(
                     "TIẾN HÀNH ĐẶT HÀNG",
@@ -344,7 +344,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -375,7 +375,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -405,7 +405,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -435,7 +435,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(243, 98, 105, 1),
+                                color: Color.fromRGBO(59, 185, 52, 1),
                                 width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
