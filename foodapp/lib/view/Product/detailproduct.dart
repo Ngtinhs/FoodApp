@@ -287,7 +287,12 @@ class _ProductDetailState extends State<ProductDetail> {
                 child: Row(
                   children: [
                     Text("Chi tiết món ăn: "),
-                    Text(product.detail),
+                    Flexible(
+                      child: Text(
+                        product.detail,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ),
