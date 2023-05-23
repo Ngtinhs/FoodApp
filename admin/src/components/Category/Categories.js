@@ -175,7 +175,7 @@ const CategoriesList = () => {
                                 <img src={`/upload/categories/${category.image}`} alt={category.name} style={{ width: '100px' }} />
                             </td>
                             <td>
-                                <Button variant="primary" onClick={() => handleShowModal(category.id)}>
+                                <Button variant="info" onClick={() => handleShowModal(category.id)}>
                                     Edit
                                 </Button>
                                 <Button variant="danger" onClick={() => handleDeleteCategory(category.id)}>

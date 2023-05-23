@@ -63,14 +63,14 @@ const OrderList = () => {
                 return (
                     <div>
                         <p>Đã hoàn thành</p>
-                        <Button variant="primary">Xem chi tiết</Button>
+                        {/* <Button variant="primary">Xem chi tiết</Button> */}
                     </div>
                 );
             case 3:
                 return (
                     <div>
                         <p>Đơn hàng đã hủy</p>
-                        <Button variant="primary" onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</Button>
+                        <Button variant="info" onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</Button>
                     </div>
                 );
             default:

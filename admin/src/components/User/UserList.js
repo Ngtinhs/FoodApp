@@ -95,7 +95,7 @@ const UserList = () => {
     return (
         <div>
             <h1>Danh sách người dùng</h1>
-            <Table>
+            <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -115,8 +115,8 @@ const UserList = () => {
                             <td>{user.phone}</td>
                             <td>{user.address}</td>
                             <td>
+                                <Button variant="info" onClick={() => openModal(user)}>Edit</Button>
                                 <Button variant="danger" onClick={() => deleteUser(user.id)}>Delete</Button>
-                                <Button variant="info" onClick={() => openModal(user)}>Update</Button>
                             </td>
                         </tr>
                     ))}
