@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ManageCategory extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _ManageCategoryState extends State<ManageCategory> {
   String updatedImage = '';
   String newCategoryName = '';
   String newCategoryImage = '';
+  String selectedImageName = '';
 
   @override
   void initState() {
@@ -90,11 +92,15 @@ class _ManageCategoryState extends State<ManageCategory> {
         request.fields['name'] = updatedName;
 
         if (updatedImage.isNotEmpty) {
-          final imageFile = await http.MultipartFile.fromPath(
+          final imageBytes = await File(updatedImage).readAsBytes();
+          final imageName =
+              '${DateTime.now().millisecondsSinceEpoch}-image.jpg';
+          final image = http.MultipartFile.fromBytes(
             'image',
-            updatedImage,
+            imageBytes,
+            filename: imageName,
           );
-          request.files.add(imageFile);
+          request.files.add(image);
         }
 
         final response = await request.send();
@@ -131,11 +137,14 @@ class _ManageCategoryState extends State<ManageCategory> {
       request.fields['name'] = newCategoryName;
 
       if (newCategoryImage.isNotEmpty) {
-        final imageFile = await http.MultipartFile.fromPath(
+        final imageBytes = await File(newCategoryImage).readAsBytes();
+        final imageName = '${DateTime.now().millisecondsSinceEpoch}-image.jpg';
+        final image = http.MultipartFile.fromBytes(
           'image',
-          newCategoryImage,
+          imageBytes,
+          filename: imageName,
         );
-        request.files.add(imageFile);
+        request.files.add(image);
       }
 
       final response = await request.send();
@@ -158,11 +167,17 @@ class _ManageCategoryState extends State<ManageCategory> {
 
   void _pickImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
+      final imageFile = File(pickedImage.path);
+      final imageName = '${DateTime.now().millisecondsSinceEpoch}-image.jpg';
+      final newPath = '${imageFile.parent.path}/$imageName';
+
+      final savedImage = await imageFile.copy(newPath);
+
       setState(() {
-        newCategoryImage = pickedImage.path;
+        newCategoryImage = savedImage.path;
       });
     }
   }
@@ -202,18 +217,26 @@ class _ManageCategoryState extends State<ManageCategory> {
                       onTap: () {
                         _pickImage();
                       },
-                      child: Container(
-                        color: Colors.grey[200],
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.file_upload),
-                              SizedBox(width: 8),
-                              Text('Choose Image'),
-                            ],
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.grey[200],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.file_upload),
+                                  SizedBox(width: 8),
+                                  Text('Choose Image'),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 8),
+                          newCategoryImage.isNotEmpty
+                              ? Image(image: FileImage(File(newCategoryImage)))
+                              : Container(), // Hiển thị hình ảnh đã chọn nếu có, ngược lại hiển thị một container trống
+                        ],
                       ),
                     ),
                   ],
@@ -302,18 +325,26 @@ class _ManageCategoryState extends State<ManageCategory> {
                       onTap: () {
                         _pickImage();
                       },
-                      child: Container(
-                        color: Colors.grey[200],
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.file_upload),
-                              SizedBox(width: 8),
-                              Text('Choose Image'),
-                            ],
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.grey[200],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.file_upload),
+                                  SizedBox(width: 8),
+                                  Text('Choose Image'),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 8),
+                          newCategoryImage.isNotEmpty
+                              ? Image(image: FileImage(File(newCategoryImage)))
+                              : Container(), // Hiển thị hình ảnh đã chọn nếu có, ngược lại hiển thị một container trống
+                        ],
                       ),
                     ),
                   ],
