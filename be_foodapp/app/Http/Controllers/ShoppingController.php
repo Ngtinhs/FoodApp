@@ -255,11 +255,29 @@ class ShoppingController extends Controller
 
     foreach ($orders as $order) {
         $date = date('Y-m-d', strtotime($order->created_at));
-        $revenueByDate[$date] = isset($revenueByDate[$date]) ? $revenueByDate[$date] + $order->total_price : $order->total_price;
+
+        // Nếu ngày đã tồn tại trong mảng $revenueByDate, cộng tổng doanh thu vào ngày đó
+        if (array_key_exists($date, $revenueByDate)) {
+            $revenueByDate[$date] += $order->total_price;
+        } else {
+            // Ngược lại, thêm một cặp key-value mới vào mảng $revenueByDate
+            $revenueByDate[$date] = $order->total_price;
+        }
     }
 
-    return response()->json($revenueByDate);
+    // Chuyển đổi mảng $revenueByDate thành mảng các đối tượng JSON
+    $revenueArray = [];
+    foreach ($revenueByDate as $date => $revenue) {
+        $revenueItem = [
+            $date => $revenue
+        ];
+        $revenueArray[] = $revenueItem;
+    }
+
+    return response()->json($revenueArray);
 }
 
+
+     
 }
 

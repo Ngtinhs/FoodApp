@@ -5,6 +5,7 @@ import { Container, Spinner } from 'react-bootstrap';
 const Revenue = () => {
     const [totalRevenue, setTotalRevenue] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [revenueData, setRevenueData] = useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/cart/revenue')
@@ -17,6 +18,14 @@ const Revenue = () => {
             .finally(() => {
                 setIsLoading(false);
             });
+
+        axios.get('http://localhost:8000/api/cart/doanhthungay')
+            .then(response => {
+                setRevenueData(response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }, []);
 
     return (
@@ -27,7 +36,20 @@ const Revenue = () => {
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             ) : (
-                totalRevenue !== null && <h2>{totalRevenue}</h2>
+                <>
+                    {totalRevenue !== null && <h2>{totalRevenue}</h2>}
+                    {revenueData.map((revenueItem, index) => {
+                        const date = Object.keys(revenueItem)[0];
+                        const revenue = revenueItem[date];
+
+                        return (
+                            <div key={index}>
+                                <h3>Tổng doanh thu ngày {date} là {revenue}</h3>
+                                <br />
+                            </div>
+                        );
+                    })}
+                </>
             )}
         </Container>
     );
