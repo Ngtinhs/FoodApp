@@ -261,8 +261,8 @@ const FoodList = () => {
                                 <img src={`/upload/foods/${food.image}`} alt={food.name} style={{ width: '100px' }} />
                             </td>
                             <td>{categories.find(category => category.id === food.category_id)?.name}</td>
-                            <td>
-                                <Button variant="primary" onClick={() => handleShowModal(food.id)}>
+                            <td style={{ width: '150px' }}>
+                                <Button variant="info" onClick={() => handleShowModal(food.id)}>
                                     Edit
                                 </Button>
                                 <Button variant="danger" onClick={() => handleDeleteFood(food.id)}>
