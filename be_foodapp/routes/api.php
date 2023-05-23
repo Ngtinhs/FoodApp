@@ -66,6 +66,10 @@ Route::group(['prefix' => 'cart'], function () {
     Route::get('revenue', [\App\Http\Controllers\ShoppingController::class, 'calculateTotalRevenue']);
 
 
+    Route::get('doanhthungay', [\App\Http\Controllers\ShoppingController::class, 'calculateDailyRevenue']);
+
+
+
 
 });
 

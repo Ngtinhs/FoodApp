@@ -248,4 +248,18 @@ class ShoppingController extends Controller
          return response()->json(['totalRevenue' => $totalRevenue], 200);
      }
 
+     public function calculateDailyRevenue()
+{
+    $orders = Order::where('status', 2)->get();
+    $revenueByDate = [];
+
+    foreach ($orders as $order) {
+        $date = date('Y-m-d', strtotime($order->created_at));
+        $revenueByDate[$date] = isset($revenueByDate[$date]) ? $revenueByDate[$date] + $order->total_price : $order->total_price;
+    }
+
+    return response()->json($revenueByDate);
 }
+
+}
+
