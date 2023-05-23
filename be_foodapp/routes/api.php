@@ -118,11 +118,12 @@ Route::group(['prefix' => 'product'], function () {
 
     // Create a product
     Route::post('/create', [\App\Http\Controllers\Api\ProductController::class, 'create']);
+    Route::put('/update/{id}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
+
 
     // Get products by category ID
     Route::get('/danhmuc/{id}', [\App\Http\Controllers\Api\ProductController::class, 'searchdanhmuc']);
 
-    Route::put('/edit/{id}', [\App\Http\Controllers\Api\ProductController::class, 'edit']);
     
     Route::delete('/delete/{id}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
 });
