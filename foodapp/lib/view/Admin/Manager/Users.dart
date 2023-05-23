@@ -88,7 +88,8 @@ class _ManageUsersState extends State<ManageUsers> {
       try {
         final response = await http.put(
           Uri.parse('http://10.0.2.2:8000/api/users/${selectedUser?['id']}'),
-          body: userData,
+          body: jsonEncode(userData),
+          headers: {'Content-Type': 'application/json'},
         );
         if (response.statusCode == 200) {
           print(jsonDecode(response.body)['message']);
@@ -113,7 +114,22 @@ class _ManageUsersState extends State<ManageUsers> {
     }
   }
 
-  void _showEditDialog(BuildContext context) {
+  void _showEditDialog(BuildContext context, Map<String, dynamic> user) {
+    // Sử dụng dữ liệu của người dùng được chọn
+    setState(() {
+      selectedUser = user;
+      updatedName = user['name'];
+      updatedEmail = user['email'];
+      updatedPhone = user['phone'];
+      updatedAddress = user['address'];
+      showModal = true;
+    });
+
+    final nameController = TextEditingController(text: updatedName);
+    final emailController = TextEditingController(text: updatedEmail);
+    final phoneController = TextEditingController(text: updatedPhone);
+    final addressController = TextEditingController(text: updatedAddress);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -121,52 +137,61 @@ class _ManageUsersState extends State<ManageUsers> {
           title: Text('Edit User'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: TextEditingController(text: updatedName),
-                    onChanged: (value) {
-                      setState(() {
-                        updatedName = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Name'),
-                  ),
-                  TextField(
-                    controller: TextEditingController(text: updatedEmail),
-                    onChanged: (value) {
-                      setState(() {
-                        updatedEmail = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Email'),
-                  ),
-                  TextField(
-                    controller: TextEditingController(text: updatedPhone),
-                    onChanged: (value) {
-                      setState(() {
-                        updatedPhone = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Phone'),
-                  ),
-                  TextField(
-                    controller: TextEditingController(text: updatedAddress),
-                    onChanged: (value) {
-                      setState(() {
-                        updatedAddress = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Address'),
-                  ),
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedName = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Name'),
+                    ),
+                    TextField(
+                      controller: emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedEmail = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Email'),
+                    ),
+                    TextField(
+                      controller: phoneController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedPhone = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Phone'),
+                    ),
+                    TextField(
+                      controller: addressController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedAddress = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Address'),
+                    ),
+                  ],
+                ),
               );
             },
           ),
           actions: [
             TextButton(
               onPressed: () {
+                // Sử dụng giá trị từ các controllers
+                setState(() {
+                  updatedName = nameController.text;
+                  updatedEmail = emailController.text;
+                  updatedPhone = phoneController.text;
+                  updatedAddress = addressController.text;
+                });
                 updateUser();
                 Navigator.of(context).pop();
               },
@@ -214,7 +239,7 @@ class _ManageUsersState extends State<ManageUsers> {
                 ),
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context),
+                  onPressed: () => _showEditDialog(context, user),
                 ),
               ],
             ),
