@@ -83,35 +83,26 @@ class _ManageCategoryState extends State<ManageCategory> {
       };
 
       try {
-        final request = http.MultipartRequest(
-          'PUT',
+        final response = await http.put(
           Uri.parse(
               'http://10.0.2.2:8000/api/categories/update/${selectedCategory?['id']}'),
+          body: jsonEncode(categoryData),
+          headers: {'Content-Type': 'application/json'},
         );
-
-        request.fields['name'] = updatedName;
-
-        if (updatedImage.isNotEmpty) {
-          final imageBytes = await File(updatedImage).readAsBytes();
-          final imageName =
-              '${DateTime.now().millisecondsSinceEpoch}-image.jpg';
-          final image = http.MultipartFile.fromBytes(
-            'image',
-            imageBytes,
-            filename: imageName,
-          );
-          request.files.add(image);
-        }
-
-        final response = await request.send();
-        final responseData = await response.stream.bytesToString();
-
         if (response.statusCode == 200) {
-          print(jsonDecode(responseData)['message']);
-          fetchCategories();
+          print(jsonDecode(response.body)['message']);
+
+          final updatedCategories =
+              categories.map<Map<String, dynamic>>((category) {
+            if (category['id'] == selectedCategory?['id']) {
+              return {...category, ...categoryData};
+            }
+            return category;
+          }).toList();
+
           setState(() {
-            updatedName = '';
-            updatedImage = '';
+            categories = updatedCategories;
+            closeModal();
           });
         } else {
           print('Request failed with status: ${response.statusCode}');
@@ -213,31 +204,14 @@ class _ManageCategoryState extends State<ManageCategory> {
                       },
                       decoration: InputDecoration(labelText: 'Name'),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        _pickImage();
+                    TextField(
+                      controller: imageController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedImage = value;
+                        });
                       },
-                      child: Column(
-                        children: [
-                          Container(
-                            color: Colors.grey[200],
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.file_upload),
-                                  SizedBox(width: 8),
-                                  Text('Choose Image'),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          newCategoryImage.isNotEmpty
-                              ? Image(image: FileImage(File(newCategoryImage)))
-                              : Container(), // Hiển thị hình ảnh đã chọn nếu có, ngược lại hiển thị một container trống
-                        ],
-                      ),
+                      decoration: InputDecoration(labelText: 'Image URL'),
                     ),
                   ],
                 ),
