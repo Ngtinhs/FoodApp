@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 
 class ManageCategory extends StatefulWidget {
   @override
@@ -80,26 +81,31 @@ class _ManageCategoryState extends State<ManageCategory> {
       };
 
       try {
-        final response = await http.put(
+        final request = http.MultipartRequest(
+          'PUT',
           Uri.parse(
               'http://10.0.2.2:8000/api/categories/update/${selectedCategory?['id']}'),
-          body: jsonEncode(categoryData),
-          headers: {'Content-Type': 'application/json'},
         );
+
+        request.fields['name'] = updatedName;
+
+        if (updatedImage.isNotEmpty) {
+          final imageFile = await http.MultipartFile.fromPath(
+            'image',
+            updatedImage,
+          );
+          request.files.add(imageFile);
+        }
+
+        final response = await request.send();
+        final responseData = await response.stream.bytesToString();
+
         if (response.statusCode == 200) {
-          print(jsonDecode(response.body)['message']);
-
-          final updatedCategories =
-              categories.map<Map<String, dynamic>>((category) {
-            if (category['id'] == selectedCategory?['id']) {
-              return {...category, ...categoryData};
-            }
-            return category;
-          }).toList();
-
+          print(jsonDecode(responseData)['message']);
+          fetchCategories();
           setState(() {
-            categories = updatedCategories;
-            closeModal();
+            updatedName = '';
+            updatedImage = '';
           });
         } else {
           print('Request failed with status: ${response.statusCode}');
@@ -117,13 +123,26 @@ class _ManageCategoryState extends State<ManageCategory> {
     };
 
     try {
-      final response = await http.post(
+      final request = http.MultipartRequest(
+        'POST',
         Uri.parse('http://10.0.2.2:8000/api/categories/create'),
-        body: jsonEncode(categoryData),
-        headers: {'Content-Type': 'application/json'},
       );
+
+      request.fields['name'] = newCategoryName;
+
+      if (newCategoryImage.isNotEmpty) {
+        final imageFile = await http.MultipartFile.fromPath(
+          'image',
+          newCategoryImage,
+        );
+        request.files.add(imageFile);
+      }
+
+      final response = await request.send();
+      final responseData = await response.stream.bytesToString();
+
       if (response.statusCode == 200) {
-        print(jsonDecode(response.body)['message']);
+        print(jsonDecode(responseData)['message']);
         fetchCategories();
         setState(() {
           newCategoryName = '';
@@ -134,6 +153,17 @@ class _ManageCategoryState extends State<ManageCategory> {
       }
     } catch (error) {
       print('Error: $error');
+    }
+  }
+
+  void _pickImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        newCategoryImage = pickedImage.path;
+      });
     }
   }
 
@@ -168,14 +198,23 @@ class _ManageCategoryState extends State<ManageCategory> {
                       },
                       decoration: InputDecoration(labelText: 'Name'),
                     ),
-                    TextField(
-                      controller: imageController,
-                      onChanged: (value) {
-                        setState(() {
-                          updatedImage = value;
-                        });
+                    GestureDetector(
+                      onTap: () {
+                        _pickImage();
                       },
-                      decoration: InputDecoration(labelText: 'Image URL'),
+                      child: Container(
+                        color: Colors.grey[200],
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.file_upload),
+                              SizedBox(width: 8),
+                              Text('Choose Image'),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -259,13 +298,23 @@ class _ManageCategoryState extends State<ManageCategory> {
                       },
                       decoration: InputDecoration(labelText: 'Name'),
                     ),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          newCategoryImage = value;
-                        });
+                    GestureDetector(
+                      onTap: () {
+                        _pickImage();
                       },
-                      decoration: InputDecoration(labelText: 'Image URL'),
+                      child: Container(
+                        color: Colors.grey[200],
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.file_upload),
+                              SizedBox(width: 8),
+                              Text('Choose Image'),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
