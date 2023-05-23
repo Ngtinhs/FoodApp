@@ -78,44 +78,40 @@ class ProductController extends Controller
 
    }
 
-   public function edit(Request $request, $id)
-   {
-       $validator = Validator::make($request->all(), [
-           'name' => 'sometimes',
-           'categories_id' => 'sometimes',
-           'price' => 'sometimes',
-           'detail' => 'sometimes',
-           'quantity' => 'sometimes',
-       ]);
+   public function update(Request $request, $id){
+    $validator = Validator::make($request->all(), [
+        'name' => 'sometimes',
+        'categories_id' => 'sometimes',
+        'price' => 'sometimes',
+        'detail' => 'sometimes',
+        'quantity' => 'sometimes',
+    ]);
 
-       if ($validator->fails()) {
-           return response()->json(['error' => $validator->errors()], 401);
-       }
+    if ($validator->fails()){
+        return response()->json(['error' => $validator->errors()], 401);
+    }
 
-       $product = Product::find($id);
+    $input = $request->all();
+    $product = Product::findOrFail($id);
 
-       if (!$product) {
-           return response()->json(['error' => 'Product not found'], 404);
-       }
+    if ($request->hasFile('image')){
+        // Xóa ảnh cũ (nếu có)
+        if (file_exists(public_path('upload/product/' . $product->image))) {
+            unlink(public_path('upload/product/' . $product->image));
+        }
 
-       $product->name = $request->input('name');
-       $product->categories_id = $request->input('categories_id');
-       $product->price = $request->input('price');
-       $product->detail = $request->input('detail');
-       $product->quantity = $request->input('quantity');
+        // Lưu ảnh mới
+        $image = $request->file('image');
+        $name = time() . '-' . $image->getClientOriginalName();
+        $path = public_path('upload/product');
+        $image->move($path, $name);
+        $input['image'] = $name;
+    }
 
-       if ($request->hasFile('image')) {
-           $image = $request->file('image');
-           $name = time() . '-' . $image->getClientOriginalName();
-           $path = public_path('upload/product');
-           $image->move($path, $name);
-           $product->image = $name;
-       }
+    $product->update($input);
 
-       $product->save();
-
-       return response()->json($product, 200);
-   }
+    return response()->json($product, 200);
+}
 
    public function delete($id)
    {
