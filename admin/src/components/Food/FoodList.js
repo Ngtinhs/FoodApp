@@ -81,6 +81,7 @@ const FoodList = () => {
                 image: null,
                 categories_id: '',
             });
+            fetchFoods();
             setShowModal(false);
             // Fetch foods after the request is completed
             axios
@@ -141,6 +142,7 @@ const FoodList = () => {
                 quantity: newFood.quantity,
                 categories_id: newFood.categories_id,
             });
+            fetchFoods();
         } catch (error) {
             console.log(error);
         }
