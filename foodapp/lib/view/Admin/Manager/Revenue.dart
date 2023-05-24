@@ -119,8 +119,9 @@ class _RevenueState extends State<Revenue> {
       appBar: AppBar(
         title: const Text("Quản lý doanh thu"),
       ),
-      body: Container(
-        child: Center(
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -134,7 +135,10 @@ class _RevenueState extends State<Revenue> {
               ),
               const SizedBox(height: 10),
               isLoading
-                  ? const CircularProgressIndicator()
+                  ? Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const CircularProgressIndicator(),
+                    )
                   : Text(
                       '$totalRevenue',
                       style: const TextStyle(
@@ -174,9 +178,12 @@ class _RevenueState extends State<Revenue> {
               const SizedBox(height: 10),
               Expanded(
                 child: filteredData.isNotEmpty
-                    ? charts.BarChart(
-                        chartData,
-                        animate: true,
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: charts.BarChart(
+                          chartData,
+                          animate: true,
+                        ),
                       )
                     : filteredData.isEmpty &&
                             (filterStartDate != null || filterEndDate != null)

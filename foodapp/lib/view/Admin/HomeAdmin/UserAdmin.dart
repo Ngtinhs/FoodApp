@@ -20,21 +20,21 @@ class UserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User'),
+        title: Text('Trang cá nhân'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome to the User screen',
+              'Xin chào !!',
               style: TextStyle(fontSize: 24),
             ),
             ElevatedButton(
               onPressed: () {
                 _logout(context); // Gọi hàm đăng xuất khi nhấn nút
               },
-              child: Text('Logout'),
+              child: Text('Đăng xuất'),
             ),
           ],
         ),

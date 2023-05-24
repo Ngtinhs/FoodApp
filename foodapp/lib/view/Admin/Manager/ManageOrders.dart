@@ -117,31 +117,39 @@ class _ManageOrdersState extends State<ManageOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Orders'),
+        title: Text('Quản lý đơn đặt món'),
       ),
       body: ListView.builder(
         itemCount: orders.length,
         itemBuilder: (ctx, index) {
           final order = orders[index];
-          return ListTile(
-            title: Text('ID: ${order['id']}'),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Phone: ${order['phone']}'),
-                Text('Address: ${order['address']}'),
-                Text('Total Price: ${order['total_price'].toStringAsFixed(2)}'),
-                Text('User ID: ${order['user_id']}'),
-                Text(
-                    'Created At: ${DateTime.parse(order['created_at']).toString()}'),
-                Text(
-                    'Updated At: ${DateTime.parse(order['updated_at']).toString()}'),
-                Text('Note: ${order['note']}'),
-              ],
-            ),
-            trailing: Container(
-              width: 120,
-              child: renderActions(order),
+          return Card(
+            elevation: 2,
+            child: ListTile(
+              title: Text(
+                'Mã đơn: ${order['id']}',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Số điện thoại: ${order['phone']}'),
+                  Text('Địa chỉ: ${order['address']}'),
+                  Text('Tổng tiền: ${order['total_price'].toStringAsFixed(2)}'),
+                  Text('Mã người dùng: ${order['user_id']}'),
+                  Text(
+                    'Ngày tạo: ${DateTime.parse(order['created_at']).toString()}',
+                  ),
+                  Text(
+                    'Cập nhật lần cuối: ${DateTime.parse(order['updated_at']).toString()}',
+                  ),
+                  Text('Ghi chú: ${order['note']}'),
+                ],
+              ),
+              trailing: Container(
+                width: 120,
+                child: renderActions(order),
+              ),
             ),
           );
         },

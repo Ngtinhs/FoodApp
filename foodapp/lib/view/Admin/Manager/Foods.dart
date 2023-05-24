@@ -269,7 +269,7 @@ class _ManageFoodState extends State<ManageFood> {
                           child: Text(category['name']),
                         );
                       }).toList(),
-                      decoration: InputDecoration(labelText: 'Category'),
+                      decoration: InputDecoration(labelText: 'Danh mục'),
                     ),
                     TextField(
                       controller: nameController,
@@ -278,7 +278,7 @@ class _ManageFoodState extends State<ManageFood> {
                           updatedName = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Name'),
+                      decoration: InputDecoration(labelText: 'Tên món ăn'),
                     ),
                     TextField(
                       controller: imageController,
@@ -287,7 +287,7 @@ class _ManageFoodState extends State<ManageFood> {
                           updatedImage = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Image URL'),
+                      decoration: InputDecoration(labelText: 'Hình ảnh'),
                     ),
                     TextField(
                       controller: priceController,
@@ -296,7 +296,7 @@ class _ManageFoodState extends State<ManageFood> {
                           updatedPrice = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Price'),
+                      decoration: InputDecoration(labelText: 'Giá'),
                     ),
                     TextField(
                       controller: detailController,
@@ -305,7 +305,7 @@ class _ManageFoodState extends State<ManageFood> {
                           updatedDetail = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Detail'),
+                      decoration: InputDecoration(labelText: 'Mô tả'),
                     ),
                     TextField(
                       controller: quantityController,
@@ -314,7 +314,7 @@ class _ManageFoodState extends State<ManageFood> {
                           updatedQuantity = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Quantity'),
+                      decoration: InputDecoration(labelText: 'Số lượng'),
                     ),
                   ],
                 ),
@@ -334,14 +334,14 @@ class _ManageFoodState extends State<ManageFood> {
                 updateFood();
                 Navigator.of(context).pop();
               },
-              child: Text('Update'),
+              child: Text('Cập nhật'),
             ),
             TextButton(
               onPressed: () {
                 closeModal();
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Hủy'),
             ),
           ],
         );
@@ -353,36 +353,54 @@ class _ManageFoodState extends State<ManageFood> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Foods'),
+        title: Text('Quản lý món ăn'),
       ),
       body: ListView.builder(
         itemCount: foods.length,
         itemBuilder: (context, index) {
           final food = foods[index];
-          return ListTile(
-            title: Text(food['name']),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Price: ${food['price']}'),
-                Text('Detail: ${food['detail']}'),
-                Text('Quantity: ${food['quantity']}'),
-                Text('Category: ${food['category']}'),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => deleteFood(food['id']),
-                ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () =>
-                      _showEditDialog(context, food, selectedCategory),
-                ),
-              ],
+          return Card(
+            elevation: 2,
+            child: ListTile(
+              title: Text(
+                food['name'],
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Giá: ${food['price']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    'Mô tả: ${food['detail']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    'Số lượng: ${food['quantity']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    'Danh mục: ${food['category']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => deleteFood(food['id']),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () =>
+                        _showEditDialog(context, food, selectedCategory),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -393,7 +411,7 @@ class _ManageFoodState extends State<ManageFood> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Create Food'),
+                title: Text('Tạo món ăn'),
                 content: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -404,7 +422,7 @@ class _ManageFoodState extends State<ManageFood> {
                             newFoodName = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Name'),
+                        decoration: InputDecoration(labelText: 'Tên món'),
                       ),
                       TextField(
                         onChanged: (value) {
@@ -412,7 +430,7 @@ class _ManageFoodState extends State<ManageFood> {
                             newFoodPrice = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Price'),
+                        decoration: InputDecoration(labelText: 'Giá'),
                       ),
                       TextField(
                         onChanged: (value) {
@@ -420,7 +438,7 @@ class _ManageFoodState extends State<ManageFood> {
                             newFoodDetail = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Detail'),
+                        decoration: InputDecoration(labelText: 'Mô tả'),
                       ),
                       TextField(
                         onChanged: (value) {
@@ -428,7 +446,7 @@ class _ManageFoodState extends State<ManageFood> {
                             newFoodQuantity = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Quantity'),
+                        decoration: InputDecoration(labelText: 'Số lượng'),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -444,7 +462,7 @@ class _ManageFoodState extends State<ManageFood> {
                                   children: [
                                     Icon(Icons.file_upload),
                                     SizedBox(width: 8),
-                                    Text('Choose Image'),
+                                    Text('Chọn hình ảnh'),
                                   ],
                                 ),
                               ),
@@ -469,7 +487,7 @@ class _ManageFoodState extends State<ManageFood> {
                       createFood();
                       Navigator.of(context).pop();
                     },
-                    child: Text('Create'),
+                    child: Text('Tạo'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -482,7 +500,7 @@ class _ManageFoodState extends State<ManageFood> {
                       });
                       Navigator.of(context).pop();
                     },
-                    child: Text('Cancel'),
+                    child: Text('Hủy'),
                   ),
                 ],
               );
