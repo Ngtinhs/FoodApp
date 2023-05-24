@@ -48,11 +48,11 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 </div>
 
 <div>
-<img src="https://user-images.githubusercontent.com/76445000/240699349-6b16226f-4969-4882-9f40-33734fa0c991.PNG" width="390px"/>
-<img src="https://user-images.githubusercontent.com/76445000/240699364-1760c20e-651a-4b72-879d-91af862d7648.PNG" width="390px"/>
-<img src="https://user-images.githubusercontent.com/76445000/240699355-9302bc07-b49c-46f4-bd84-5b0f07a64c33.PNG" width="390px"/>
-<img src="https://user-images.githubusercontent.com/76445000/240699375-07d2ea36-e2f0-4ecd-92b7-9628b1134256.PNG" width="390px"/>
-<img src="https://user-images.githubusercontent.com/76445000/240699342-c304fc1d-2c40-4eb7-b907-8a9e4676b4a9.PNG" width="390px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699349-6b16226f-4969-4882-9f40-33734fa0c991.PNG" width="780px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699364-1760c20e-651a-4b72-879d-91af862d7648.PNG" width="780px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699355-9302bc07-b49c-46f4-bd84-5b0f07a64c33.PNG" width="780px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699375-07d2ea36-e2f0-4ecd-92b7-9628b1134256.PNG" width="780px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699342-c304fc1d-2c40-4eb7-b907-8a9e4676b4a9.PNG" width="780px"/>
 </div>
 
 
