@@ -14,8 +14,16 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 - Cập nhật thông tin cá nhân
 - Đánh giá và nhận xét về nhà hàng và món ăn (Sẽ cải tiến)
 <div>
-![dang ki](https://github.com/Ngtinhs/FoodApp/assets/76445000/395c0bd7-a551-4c02-a166-be51cd556fb2)
-
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240694032-395c0bd7-a551-4c02-a166-be51cd556fb2.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240694772-ce2b1da2-5818-46a3-b32a-af6ec604baa6.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695087-ba0ca549-22f5-4400-9628-83684d4cc635.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695092-7e3ed342-6560-4c38-abcf-b646d8a169d5.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695106-22cb8013-defe-4b13-89f0-bbb0e5915e46.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695102-7369bb01-c85f-471a-9c17-3fa53f1742cb.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695080-ac66fcb2-bd52-4c56-8a60-7f1a2a06c43c.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695068-6a4d520f-3113-4189-82c4-593d16ee8aab.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695084-5cdc1ed2-7b4c-4189-b3cb-6e0997539c94.PNG" width="195px"/>
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695096-95db339a-6809-4870-83ad-f851050ca958.PNG" width="195px"/>
 </div>
 
 ### Trang admin
