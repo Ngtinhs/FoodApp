@@ -129,8 +129,7 @@ const CategoriesList = () => {
     return (
         <div>
 
-            <Button onClick={() => handleShowModal()}>Create Category</Button>
-
+            <Button onClick={() => handleShowModal()}>Tạo danh mục món ăn</Button>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedCategoryId ? 'Edit Category' : 'Create Category'}</Modal.Title>
@@ -138,21 +137,22 @@ const CategoriesList = () => {
                 <Modal.Body>
                     <Form onSubmit={selectedCategoryId ? handleEditCategory : handleCreateCategory}>
                         <Form.Group>
-                            <Form.Label>Name:</Form.Label>
+                            <Form.Label>Tên danh mục:</Form.Label>
                             <Form.Control type="text" name="name" value={newCategory.name} onChange={handleInputChange} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Image:</Form.Label>
+                            <Form.Label>Hình ảnh:</Form.Label>
                             <Form.Control type="file" name="image" accept="image/*" onChange={handleFileChange} />
                         </Form.Group>
+                        <br />
                         <Button variant="primary" type="submit">
-                            {selectedCategoryId ? 'Update Category' : 'Create Category'}
+                            {selectedCategoryId ? 'Chỉnh sửa danh mục' : 'Tạo danh mục món ăn'}
                         </Button>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
+                        Hủy
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -160,10 +160,10 @@ const CategoriesList = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Action</th>
+                        <th>Mã danh mục</th>
+                        <th>Tên danh mục</th>
+                        <th>Hình ảnh</th>
+                        <th>Tùy chọn</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,14 +172,15 @@ const CategoriesList = () => {
                             <td>{category.id}</td>
                             <td>{category.name}</td>
                             <td>
-                                <img src={`/upload/categories/${category.image}`} alt={category.name} style={{ width: '100px' }} />
+                                <img src={`http://127.0.0.1:8000/upload/categories/${category.image}`} alt={category.name} style={{ width: '100px' }} />
                             </td>
                             <td>
                                 <Button variant="info" onClick={() => handleShowModal(category.id)}>
-                                    Edit
+                                    Chỉnh sửa
                                 </Button>
+                                <span style={{ marginLeft: '10px' }}></span>
                                 <Button variant="danger" onClick={() => handleDeleteCategory(category.id)}>
-                                    Delete
+                                    Xóa
                                 </Button>
                             </td>
                         </tr>

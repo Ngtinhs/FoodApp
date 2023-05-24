@@ -180,37 +180,37 @@ const FoodList = () => {
 
     return (
         <div>
-            <Button onClick={() => handleShowModal()}>Create Food</Button>
+            <Button onClick={() => handleShowModal()}>Thêm món ăn</Button>
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{selectedFoodId ? 'Edit Food' : 'Create Food'}</Modal.Title>
+                    <Modal.Title>{selectedFoodId ? 'Chỉnh sửa món' : 'Tạo món'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={selectedFoodId ? handleEditFood : handleCreateFood}>
                         <Form.Group>
-                            <Form.Label>Name:</Form.Label>
+                            <Form.Label>Tên món ăn:</Form.Label>
                             <Form.Control type="text" name="name" value={newFood.name} onChange={handleInputChange} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Detail:</Form.Label>
+                            <Form.Label>Mô tả:</Form.Label>
                             <Form.Control type="text" name="detail" value={newFood.detail} onChange={handleInputChange} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Price:</Form.Label>
+                            <Form.Label>Giá:</Form.Label>
                             <Form.Control type="text" name="price" value={newFood.price} onChange={handleInputChange} />
                         </Form.Group>
 
                         <Form.Group>
-                            <Form.Label>Quantity:</Form.Label>
+                            <Form.Label>Số lượng:</Form.Label>
                             <Form.Control type="text" name="quantity" value={newFood.quantity} onChange={handleInputChange} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Image:</Form.Label>
+                            <Form.Label>Hình ảnh:</Form.Label>
                             <Form.Control type="file" name="image" accept="image/*" onChange={handleFileChange} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Category:</Form.Label>
+                            <Form.Label>Danh mục:</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="categories_id"
@@ -224,14 +224,15 @@ const FoodList = () => {
                                 ))}
                             </Form.Control>
                         </Form.Group>
+                        <br />
                         <Button variant="primary" type="submit">
-                            {selectedFoodId ? 'Update Food' : 'Create Food'}
+                            {selectedFoodId ? 'Chỉnh sửa món' : 'Tạo món'}
                         </Button>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
+                        Hủy
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -239,14 +240,14 @@ const FoodList = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Image</th>
-                        <th>Category</th>
-                        <th>Action</th>
+                        <th>Mã món</th>
+                        <th>Tên món</th>
+                        <th>Mô tả</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Hình ảnh</th>
+                        <th>Danh mục</th>
+                        <th>Tùy chọn</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -254,19 +255,20 @@ const FoodList = () => {
                         <tr key={food.id}>
                             <td>{food.id}</td>
                             <td>{food.name}</td>
-                            <td>{food.detail}</td>
+                            <td style={{ width: '450px' }}>{food.detail}</td>
                             <td>{food.price}</td>
                             <td>{food.quantity}</td>
                             <td>
-                                <img src={`/upload/foods/${food.image}`} alt={food.name} style={{ width: '100px' }} />
+                                <img src={`http://127.0.0.1:8000/upload/product/${food.image}`} alt={food.name} style={{ width: '100px' }} />
                             </td>
                             <td>{categories.find(category => category.id === food.category_id)?.name}</td>
-                            <td style={{ width: '150px' }}>
+                            <td style={{ width: '200px' }}>
                                 <Button variant="info" onClick={() => handleShowModal(food.id)}>
-                                    Edit
+                                    Chỉnh sửa
                                 </Button>
+                                <span style={{ marginLeft: '10px' }}></span>
                                 <Button variant="danger" onClick={() => handleDeleteFood(food.id)}>
-                                    Delete
+                                    Xóa
                                 </Button>
                             </td>
                         </tr>
