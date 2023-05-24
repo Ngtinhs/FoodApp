@@ -26,6 +26,8 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/76445000/240695096-95db339a-6809-4870-83ad-f851050ca958.PNG" width="195px"/>
 </div>
 
+
+
 ### Trang admin
 
 - Đăng nhập vào trang admin
@@ -34,6 +36,30 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 - Quản lý đơn hàng và cập nhật trạng thái đơn hàng
 - Quản lý khách hàng
 - Xem thông báo và thông tin thống kê
+
+
+<div>
+<img src="https://user-images.githubusercontent.com/76445000/240698658-e9acfcf6-4a5c-4588-9bb0-1922c49ecd0b.PNG" width="195px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240698675-28a57e41-2ddf-4ff8-8a40-e5326bd984a6.PNG" width="195px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240698684-8b4e748d-68ac-486c-af50-042b95100a50.PNG" width="195px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240698703-cca6c612-375d-474a-855b-086d357719cb.PNG" width="195px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240698715-49d8b337-9ad2-408e-ac14-24da81b8d63b.PNG" width="195px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240698722-600c0cfb-d830-475a-b7e8-72c1063b00e7.PNG" width="195px"/>
+</div>
+
+<div>
+<img src="https://user-images.githubusercontent.com/76445000/240699349-6b16226f-4969-4882-9f40-33734fa0c991.PNG" width="390px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699364-1760c20e-651a-4b72-879d-91af862d7648.PNG" width="390px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699355-9302bc07-b49c-46f4-bd84-5b0f07a64c33.PNG" width="390px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699375-07d2ea36-e2f0-4ecd-92b7-9628b1134256.PNG" width="390px"/>
+<img src="https://user-images.githubusercontent.com/76445000/240699342-c304fc1d-2c40-4eb7-b907-8a9e4676b4a9.PNG" width="390px"/>
+</div>
+
+
+
+
+
+
 
 ## Cài đặt
 
