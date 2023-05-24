@@ -39,11 +39,11 @@ class _MainAdminState extends State<MainAdmin> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Home',
+              label: 'Trang chủ',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'User',
+              label: 'Người dùng',
             ),
           ],
         ),

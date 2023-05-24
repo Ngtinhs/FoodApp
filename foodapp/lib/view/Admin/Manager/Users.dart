@@ -134,7 +134,7 @@ class _ManageUsersState extends State<ManageUsers> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit User'),
+          title: Text('Chỉnh sửa người dùng'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -148,7 +148,7 @@ class _ManageUsersState extends State<ManageUsers> {
                           updatedName = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Name'),
+                      decoration: InputDecoration(labelText: 'Tên'),
                     ),
                     TextField(
                       controller: emailController,
@@ -166,7 +166,7 @@ class _ManageUsersState extends State<ManageUsers> {
                           updatedPhone = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Phone'),
+                      decoration: InputDecoration(labelText: 'Số điện thoại'),
                     ),
                     TextField(
                       controller: addressController,
@@ -175,7 +175,7 @@ class _ManageUsersState extends State<ManageUsers> {
                           updatedAddress = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Address'),
+                      decoration: InputDecoration(labelText: 'Địa chỉ'),
                     ),
                   ],
                 ),
@@ -195,14 +195,14 @@ class _ManageUsersState extends State<ManageUsers> {
                 updateUser();
                 Navigator.of(context).pop();
               },
-              child: Text('Update'),
+              child: Text('Cập nhật'),
             ),
             TextButton(
               onPressed: () {
                 closeModal();
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Hủy'),
             ),
           ],
         );
@@ -214,34 +214,53 @@ class _ManageUsersState extends State<ManageUsers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Users'),
+        title: Text('Quản lý người dùng'),
       ),
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          return ListTile(
-            title: Text(user['name']),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Email: ${user['email']}'),
-                Text('Phone: ${user['phone']}'),
-                Text('Address: ${user['address']}'),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => deleteUser(user['id']),
-                ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, user),
-                ),
-              ],
+          return Card(
+            elevation: 2,
+            child: ListTile(
+              title: Text(
+                user['name'],
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 4),
+                  Text(
+                    'Email: ${user['email']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Số điện thoại: ${user['phone']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Địa chỉ: ${user['address']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => deleteUser(user['id']),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => _showEditDialog(context, user),
+                  ),
+                ],
+              ),
             ),
           );
         },

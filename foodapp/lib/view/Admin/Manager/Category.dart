@@ -188,7 +188,7 @@ class _ManageCategoryState extends State<ManageCategory> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Category'),
+          title: Text('Chỉnh sửa danh mục món ăn'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -202,7 +202,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                           updatedName = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Name'),
+                      decoration: InputDecoration(labelText: 'Tên danh mục'),
                     ),
                     TextField(
                       controller: imageController,
@@ -211,7 +211,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                           updatedImage = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Image URL'),
+                      decoration: InputDecoration(labelText: 'Hình ảnh'),
                     ),
                   ],
                 ),
@@ -228,14 +228,14 @@ class _ManageCategoryState extends State<ManageCategory> {
                 updateCategory();
                 Navigator.of(context).pop();
               },
-              child: Text('Update'),
+              child: Text('Cập nhật'),
             ),
             TextButton(
               onPressed: () {
                 closeModal();
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Hủy'),
             ),
           ],
         );
@@ -247,32 +247,45 @@ class _ManageCategoryState extends State<ManageCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Categories'),
+        title: Text('Quản lý danh mục món ăn'),
       ),
       body: ListView.builder(
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final category = categories[index];
-          return ListTile(
-            title: Text(category['name']),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Image URL: ${category['image']}'),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => deleteCategory(category['id']),
+          return Card(
+            elevation: 2,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Icon(Icons.restaurant_menu, size: 20),
+                // backgroundImage: NetworkImage(category['image']),
+                radius: 20,
+              ),
+              title: Text(
+                category['name'],
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  'Hình ảnh: ${category['image']}',
+                  style: TextStyle(fontSize: 12),
                 ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, category),
-                ),
-              ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => deleteCategory(category['id']),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => _showEditDialog(context, category),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -283,7 +296,7 @@ class _ManageCategoryState extends State<ManageCategory> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Create Category'),
+                title: Text('Tạo danh mục món ăn'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -293,7 +306,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                           newCategoryName = value;
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Name'),
+                      decoration: InputDecoration(labelText: 'Tên danh mục'),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -309,7 +322,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                                 children: [
                                   Icon(Icons.file_upload),
                                   SizedBox(width: 8),
-                                  Text('Choose Image'),
+                                  Text('Vui vòng chọn ảnh'),
                                 ],
                               ),
                             ),
@@ -329,7 +342,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                       createCategory();
                       Navigator.of(context).pop();
                     },
-                    child: Text('Create'),
+                    child: Text('Tạo'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -339,7 +352,7 @@ class _ManageCategoryState extends State<ManageCategory> {
                       });
                       Navigator.of(context).pop();
                     },
-                    child: Text('Cancel'),
+                    child: Text('Hủy'),
                   ),
                 ],
               );
