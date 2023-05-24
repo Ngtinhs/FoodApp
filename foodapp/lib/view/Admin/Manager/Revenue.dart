@@ -119,78 +119,80 @@ class _RevenueState extends State<Revenue> {
       appBar: AppBar(
         title: const Text("Quản lý doanh thu"),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Tổng doanh thu:',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                'Tổng doanh thu:',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            isLoading
-                ? Container(
-                    padding: const EdgeInsets.all(16),
-                    child: const CircularProgressIndicator(),
-                  )
-                : Text(
-                    '$totalRevenue',
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              isLoading
+                  ? Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const CircularProgressIndicator(),
+                    )
+                  : Text(
+                      '$totalRevenue',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              const SizedBox(height: 20),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _selectStartDate(context),
+                    child: Text(
+                      filterStartDate != null
+                          ? 'Ngày bắt đầu: ${filterStartDate!.toString().split(' ')[0]}'
+                          : 'Chọn ngày bắt đầu',
                     ),
                   ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => _selectStartDate(context),
-                  child: Text(
-                    filterStartDate != null
-                        ? 'Ngày bắt đầu: ${filterStartDate!.toString().split(' ')[0]}'
-                        : 'Chọn ngày bắt đầu',
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () => _selectEndDate(context),
+                    child: Text(
+                      filterEndDate != null
+                          ? 'Ngày kết thúc: ${filterEndDate!.toString().split(' ')[0]}'
+                          : 'Chọn ngày kết thúc',
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => _selectEndDate(context),
-                  child: Text(
-                    filterEndDate != null
-                        ? 'Ngày kết thúc: ${filterEndDate!.toString().split(' ')[0]}'
-                        : 'Chọn ngày kết thúc',
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      filterChartData();
+                    },
+                    child: const Text('Lọc'),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    filterChartData();
-                  },
-                  child: const Text('Lọc'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: filteredData.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: charts.BarChart(
-                        chartData,
-                        animate: true,
-                      ),
-                    )
-                  : filteredData.isEmpty &&
-                          (filterStartDate != null || filterEndDate != null)
-                      ? const Text(
-                          'Không có dữ liệu trong khoảng thời gian đã chọn.')
-                      : const SizedBox(),
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: filteredData.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: charts.BarChart(
+                          chartData,
+                          animate: true,
+                        ),
+                      )
+                    : filteredData.isEmpty &&
+                            (filterStartDate != null || filterEndDate != null)
+                        ? const Text(
+                            'Không có dữ liệu trong khoảng thời gian đã chọn.')
+                        : const SizedBox(),
+              ),
+            ],
+          ),
         ),
       ),
     );
