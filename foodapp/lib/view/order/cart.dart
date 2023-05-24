@@ -516,7 +516,7 @@ class _CartListState extends State<CartList> {
                         BoxDecoration(color: Color.fromRGBO(59, 185, 52, 1)),
                     child: Center(
                         child: Text(
-                      "ĐẶT HÀNG",
+                      "ĐẶT MÓN ĂN",
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,

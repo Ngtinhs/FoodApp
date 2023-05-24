@@ -256,7 +256,7 @@ class _OrdersuccessState extends State<Ordersuccess> {
                           width: 250,
                           child: Image.asset("assets/image/petlogo.png")),
                       Text(
-                        "BẠN ĐÃ ĐẶT HÀNG THÀNH CÔNG",
+                        "BẠN ĐÃ ĐẶT MÓN THÀNH CÔNG",
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.red,
@@ -266,7 +266,7 @@ class _OrdersuccessState extends State<Ordersuccess> {
                         height: 30,
                       ),
                       Text(
-                        "Petshop chân thành cảm ơn !",
+                        "TrippetFood chân thành cảm ơn !",
                         style: TextStyle(fontSize: 20, color: Colors.red),
                       )
                     ],
