@@ -84,17 +84,17 @@ const OrderList = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>User ID</th>
-                        <th>Created At</th>
-                        <th>Updated At</th>
-                        <th>Note</th>
-                        <th>Actions</th>
+                        <th>Mã đơn</th>
+                        <th>Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Mã người dùng</th>
+                        <th>Ngày tạo đơn</th>
+                        <th>Lần cuối cập nhật</th>
+                        <th>Ghi chú</th>
+                        <th>Tùy chọn</th>
                     </tr>
                 </thead>
                 <tbody>
