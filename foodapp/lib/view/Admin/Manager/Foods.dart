@@ -12,6 +12,9 @@ class ManageFood extends StatefulWidget {
 class _ManageFoodState extends State<ManageFood> {
   List<Map<String, dynamic>> foods = [];
   Map<String, dynamic>? selectedFood;
+  List<Map<String, dynamic>> categories = [];
+  Map<String, dynamic>? selectedCategory;
+
   bool showModal = false;
   String updatedName = '';
   String updatedImage = '';
@@ -29,6 +32,7 @@ class _ManageFoodState extends State<ManageFood> {
   void initState() {
     super.initState();
     fetchFoods();
+    fetchCategories();
   }
 
   void fetchFoods() async {
@@ -72,6 +76,9 @@ class _ManageFoodState extends State<ManageFood> {
       updatedQuantity =
           food['quantity'].toString(); // Chuyển đổi sang kiểu String
       showModal = true;
+      selectedCategory = categories.firstWhere(
+          (category) => category['id'] == food['categoryId'].toString(),
+          orElse: () => Map<String, dynamic>());
     });
   }
 
@@ -87,6 +94,23 @@ class _ManageFoodState extends State<ManageFood> {
     });
   }
 
+  void fetchCategories() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/categories'));
+      if (response.statusCode == 200) {
+        setState(() {
+          categories =
+              List<Map<String, dynamic>>.from(jsonDecode(response.body));
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
   void updateFood() async {
     if (selectedFood != null) {
       final foodData = {
@@ -95,6 +119,7 @@ class _ManageFoodState extends State<ManageFood> {
         'price': updatedPrice,
         'detail': updatedDetail,
         'quantity': updatedQuantity,
+        'categoryId': selectedCategory?['id'],
       };
 
       try {
@@ -104,6 +129,7 @@ class _ManageFoodState extends State<ManageFood> {
           body: jsonEncode(foodData),
           headers: {'Content-Type': 'application/json'},
         );
+
         if (response.statusCode == 200) {
           print(jsonDecode(response.body)['message']);
 
@@ -129,11 +155,12 @@ class _ManageFoodState extends State<ManageFood> {
 
   void createFood() async {
     final foodData = {
-      'name': newFoodName,
-      'image': newFoodImage,
-      'price': newFoodPrice,
-      'detail': newFoodDetail,
-      'quantity': newFoodQuantity,
+      'name': updatedName,
+      'image': updatedImage,
+      'price': updatedPrice,
+      'detail': updatedDetail,
+      'quantity': updatedQuantity,
+      'categoryId': selectedCategory?['id'],
     };
 
     try {
@@ -196,7 +223,11 @@ class _ManageFoodState extends State<ManageFood> {
     }
   }
 
-  void _showEditDialog(BuildContext context, Map<String, dynamic> food) {
+  void _showEditDialog(
+    BuildContext context,
+    Map<String, dynamic> food,
+    Map<String, dynamic>? selectedCategory,
+  ) {
     setState(() {
       selectedFood = food;
       updatedName = food['name'];
@@ -225,6 +256,21 @@ class _ManageFoodState extends State<ManageFood> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    DropdownButtonFormField<dynamic>(
+                      value: selectedCategory,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedCategory = newValue;
+                        });
+                      },
+                      items: categories.map((category) {
+                        return DropdownMenuItem<dynamic>(
+                          value: category['id'],
+                          child: Text(category['name']),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(labelText: 'Category'),
+                    ),
                     TextField(
                       controller: nameController,
                       onChanged: (value) {
@@ -333,7 +379,8 @@ class _ManageFoodState extends State<ManageFood> {
                 ),
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, food),
+                  onPressed: () =>
+                      _showEditDialog(context, food, selectedCategory),
                 ),
               ],
             ),
