@@ -4,51 +4,18 @@ import 'package:foodapp/view/Admin/Manager/Foods.dart';
 import 'package:foodapp/view/Admin/Manager/ManageOrders.dart';
 import 'package:foodapp/view/Admin/Manager/Users.dart';
 import 'package:foodapp/view/Admin/Manager/Revenue.dart';
-import 'package:foodapp/view/Login/Login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeAdmin extends StatefulWidget {
-  @override
-  _HomeAdminState createState() => _HomeAdminState();
-}
-
-class _HomeAdminState extends State<HomeAdmin> {
+class HomeScreen extends StatelessWidget {
   Future<void> _refreshData() async {
-    // Do something to refresh the data
-    // For example, fetch new data from an API
-
-    // Simulate a delay for demonstration purposes
-    await Future.delayed(Duration(seconds: 2));
-
-    // After refreshing the data, call setState() to rebuild the UI
-    setState(() {});
-  }
-
-  Future<void> _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Clear the stored user information
-    await prefs.remove('userId');
-
-    // Navigate to the login page
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => Login()),
-    );
+    // Thực hiện logic làm mới dữ liệu ở đây
+    // Ví dụ: gọi API để cập nhật dữ liệu mới
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('Trang quản trị'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: _logout,
-          ),
-        ],
+        title: Text('Home'),
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
