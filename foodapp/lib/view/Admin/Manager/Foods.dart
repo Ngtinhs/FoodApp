@@ -15,12 +15,15 @@ class _ManageFoodState extends State<ManageFood> {
   bool showModal = false;
   String updatedName = '';
   String updatedImage = '';
+  String updatedPrice = '';
+  String updatedDetail = '';
+  String updatedQuantity = '';
   String newFoodName = '';
   String newFoodImage = '';
-  String newFoodDetail = '';
   String newFoodPrice = '';
+  String newFoodDetail = '';
   String newFoodQuantity = '';
-  String newFoodCategoryId = '';
+  String selectedImageName = '';
 
   @override
   void initState() {
@@ -64,6 +67,10 @@ class _ManageFoodState extends State<ManageFood> {
       selectedFood = food;
       updatedName = food['name'];
       updatedImage = food['image'];
+      updatedPrice = food['price'].toString(); // Chuyển đổi sang kiểu String
+      updatedDetail = food['detail'];
+      updatedQuantity =
+          food['quantity'].toString(); // Chuyển đổi sang kiểu String
       showModal = true;
     });
   }
@@ -73,6 +80,9 @@ class _ManageFoodState extends State<ManageFood> {
       selectedFood = null;
       updatedName = '';
       updatedImage = '';
+      updatedPrice = '';
+      updatedDetail = '';
+      updatedQuantity = '';
       showModal = false;
     });
   }
@@ -82,10 +92,9 @@ class _ManageFoodState extends State<ManageFood> {
       final foodData = {
         'name': updatedName,
         'image': updatedImage,
-        'detail': newFoodDetail,
-        'price': newFoodPrice,
-        'quantity': newFoodQuantity,
-        'category_id': newFoodCategoryId,
+        'price': updatedPrice,
+        'detail': updatedDetail,
+        'quantity': updatedQuantity,
       };
 
       try {
@@ -122,10 +131,9 @@ class _ManageFoodState extends State<ManageFood> {
     final foodData = {
       'name': newFoodName,
       'image': newFoodImage,
-      'detail': newFoodDetail,
       'price': newFoodPrice,
+      'detail': newFoodDetail,
       'quantity': newFoodQuantity,
-      'category_id': newFoodCategoryId,
     };
 
     try {
@@ -135,10 +143,9 @@ class _ManageFoodState extends State<ManageFood> {
       );
 
       request.fields['name'] = newFoodName;
-      request.fields['detail'] = newFoodDetail;
       request.fields['price'] = newFoodPrice;
+      request.fields['detail'] = newFoodDetail;
       request.fields['quantity'] = newFoodQuantity;
-      request.fields['category_id'] = newFoodCategoryId;
 
       if (newFoodImage.isNotEmpty) {
         final imageBytes = await File(newFoodImage).readAsBytes();
@@ -160,10 +167,9 @@ class _ManageFoodState extends State<ManageFood> {
         setState(() {
           newFoodName = '';
           newFoodImage = '';
-          newFoodDetail = '';
           newFoodPrice = '';
+          newFoodDetail = '';
           newFoodQuantity = '';
-          newFoodCategoryId = '';
         });
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -195,15 +201,18 @@ class _ManageFoodState extends State<ManageFood> {
       selectedFood = food;
       updatedName = food['name'];
       updatedImage = food['image'];
+      updatedPrice = food['price'].toString(); // Chuyển đổi sang kiểu String
+      updatedDetail = food['detail'];
+      updatedQuantity =
+          food['quantity'].toString(); // Chuyển đổi sang kiểu String
       showModal = true;
     });
 
     final nameController = TextEditingController(text: updatedName);
     final imageController = TextEditingController(text: updatedImage);
-    final detailController = TextEditingController(text: newFoodDetail);
-    final priceController = TextEditingController(text: newFoodPrice);
-    final quantityController = TextEditingController(text: newFoodQuantity);
-    final categoryIdController = TextEditingController(text: newFoodCategoryId);
+    final priceController = TextEditingController(text: updatedPrice);
+    final detailController = TextEditingController(text: updatedDetail);
+    final quantityController = TextEditingController(text: updatedQuantity);
 
     showDialog(
       context: context,
@@ -235,40 +244,31 @@ class _ManageFoodState extends State<ManageFood> {
                       decoration: InputDecoration(labelText: 'Image URL'),
                     ),
                     TextField(
-                      controller: detailController,
-                      onChanged: (value) {
-                        setState(() {
-                          newFoodDetail = value;
-                        });
-                      },
-                      decoration: InputDecoration(labelText: 'Detail'),
-                    ),
-                    TextField(
                       controller: priceController,
                       onChanged: (value) {
                         setState(() {
-                          newFoodPrice = value;
+                          updatedPrice = value;
                         });
                       },
                       decoration: InputDecoration(labelText: 'Price'),
                     ),
                     TextField(
+                      controller: detailController,
+                      onChanged: (value) {
+                        setState(() {
+                          updatedDetail = value;
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Detail'),
+                    ),
+                    TextField(
                       controller: quantityController,
                       onChanged: (value) {
                         setState(() {
-                          newFoodQuantity = value;
+                          updatedQuantity = value;
                         });
                       },
                       decoration: InputDecoration(labelText: 'Quantity'),
-                    ),
-                    TextField(
-                      controller: categoryIdController,
-                      onChanged: (value) {
-                        setState(() {
-                          newFoodCategoryId = value;
-                        });
-                      },
-                      decoration: InputDecoration(labelText: 'Category ID'),
                     ),
                   ],
                 ),
@@ -281,10 +281,9 @@ class _ManageFoodState extends State<ManageFood> {
                 setState(() {
                   updatedName = nameController.text;
                   updatedImage = imageController.text;
-                  newFoodDetail = detailController.text;
-                  newFoodPrice = priceController.text;
-                  newFoodQuantity = quantityController.text;
-                  newFoodCategoryId = categoryIdController.text;
+                  updatedPrice = priceController.text;
+                  updatedDetail = detailController.text;
+                  updatedQuantity = quantityController.text;
                 });
                 updateFood();
                 Navigator.of(context).pop();
@@ -319,11 +318,10 @@ class _ManageFoodState extends State<ManageFood> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Image URL: ${food['image']}'),
-                Text('Detail: ${food['detail']}'),
                 Text('Price: ${food['price']}'),
+                Text('Detail: ${food['detail']}'),
                 Text('Quantity: ${food['quantity']}'),
-                Text('Category ID: ${food['category_id']}'),
+                Text('Category: ${food['category']}'),
               ],
             ),
             trailing: Row(
@@ -364,18 +362,18 @@ class _ManageFoodState extends State<ManageFood> {
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            newFoodDetail = value;
-                          });
-                        },
-                        decoration: InputDecoration(labelText: 'Detail'),
-                      ),
-                      TextField(
-                        onChanged: (value) {
-                          setState(() {
                             newFoodPrice = value;
                           });
                         },
                         decoration: InputDecoration(labelText: 'Price'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            newFoodDetail = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Detail'),
                       ),
                       TextField(
                         onChanged: (value) {
@@ -385,35 +383,36 @@ class _ManageFoodState extends State<ManageFood> {
                         },
                         decoration: InputDecoration(labelText: 'Quantity'),
                       ),
-                      TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            newFoodCategoryId = value;
-                          });
-                        },
-                        decoration: InputDecoration(labelText: 'Category ID'),
-                      ),
                       GestureDetector(
                         onTap: () {
                           _pickImage();
                         },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 16),
-                          child: Text(
-                            'Select Image',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        child: Column(
+                          children: [
+                            Container(
+                              color: Colors.grey[200],
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.file_upload),
+                                    SizedBox(width: 8),
+                                    Text('Choose Image'),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(height: 8),
+                            newFoodImage.isNotEmpty
+                                ? Image.file(
+                                    File(newFoodImage),
+                                    width: 150,
+                                    height: 150,
+                                  )
+                                : Container(),
+                          ],
                         ),
                       ),
-                      if (newFoodImage.isNotEmpty)
-                        Container(
-                          margin: EdgeInsets.only(top: 16),
-                          child: Image.file(File(newFoodImage)),
-                        ),
                     ],
                   ),
                 ),
@@ -430,10 +429,9 @@ class _ManageFoodState extends State<ManageFood> {
                       setState(() {
                         newFoodName = '';
                         newFoodImage = '';
-                        newFoodDetail = '';
                         newFoodPrice = '';
+                        newFoodDetail = '';
                         newFoodQuantity = '';
-                        newFoodCategoryId = '';
                       });
                       Navigator.of(context).pop();
                     },
