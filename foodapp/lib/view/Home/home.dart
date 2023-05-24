@@ -306,7 +306,7 @@ class _Home extends State<Home> {
             body: TabBarView(children: [
               Container(
                 width: 360,
-                height: 580,
+                // height: 580,
                 child: SingleChildScrollView(
                     // physics: ScrollPhysics(),
                     child: ConstrainedBox(
@@ -318,7 +318,7 @@ class _Home extends State<Home> {
                       Padding(
                         padding: const EdgeInsets.only(top: 15, bottom: 10),
                         child: Text(
-                          "DANH MỤC",
+                          "DANH MỤC MÓN ĂN",
                           style: TextStyle(
                               color: Color.fromRGBO(227, 67, 67, 1.0),
                               fontSize: 15),
@@ -326,178 +326,6 @@ class _Home extends State<Home> {
                       ),
                       Container(
                           width: 360, height: 380, child: buildFutureBuilder()),
-                      SizedBox(
-                        height: 250,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 0),
-                        width: 360,
-                        height: 650,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0),
-                              child: Text(
-                                "SẢN PHẨM MỚI",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(227, 67, 67, 1.0),
-                                    fontSize: 15),
-                              ),
-                            ),
-                            Container(
-                                width: 360,
-                                height: 540,
-                                child: FutureBuilder(
-                                  future: sanphammoi,
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
-                                    if (snapshot.hasData) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                        case ConnectionState.waiting:
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Text("Error Data");
-                                          } else {
-                                            List<Product>? productnew =
-                                                snapshot.data;
-                                            return RefreshIndicator(
-                                                child: ListView.builder(
-                                                    itemCount:
-                                                        productnew!.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            index) {
-                                                      return InkWell(
-                                                        child: Container(
-                                                          padding:
-                                                              EdgeInsets.all(5),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            // boxShadow: [
-                                                            //   BoxShadow(
-                                                            //       offset: const Offset(0.5,0.1),
-                                                            //       blurRadius: 0.5,
-                                                            //       spreadRadius: 1.0,
-                                                            //       color: Colors.grey
-                                                            //   ),
-                                                            // ],
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    241,
-                                                                    241,
-                                                                    241,
-                                                                    1.0),
-                                                            // borderRadius: BorderRadius.all(Radius.circular(20))
-                                                          ),
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  top: 5,
-                                                                  bottom: 15),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Container(
-                                                                width: 100,
-                                                                child: Image
-                                                                    .network(
-                                                                        "${Apihelper.image_base}/product/${productnew[index].image}"),
-                                                              ),
-                                                              Column(
-                                                                // mainAxisAlignment: MainAxisAlignment.start,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          top:
-                                                                              15,
-                                                                          bottom:
-                                                                              15),
-                                                                      padding: EdgeInsets.only(
-                                                                          left:
-                                                                              5),
-                                                                      width:
-                                                                          250,
-                                                                      child:
-                                                                          Text(
-                                                                        productnew[index]
-                                                                            .name,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.w700),
-                                                                      )),
-                                                                  Container(
-                                                                    padding: EdgeInsets
-                                                                        .only(
-                                                                            left:
-                                                                                5),
-                                                                    child: Text(
-                                                                      Apihelper
-                                                                          .money(
-                                                                        productnew[index]
-                                                                            .price,
-                                                                      ),
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.deepOrange),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ProductDetail(
-                                                                            productnew[index],
-                                                                          )));
-                                                        },
-                                                      );
-                                                    }),
-                                                onRefresh: refreshCate);
-                                          }
-                                      }
-                                    } else {
-                                      return Center(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            CircularProgressIndicator(),
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                refreshCate();
-                                              },
-                                              child: Text("Refresh"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ))
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 )),
@@ -507,7 +335,7 @@ class _Home extends State<Home> {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(7),
-                      child: Text("SẢN PHẨM BÁN CHẠY",
+                      child: Text("MÓN ĂN BÁN CHẠY",
                           style: TextStyle(
                               color: Color.fromRGBO(227, 67, 67, 1.0),
                               fontSize: 15,
@@ -629,7 +457,7 @@ class _Home extends State<Home> {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(7),
-                      child: Text("TẤT CẢ SẢN PHẨM",
+                      child: Text("TẤT CẢ MÓN ĂN",
                           style: TextStyle(
                               color: Color.fromRGBO(227, 67, 67, 1.0),
                               fontSize: 15,

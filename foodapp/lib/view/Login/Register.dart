@@ -304,7 +304,7 @@ class _Register extends State<Register> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text('Failed'),
+            title: new Text('Thành công'),
             content: new Text('$messa'),
             actions: <Widget>[
               new ElevatedButton(
