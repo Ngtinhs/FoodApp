@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:foodapp/api/CartApi.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
@@ -7,7 +6,6 @@ import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/Product/productsearch.dart';
 import 'package:foodapp/view/User/Infomation.dart';
-import 'package:foodapp/view/order/ordersuccess.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cart.dart';

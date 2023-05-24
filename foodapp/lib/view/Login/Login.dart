@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/AuthApi.dart';
 import 'package:foodapp/config/apihelper.dart';
-import 'package:foodapp/view/Admin/HomeAdmin/HomeAdmin.dart';
+import 'package:foodapp/view/Admin/HomeAdmin/MainAdmin.dart';
 import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -181,7 +181,7 @@ class _Login extends State<Login> {
         if (jsonResponse['role'] == 1) {
           // Nếu role là 1, chuyển hướng đến trang HomeAdmin
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+              context, MaterialPageRoute(builder: (context) => MainAdmin()));
         } else {
           // Nếu role là 2 hoặc bất kỳ giá trị khác, chuyển hướng đến trang Home
           Navigator.push(
