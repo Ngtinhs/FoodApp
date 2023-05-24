@@ -13,6 +13,10 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 - Theo dõi đơn hàng và cập nhật trạng thái đơn hàng
 - Cập nhật thông tin cá nhân
 - Đánh giá và nhận xét về nhà hàng và món ăn (Sẽ cải tiến)
+<div>
+![dang ki](https://github.com/Ngtinhs/FoodApp/assets/76445000/395c0bd7-a551-4c02-a166-be51cd556fb2)
+
+</div>
 
 ### Trang admin
 
