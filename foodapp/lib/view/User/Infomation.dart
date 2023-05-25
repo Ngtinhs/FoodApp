@@ -78,14 +78,6 @@ class _InformationState extends State<Information> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.blue, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
-                  ),
-                ],
               ),
               width: 150,
               height: 150,
@@ -99,149 +91,89 @@ class _InformationState extends State<Information> {
           ),
           SizedBox(height: 40),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
             child: Text(
               "Họ tên:",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: Offset(0, 2),
-                    ),
-                  ]),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               "$name",
-              style: TextStyle(fontSize: 20, shadows: [
-                Shadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0, 2),
-                ),
-              ]),
+              style: TextStyle(fontSize: 20),
             ),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
             child: Text(
               "Số điện thoại:",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: Offset(0, 2),
-                    ),
-                  ]),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               (phone != null) ? "$phone" : "",
-              style: TextStyle(fontSize: 20, shadows: [
-                Shadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0, 2),
-                ),
-              ]),
+              style: TextStyle(fontSize: 20),
             ),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
             child: Text(
               "Email:",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: Offset(0, 2),
-                    ),
-                  ]),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               (email != null) ? "$email" : "",
-              style: TextStyle(fontSize: 20, shadows: [
-                Shadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0, 2),
-                ),
-              ]),
+              style: TextStyle(fontSize: 20),
             ),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
             child: Text(
               "Địa chỉ:",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: Offset(0, 2),
-                    ),
-                  ]),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               (address != null) ? "$address" : "",
-              style: TextStyle(fontSize: 20, shadows: [
-                Shadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0, 2),
-                ),
-              ]),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           SizedBox(height: 40),
           Center(
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Changinfo(),
-                  ),
-                );
-              },
-              child: Text(
-                "CẬP NHẬT THÔNG TIN",
-                style: TextStyle(fontSize: 18, shadows: [
-                  Shadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    offset: Offset(0, 2),
-                  ),
-                ]),
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Changinfo(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "CẬP NHẬT THÔNG TIN",
+                  style: TextStyle(fontSize: 18),
                 ),
-                shadowColor: Colors.grey.withOpacity(0.5),
-                elevation: 5,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
             ),
           ),
