@@ -26,6 +26,7 @@ class _ChanginfoState extends State<Changinfo> {
   late String address;
   late String email;
   late String phone;
+  late String selectedAddress;
   TextEditingController namec = new TextEditingController();
   TextEditingController phonec = new TextEditingController();
   TextEditingController addressc = new TextEditingController();
@@ -48,6 +49,22 @@ class _ChanginfoState extends State<Changinfo> {
     } else {
       setState(() {
         login = false;
+      });
+    }
+  }
+
+  void navigateToMapScreen(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapScreen(),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedAddress = result;
+        addressc.text = selectedAddress;
       });
     }
   }
@@ -392,9 +409,7 @@ class _ChanginfoState extends State<Changinfo> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Xử lý khi người dùng nhấn vào nút "Chọn vị trí"
-                      navigateToMapScreen(
-                          context); // Gọi hàm để mở trang bản đồ
+                      navigateToMapScreen(context);
                     },
                     child: Text("Chọn vị trí"),
                   ),
@@ -419,13 +434,4 @@ class _ChanginfoState extends State<Changinfo> {
       ),
     );
   }
-}
-
-void navigateToMapScreen(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => MapScreen(),
-    ),
-  );
 }

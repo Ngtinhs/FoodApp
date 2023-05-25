@@ -7,47 +7,36 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  late GoogleMapController mapController;
-  late LatLng _selectedPosition;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  void _onMapTapped(LatLng position) {
-    setState(() {
-      _selectedPosition = position;
-    });
-  }
+  GoogleMapController? mapController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chọn vị trí"),
+        title: Text('Chọn vị trí'),
       ),
       body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        onTap: _onMapTapped,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(0, 0),
-          zoom: 15,
-        ),
-        markers: _selectedPosition != null
-            ? <Marker>{
-                Marker(
-                  markerId: MarkerId("selectedPosition"),
-                  position: _selectedPosition,
-                ),
-              }
-            : <Marker>{},
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context, _selectedPosition);
+        onMapCreated: (controller) {
+          setState(() {
+            mapController = controller;
+          });
         },
-        child: Icon(Icons.check),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(10.78722, 106.6537159),
+          zoom: 14.0,
+        ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Gán vị trí là ...
+          String selectedAddress = '16 Chử Đồng Tử, Phường 7, Quận Tân Bình';
+
+          Navigator.pop(context, selectedAddress);
+        },
+        label: Text('Chọn địa chỉ'),
+        icon: Icon(Icons.place),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
