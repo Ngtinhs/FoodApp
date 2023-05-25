@@ -6,6 +6,7 @@ import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/Product/productsearch.dart';
 import 'package:foodapp/view/User/Infomation.dart';
+import 'package:foodapp/view/User/MapScreen.dart';
 import 'package:foodapp/view/order/cart.dart';
 import 'package:foodapp/view/order/listorder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,7 @@ class _ChanginfoState extends State<Changinfo> {
   TextEditingController namec = new TextEditingController();
   TextEditingController phonec = new TextEditingController();
   TextEditingController addressc = new TextEditingController();
+  late BuildContext context;
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
     bool test = prefs.containsKey("id");
@@ -70,6 +72,7 @@ class _ChanginfoState extends State<Changinfo> {
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -387,6 +390,14 @@ class _ChanginfoState extends State<Changinfo> {
                       ),
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Xử lý khi người dùng nhấn vào nút "Chọn vị trí"
+                      navigateToMapScreen(
+                          context); // Gọi hàm để mở trang bản đồ
+                    },
+                    child: Text("Chọn vị trí"),
+                  ),
                 ],
               ),
             ),
@@ -408,4 +419,13 @@ class _ChanginfoState extends State<Changinfo> {
       ),
     );
   }
+}
+
+void navigateToMapScreen(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => MapScreen(),
+    ),
+  );
 }
