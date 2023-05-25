@@ -2,6 +2,13 @@
     package="com.example.foodapp">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
+    <!-- Quyền truy cập vị trí chính xác của người dùng. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> 
+    
+    <!-- Quyền truy cập vị trí xấp xỉ của người dùng. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="foodapp"
         android:name="${applicationName}"
