@@ -214,7 +214,7 @@ class _Home extends State<Home> {
                         builder: (BuildContext context) => IconButton(
                               onPressed: () =>
                                   Scaffold.of(context).openDrawer(),
-                              icon: Icon(Icons.menu, color: Colors.pinkAccent),
+                              icon: Icon(Icons.menu, color: Colors.green),
                             )),
                   ),
                   Container(
@@ -264,7 +264,7 @@ class _Home extends State<Home> {
                             child: InkWell(
                               child: Icon(
                                 Icons.dangerous_rounded,
-                                color: Colors.pinkAccent,
+                                color: Colors.green,
                               ),
                               onTap: () {
                                 search.text = "";
@@ -278,7 +278,7 @@ class _Home extends State<Home> {
                     child: InkWell(
                       child: Icon(
                         Icons.shopping_cart,
-                        color: Colors.pinkAccent,
+                        color: Colors.green,
                       ),
                       onTap: () {
                         Navigator.push(

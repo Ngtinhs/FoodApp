@@ -172,7 +172,7 @@ class _SearchProductState extends State<SearchProduct> {
             Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: InkWell(
-                  child: Icon(Icons.arrow_back_ios, color: Colors.pinkAccent),
+                  child: Icon(Icons.arrow_back_ios, color: Colors.green),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -224,7 +224,7 @@ class _SearchProductState extends State<SearchProduct> {
                       child: InkWell(
                         child: Icon(
                           Icons.dangerous_rounded,
-                          color: Colors.pinkAccent,
+                          color: Colors.green,
                         ),
                         onTap: () {
                           search.text = "";
@@ -238,7 +238,7 @@ class _SearchProductState extends State<SearchProduct> {
               child: InkWell(
                 child: Icon(
                   Icons.shopping_cart,
-                  color: Colors.pinkAccent,
+                  color: Colors.green,
                 ),
                 onTap: () {
                   Navigator.push(context,

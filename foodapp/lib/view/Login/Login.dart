@@ -179,7 +179,7 @@ class _Login extends State<Login> {
         pref.setString('image', jsonResponse['image']);
 
         if (jsonResponse['role'] == 1) {
-          // Nếu role là 1, chuyển hướng đến trang HomeAdmin
+          // Nếu role là 1, chuyển hướng đến trang MainAdmin
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MainAdmin()));
         } else {
