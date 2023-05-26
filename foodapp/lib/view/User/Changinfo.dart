@@ -189,72 +189,70 @@ class _ChanginfoState extends State<Changinfo> {
             Container(
               width: 350,
               padding: EdgeInsets.only(left: 10, right: 10),
-              child: TextFormField(
-                controller: addressc,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.normal,
-                ),
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.only(bottom: -9, left: 13, right: 13),
-                  hintText: "Địa chỉ",
-                  hintStyle: TextStyle(
-                      color: Colors.grey, fontFamily: 'Roboto', fontSize: 13),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(59, 185, 52, 1), width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    navigateToMapScreen(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: addressc,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(bottom: -9, left: 13, right: 13),
+                        hintText: "Địa chỉ",
+                        hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'Roboto',
+                            fontSize: 13),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromRGBO(59, 185, 52, 1),
+                              width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
                     ),
                   ),
-                  child: Text(
-                    "Chọn vị trí",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal,
-                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      navigateToMapScreen(context);
+                    },
+                    child: Text("Chọn vị trí"),
                   ),
-                ),
+                ],
               ),
             ),
             SizedBox(
               height: 30,
             ),
             TextButton(
-                onPressed: () {
-                  if (namec.text != "" &&
-                      phonec.text != "" &&
-                      addressc.text != "") {
-                    UserApi.updateInfo(
-                        namec.text, phonec.text, addressc.text, context);
-                  }
-                },
-                child: Text("CẬP NHẬT"))
+              onPressed: () {
+                if (namec.text != "" &&
+                    phonec.text != "" &&
+                    addressc.text != "") {
+                  UserApi.updateInfo(
+                      namec.text, phonec.text, addressc.text, context);
+                }
+              },
+              child: Text(
+                "CẬP NHẬT",
+                style: TextStyle(fontSize: 18),
+              ),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
           ],
         ),
       ),
