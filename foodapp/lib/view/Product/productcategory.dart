@@ -79,7 +79,7 @@ class _SearchDanhMucState extends State<SearchDanhMuc> {
           children: [
             DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color.fromRGBO(59, 185, 52, 1),
                 ),
                 child: Column(
                   children: [

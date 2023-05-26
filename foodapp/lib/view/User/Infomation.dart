@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
-import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/User/Changinfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,17 +40,6 @@ class _InformationState extends State<Information> {
   }
 
   TextEditingController search = new TextEditingController();
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    setState(() {
-      name = "";
-      login = false;
-      image = "";
-    });
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -64,10 +52,10 @@ class _InformationState extends State<Information> {
       appBar: AppBar(
         title: Row(
           children: [
-            Text("Thông tin"),
+            Text("Thông tin cá nhân"),
           ],
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromRGBO(59, 185, 52, 1),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +65,8 @@ class _InformationState extends State<Information> {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.blue, width: 2),
+                border:
+                    Border.all(color: Color.fromRGBO(59, 185, 52, 1), width: 2),
               ),
               width: 150,
               height: 150,
@@ -168,7 +157,7 @@ class _InformationState extends State<Information> {
                 ),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color.fromRGBO(59, 185, 52, 1),
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

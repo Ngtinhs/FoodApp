@@ -29,7 +29,7 @@ class _MainAdminState extends State<MainAdmin> {
     return MaterialApp(
       title: 'Flutter Navigation Bottom',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: Scaffold(
         body: _children[_currentIndex],

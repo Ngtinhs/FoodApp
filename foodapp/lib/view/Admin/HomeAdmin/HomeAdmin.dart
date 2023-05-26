@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color.fromRGBO(59, 185, 52, 1),
                   radius: 40,
                   child: Icon(Icons.category, size: 40),
                 ),
