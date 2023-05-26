@@ -83,7 +83,7 @@ class _ListOrderState extends State<ListOrder> {
               padding: EdgeInsets.all(7),
               child: Text("Đơn hàng",
                   style: TextStyle(
-                      color: Color.fromRGBO(227, 67, 67, 1.0),
+                      color: Color.fromRGBO(0, 128, 0, 1.0),
                       fontSize: 15,
                       fontWeight: FontWeight.bold)),
             ),

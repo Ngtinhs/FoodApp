@@ -214,7 +214,7 @@ class _Home extends State<Home> {
                         builder: (BuildContext context) => IconButton(
                               onPressed: () =>
                                   Scaffold.of(context).openDrawer(),
-                              icon: Icon(Icons.menu, color: Colors.green),
+                              icon: Icon(Icons.menu, color: Colors.black),
                             )),
                   ),
                   Container(
@@ -264,7 +264,7 @@ class _Home extends State<Home> {
                             child: InkWell(
                               child: Icon(
                                 Icons.dangerous_rounded,
-                                color: Colors.green,
+                                color: Colors.black,
                               ),
                               onTap: () {
                                 search.text = "";
@@ -278,7 +278,7 @@ class _Home extends State<Home> {
                     child: InkWell(
                       child: Icon(
                         Icons.shopping_cart,
-                        color: Colors.green,
+                        color: Colors.black,
                       ),
                       onTap: () {
                         Navigator.push(
@@ -297,9 +297,24 @@ class _Home extends State<Home> {
               // },),
               bottom: TabBar(
                 tabs: [
-                  Tab(child: Text("Trang chủ")),
-                  Tab(child: Text("Bán chạy")),
-                  Tab(child: Text("Sản phẩm")),
+                  Tab(
+                    child: Text(
+                      "Trang chủ",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Bán chạy",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Sản phẩm",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -320,7 +335,7 @@ class _Home extends State<Home> {
                         child: Text(
                           "DANH MỤC MÓN ĂN",
                           style: TextStyle(
-                              color: Color.fromRGBO(227, 67, 67, 1.0),
+                              color: Color.fromRGBO(0, 128, 0, 1.0),
                               fontSize: 15),
                         ),
                       ),
@@ -337,7 +352,7 @@ class _Home extends State<Home> {
                       padding: EdgeInsets.all(7),
                       child: Text("MÓN ĂN BÁN CHẠY",
                           style: TextStyle(
-                              color: Color.fromRGBO(227, 67, 67, 1.0),
+                              color: Color.fromRGBO(0, 128, 0, 1.0),
                               fontSize: 15,
                               fontWeight: FontWeight.bold)),
                     ),
@@ -459,7 +474,7 @@ class _Home extends State<Home> {
                       padding: EdgeInsets.all(7),
                       child: Text("TẤT CẢ MÓN ĂN",
                           style: TextStyle(
-                              color: Color.fromRGBO(227, 67, 67, 1.0),
+                              color: Color.fromRGBO(0, 128, 0, 1.0),
                               fontSize: 15,
                               fontWeight: FontWeight.bold)),
                     ),
@@ -641,7 +656,7 @@ class _Home extends State<Home> {
                                     Text(
                                       "${category[index].name} ",
                                       style: TextStyle(
-                                        color: Color.fromRGBO(245, 90, 90, 1.0),
+                                        color: Color.fromRGBO(0, 0, 0, 1.0),
                                       ),
                                     ),
                                   ],
