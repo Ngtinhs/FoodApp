@@ -187,47 +187,59 @@ class _ChanginfoState extends State<Changinfo> {
               height: 30,
             ),
             Container(
-              width: 440,
-              padding: EdgeInsets.only(left: 30),
-              child: Row(
-                children: [
-                  Container(
-                    width: 350,
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: TextFormField(
-                      controller: addressc,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.only(bottom: -9, left: 13, right: 13),
-                        hintText: "Địa chỉ",
-                        hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontFamily: 'Roboto',
-                            fontSize: 13),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromRGBO(59, 185, 52, 1),
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
+              width: 350,
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: TextFormField(
+                controller: addressc,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.normal,
+                ),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.only(bottom: -9, left: 13, right: 13),
+                  hintText: "Địa chỉ",
+                  hintStyle: TextStyle(
+                      color: Colors.grey, fontFamily: 'Roboto', fontSize: 13),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(59, 185, 52, 1), width: 2.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    navigateToMapScreen(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      navigateToMapScreen(context);
-                    },
-                    child: Text("Chọn vị trí"),
+                  child: Text(
+                    "Chọn vị trí",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
             SizedBox(
