@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/ProductApi.dart';
 import 'package:foodapp/config/apihelper.dart';
@@ -137,8 +138,9 @@ class _SearchDanhMucState extends State<SearchDanhMuc> {
                                             children: [
                                               Container(
                                                   height: 100,
-                                                  child: Image.network(
-                                                      "${Apihelper.image_base}/product/${tatcasanpham[index].image}")),
+                                                  child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          "${Apihelper.image_base}/product/${tatcasanpham[index].image}")),
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     left: 15,

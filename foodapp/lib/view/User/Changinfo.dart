@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/UserApi.dart';
 import 'package:foodapp/config/apihelper.dart';
@@ -95,8 +96,8 @@ class _ChanginfoState extends State<Changinfo> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(50))),
                 width: 150,
-                child: Image.network(
-                  "${Apihelper.image_base}/avatar/$image",
+                child: CachedNetworkImage(
+                  imageUrl: "${Apihelper.image_base}/avatar/$image",
                   width: 250,
                 ),
               ),

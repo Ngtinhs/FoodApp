@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/CategoryApi.dart';
 import 'package:foodapp/api/ProductApi.dart';
@@ -116,8 +117,9 @@ class _Home extends State<Home> {
                           if (image != "")
                             InkWell(
                               child: CircleAvatar(
-                                child: Image.network(
-                                    "${Apihelper.image_base}/avatar/${image}"),
+                                child: CachedNetworkImage(
+                                    imageUrl:
+                                        "${Apihelper.image_base}/avatar/${image}"),
                               ),
                               onTap: () {
                                 Navigator.push(
@@ -411,9 +413,13 @@ class _Home extends State<Home> {
                                                   child: Column(
                                                     children: [
                                                       Container(
-                                                          height: 100,
-                                                          child: Image.network(
-                                                              "${Apihelper.image_base}/product/${muanhieu[index].image}")),
+                                                        height: 100,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              "${Apihelper.image_base}/product/${muanhieu[index].image}",
+                                                        ),
+                                                      ),
                                                       Container(
                                                         padding:
                                                             EdgeInsets.only(
@@ -535,8 +541,9 @@ class _Home extends State<Home> {
                                                     children: [
                                                       Container(
                                                           height: 100,
-                                                          child: Image.network(
-                                                              "${Apihelper.image_base}/product/${tatcasanpham[index].image}")),
+                                                          child: CachedNetworkImage(
+                                                              imageUrl:
+                                                                  "${Apihelper.image_base}/product/${tatcasanpham[index].image}")),
                                                       Container(
                                                         padding:
                                                             EdgeInsets.only(
@@ -641,8 +648,9 @@ class _Home extends State<Home> {
                                     InkWell(
                                       child: Container(
                                           width: 100,
-                                          child: Image.network(
-                                              "${Apihelper.image_base}/categories/${category[index].image}")),
+                                          child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "${Apihelper.image_base}/categories/${category[index].image}")),
                                       onTap: () {
                                         Navigator.push(
                                             context,

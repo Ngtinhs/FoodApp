@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
@@ -71,8 +72,8 @@ class _InformationState extends State<Information> {
               width: 150,
               height: 150,
               child: ClipOval(
-                child: Image.network(
-                  "${Apihelper.image_base}/avatar/$image",
+                child: CachedNetworkImage(
+                  imageUrl: "${Apihelper.image_base}/avatar/$image",
                   fit: BoxFit.cover,
                 ),
               ),

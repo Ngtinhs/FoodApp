@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/CartApi.dart';
 import 'package:foodapp/config/apihelper.dart';
@@ -72,8 +73,9 @@ class _ProductDetailState extends State<ProductDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Image.network(
-                    "${Apihelper.image_base}/product/${product.image}"),
+                child: CachedNetworkImage(
+                    imageUrl:
+                        "${Apihelper.image_base}/product/${product.image}"),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
