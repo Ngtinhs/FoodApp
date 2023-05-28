@@ -36,35 +36,48 @@ class ShoppingController extends Controller
     public function insert(Request $request){
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
-            'user_id'=>'required',
+            'user_id' => 'required',
         ]);
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 401);
         }
-        $cartproduct = Shopping::where('product_id',$request->product_id)
-            ->where('user_id',$request->user_id)->first();
-        if($cartproduct==null){
-            $product = Product::find($request->product_id);
+    
+        $product = Product::find($request->product_id);
+    
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+    
+        $cartproduct = Shopping::where('product_id', $request->product_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+    
+        if ($cartproduct == null) {
             $cart = new Shopping();
             $cart->product_id = $request->product_id;
             $cart->user_id = $request->user_id;
             $cart->name = $product->name;
             $cart->price = $product->price;
             $cart->quantity = 1;
-            $cart->image =$product->image;
-            $cart->total = ($cart->price*$cart->quantity);
+            $cart->image = $product->image;
+            $cart->total = ($cart->price * $cart->quantity);
             $cart->save();
-            return response()->json($cart,200);
-        }
-        else{
-            $cartproduct->quantity=$cartproduct->quantity+1;
+            return response()->json($cart, 200);
+        } else {
+            // Kiểm tra số lượng sản phẩm muốn thêm vào giỏ hàng
+            // nếu lớn hơn số lượng có sẵn trong kho, trả về lỗi
+            if (($cartproduct->quantity + 1) > $product->quantity) {
+                return response()->json(['message' => 'Hết món ăn'], 400);
+            }
+    
+            $cartproduct->quantity += 1;
             $cartproduct->total = $cartproduct->price * $cartproduct->quantity;
             $cartproduct->save();
-            return response()->json($cartproduct,200);
+            return response()->json($cartproduct, 200);
         }
-
     }
-
+    
 
 
     public function delete(Request $request){

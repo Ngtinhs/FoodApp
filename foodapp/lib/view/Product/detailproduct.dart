@@ -22,6 +22,8 @@ class _ProductDetailState extends State<ProductDetail> {
   late bool login;
   late String name;
   late String image;
+  bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
+
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
     bool test = prefs.containsKey("id");
@@ -52,8 +54,15 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     checklogin();
+
+    // Kiểm tra số lượng sản phẩm và cập nhật giá trị cho biến isOutOfStock
+    if (product.quantity == 0) {
+      setState(() {
+        isOutOfStock = true;
+      });
+    }
   }
 
   @override
@@ -120,6 +129,20 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
+                child: Row(
+                  children: [
+                    Text("Số lượng có sẳn: "),
+                    Flexible(
+                      child: Text(
+                        product.quantity.toString(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -132,16 +155,20 @@ class _ProductDetailState extends State<ProductDetail> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      CartApi.insert(product.id, context);
+                      if (!isOutOfStock) {
+                        CartApi.insert(product.id, context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+                      backgroundColor: isOutOfStock
+                          ? Colors.grey
+                          : Color.fromRGBO(59, 185, 52, 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
                     ),
                     label: Text(
-                      "Thêm vào giỏ",
+                      isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Raleway',

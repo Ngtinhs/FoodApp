@@ -7,6 +7,7 @@ import 'package:foodapp/model/Cart.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/order/formcheckout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CartList extends StatefulWidget {
   const CartList({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _CartListState extends State<CartList> {
   late CartApi cartApi = new CartApi();
   late Future<List<Cart>> carts = cartApi.getCart();
   late bool checkcart = true;
+  late bool isOutOfStock = false;
   Future<List<Cart>> refreshCart() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
@@ -285,11 +287,35 @@ class _CartListState extends State<CartList> {
                                                                   ),
                                                                 ),
                                                                 onTap: () {
-                                                                  CartApi.insert(
+                                                                  if (muanhieu[index]
+                                                                              .quantity +
+                                                                          1 >
                                                                       muanhieu[
                                                                               index]
-                                                                          .product_id,
-                                                                      context);
+                                                                          .quantity) {
+                                                                    Fluttertoast
+                                                                        .showToast(
+                                                                      msg:
+                                                                          'Hết món rồi đó ông nội',
+                                                                      toastLength:
+                                                                          Toast
+                                                                              .LENGTH_SHORT,
+                                                                      gravity:
+                                                                          ToastGravity
+                                                                              .BOTTOM,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      textColor:
+                                                                          Colors
+                                                                              .white,
+                                                                    );
+                                                                  } else {
+                                                                    CartApi.insert(
+                                                                        muanhieu[index]
+                                                                            .product_id,
+                                                                        context);
+                                                                  }
                                                                 },
                                                               ),
                                                             ],
