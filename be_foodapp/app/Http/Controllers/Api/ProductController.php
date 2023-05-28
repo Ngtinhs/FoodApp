@@ -59,7 +59,7 @@ class ProductController extends Controller
                 'image'=>'required',
                 'price' =>'required',
                 'detail'=>'required',
-                'quantity'=>'required',
+                'quantity' => 'required|integer|min:0'
        ]);
         if ($validator->fails()){
             return response()->json(['error'=>$validator->errors()],401);
@@ -84,7 +84,7 @@ class ProductController extends Controller
         'categories_id' => 'sometimes',
         'price' => 'sometimes',
         'detail' => 'sometimes',
-        'quantity' => 'sometimes',
+        'quantity' => 'sometimes|integer|min:0',
     ]);
 
     if ($validator->fails()){
