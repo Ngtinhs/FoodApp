@@ -122,6 +122,7 @@ class _CheckoutState extends State<Checkout> {
                     orderInfo += 'Tổng tiền: ${Apihelper.money(total_cart)}\n';
 
                     EmailService.sendOrderInfoEmail(recipientEmail, orderInfo);
+                    EmailService.sendOrderInfoEmails(recipientEmail, orderInfo);
 
                     // Thực hiện các xử lý khác sau khi gửi email
 
