@@ -157,12 +157,15 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
-                  onTap: (LatLng latLng) {
-                    searchAndSelectAddress('');
+                  onTap: (LatLng latLng) async {
+                    final address = await _getAddressFromLatLng(latLng);
+                    setState(() {
+                      selectedAddress = address;
+                    });
                   },
                 ),
                 Positioned(
-                  top: 16.0,
+                  top: 30.0,
                   left: 16.0,
                   right: 16.0,
                   child: Container(
@@ -224,5 +227,23 @@ class _MapScreenState extends State<MapScreen> {
               child: CircularProgressIndicator(),
             ),
     );
+  }
+
+  Future<String?> _getAddressFromLatLng(LatLng latLng) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        latLng.latitude,
+        latLng.longitude,
+      );
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.first;
+        String address =
+            '${placemark.name}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}';
+        return address;
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    return null;
   }
 }
