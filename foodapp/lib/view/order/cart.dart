@@ -7,7 +7,6 @@ import 'package:foodapp/model/Cart.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/order/formcheckout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CartList extends StatefulWidget {
   const CartList({Key? key}) : super(key: key);
@@ -287,35 +286,11 @@ class _CartListState extends State<CartList> {
                                                                   ),
                                                                 ),
                                                                 onTap: () {
-                                                                  if (muanhieu[index]
-                                                                              .quantity +
-                                                                          1 >
+                                                                  CartApi.insert(
                                                                       muanhieu[
                                                                               index]
-                                                                          .quantity) {
-                                                                    Fluttertoast
-                                                                        .showToast(
-                                                                      msg:
-                                                                          'Hết món rồi đó ông nội',
-                                                                      toastLength:
-                                                                          Toast
-                                                                              .LENGTH_SHORT,
-                                                                      gravity:
-                                                                          ToastGravity
-                                                                              .BOTTOM,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red,
-                                                                      textColor:
-                                                                          Colors
-                                                                              .white,
-                                                                    );
-                                                                  } else {
-                                                                    CartApi.insert(
-                                                                        muanhieu[index]
-                                                                            .product_id,
-                                                                        context);
-                                                                  }
+                                                                          .product_id,
+                                                                      context);
                                                                 },
                                                               ),
                                                             ],
