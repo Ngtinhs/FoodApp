@@ -122,7 +122,7 @@ class _ChanginfoState extends State<Changinfo> {
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.only(bottom: -9, left: 13, right: 13),
-                        hintText: "Họ tên",
+                        hintText: "Vui lòng nhập họ tên",
                         hintStyle: TextStyle(
                             color: Colors.grey,
                             fontFamily: 'Roboto',
@@ -163,7 +163,7 @@ class _ChanginfoState extends State<Changinfo> {
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.only(bottom: -9, left: 13, right: 13),
-                        hintText: "Số điện thoại",
+                        hintText: "Vui lòng nhập số điện thoại",
                         hintStyle: TextStyle(
                             color: Colors.grey,
                             fontFamily: 'Roboto',
@@ -188,11 +188,13 @@ class _ChanginfoState extends State<Changinfo> {
               height: 30,
             ),
             Container(
-              width: 350,
-              padding: EdgeInsets.only(left: 10, right: 10),
+              width: 440,
+              padding: EdgeInsets.only(left: 30),
               child: Row(
                 children: [
-                  Expanded(
+                  Container(
+                    width: 350,
+                    padding: EdgeInsets.only(left: 10, right: 10),
                     child: TextFormField(
                       controller: addressc,
                       style: TextStyle(
@@ -202,7 +204,7 @@ class _ChanginfoState extends State<Changinfo> {
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.only(bottom: -9, left: 13, right: 13),
-                        hintText: "Địa chỉ",
+                        hintText: "Vui lòng hoặc chọn địa chỉ ở dưới",
                         hintStyle: TextStyle(
                             color: Colors.grey,
                             fontFamily: 'Roboto',
@@ -220,13 +222,16 @@ class _ChanginfoState extends State<Changinfo> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      navigateToMapScreen(context);
-                    },
-                    child: Text("Chọn vị trí"),
-                  ),
                 ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                navigateToMapScreen(context);
+              },
+              child: Text("Chọn vị trí"),
+              style: TextButton.styleFrom(
+                backgroundColor: Color.fromRGBO(59, 185, 52, 1),
               ),
             ),
             SizedBox(
