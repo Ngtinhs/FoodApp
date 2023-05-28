@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:foodapp/config/apihelper.dart';
+import 'package:foodapp/view/Home/MailService/email_service.dart';
 import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -280,18 +281,22 @@ class _Register extends State<Register> {
         body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      if (jsonResponse != null) {}
-      // print(jsonResponse['token']);
-      pref.setString('token', jsonResponse['token']);
-      pref.setString('name', jsonResponse['name']);
-      pref.setString('phone', jsonResponse['phone']);
-      pref.setString('email', jsonResponse['email']);
-      pref.setString('address', jsonResponse['address']);
-      pref.setInt('id', jsonResponse['id']);
-      pref.setInt('role', jsonResponse['role']); //role = 1 :admin
-      pref.setString('image', jsonResponse['image']); //role = 1 :admin
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => WelcomePage()), (Route<dynamic> route) => false);
+      if (jsonResponse != null) {
+        pref.setString('token', jsonResponse['token']);
+        pref.setString('name', jsonResponse['name']);
+        pref.setString('phone', jsonResponse['phone']);
+        pref.setString('email', jsonResponse['email']);
+        pref.setString('address', jsonResponse['address']);
+        pref.setInt('id', jsonResponse['id']);
+        pref.setInt('role', jsonResponse['role']);
+        pref.setString('image', jsonResponse['image']);
+
+        // Gửi email thông báo đăng ký thành công
+        EmailService.sendRegistrationEmail(email);
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      }
     } else {
       print("dsa");
       setState(() {});

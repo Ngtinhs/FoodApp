@@ -4,6 +4,7 @@ import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:foodapp/view/Home/MailService/email_service.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -101,13 +102,30 @@ class _CheckoutState extends State<Checkout> {
                         color: Colors.white),
                   )),
                 ),
-                onTap: () {
+                onTap: () async {
                   if (namec.text != "" &&
                       phone.text != "" &&
                       address.text != "" &&
                       note.text != "") {
-                    CartApi.orderproduct(namec.text, phone.text, address.text,
-                        note.text, context);
+                    await CartApi.orderproduct(namec.text, phone.text,
+                        address.text, note.text, context);
+
+                    // Gửi thông tin đơn hàng vào email đăng nhập
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String recipientEmail = prefs.getString('email') ?? '';
+                    String orderInfo = 'Thông tin đơn đặt món:\n\n';
+                    orderInfo += 'Họ và tên: ${namec.text}\n';
+                    orderInfo += 'Số điện thoại: ${phone.text}\n';
+                    orderInfo += 'Địa chỉ: ${address.text}\n';
+                    orderInfo += 'Ghi chú: ${note.text}\n';
+                    orderInfo += 'Tổng tiền: ${Apihelper.money(total_cart)}\n';
+
+                    EmailService.sendOrderInfoEmail(recipientEmail, orderInfo);
+
+                    // Thực hiện các xử lý khác sau khi gửi email
+
+                    // Ví dụ: chuyển sang trang thành công hoặc xóa giỏ hàng
                   } else {
                     _showDialog("Vui lòng nhập đầy đủ các trường");
                   }
