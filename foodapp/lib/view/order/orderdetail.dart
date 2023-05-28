@@ -81,7 +81,7 @@ class _OrderDetailState extends State<OrderDetail> {
           children: [
             Padding(
               padding: EdgeInsets.all(7),
-              child: Text("Đơn hàng",
+              child: Text("Đơn đặt món",
                   style: TextStyle(
                       color: Color.fromRGBO(0, 128, 0, 1.0),
                       fontSize: 15,

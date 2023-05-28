@@ -101,7 +101,7 @@ class _ManageOrdersState extends State<ManageOrders> {
       case 3:
         return Column(
           children: [
-            Text('Đơn hàng đã hủy'),
+            Text('Đơn đặt món đã hủy'),
             // TextButton(
             //   onPressed: () => handleUpdateStatus(id, 0),
             //   child: Text('Đặt lại'),

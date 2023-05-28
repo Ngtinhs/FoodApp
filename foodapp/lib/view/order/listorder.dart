@@ -57,10 +57,11 @@ class _ListOrderState extends State<ListOrder> {
 
   CartApi cartApi = new CartApi();
   late Future<List<Order>> orders = cartApi.getOrder(fstatus);
+  bool isConfirmationShown = false;
+
   @override
   void initState() {
-    // TODO: implement initState
-
+    super.initState();
     checklogin();
     refresh();
   }
@@ -81,169 +82,212 @@ class _ListOrderState extends State<ListOrder> {
           children: [
             Padding(
               padding: EdgeInsets.all(7),
-              child: Text("Đơn hàng",
-                  style: TextStyle(
-                      color: Color.fromRGBO(0, 128, 0, 1.0),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold)),
+              child: Text(
+                "Đơn đặt món",
+                style: TextStyle(
+                  color: Color.fromRGBO(0, 128, 0, 1.0),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             Container(
               height: 600,
               child: FutureBuilder(
-                  future: orders,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<Order>> snapshot) {
-                    if (snapshot.hasData) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                        case ConnectionState.waiting:
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        default:
-                          if (snapshot.hasError) {
-                            return Text("Error Data");
-                          } else {
-                            List<Order>? tatcasanpham = snapshot.data;
-                            return RefreshIndicator(
-                                child: ListView.builder(
-                                    itemCount: tatcasanpham!.length,
-                                    itemBuilder: (BuildContext context, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OrderDetail(
-                                                        tatcasanpham[index].id,
-                                                      )));
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.only(bottom: 30),
-                                          padding: EdgeInsets.only(top: 5),
-                                          decoration: BoxDecoration(
-                                              color: Color.fromRGBO(186, 186,
-                                                  186, 0.12549019607843137),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                future: orders,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Order>> snapshot) {
+                  if (snapshot.hasData) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        if (snapshot.hasError) {
+                          return Text("Error Data");
+                        } else {
+                          List<Order>? tatcasanpham = snapshot.data;
+                          return RefreshIndicator(
+                            child: ListView.builder(
+                              itemCount: tatcasanpham!.length,
+                              itemBuilder: (BuildContext context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OrderDetail(
+                                          tatcasanpham[index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 30),
+                                    padding: EdgeInsets.only(top: 5),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(
+                                          186, 186, 186, 0.12549019607843137),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Container(
-                                                  padding: EdgeInsets.all(20),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                          "${tatcasanpham[index].name}"),
-                                                      Text(Apihelper.money(
-                                                          tatcasanpham[index]
-                                                              .total_price))
-                                                    ],
-                                                  )),
-                                              Container(
-                                                  padding:
-                                                      EdgeInsets.only(left: 20),
-                                                  child: Text(
-                                                    "${tatcasanpham[index].phone}",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.pink),
-                                                  )),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                  padding:
-                                                      EdgeInsets.only(left: 20),
-                                                  child: Text(
-                                                    "${tatcasanpham[index].address}",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.pink),
-                                                  )),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 20, bottom: 20),
-                                                  child: Text(
-                                                    "${tatcasanpham[index].note}",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.pink),
-                                                  )),
-                                              Container(
-                                                padding: EdgeInsets.all(20),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: 20, bottom: 20),
-                                                      child: (Text(
-                                                        "${tatcasanpham[index].status}",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.pink),
-                                                      )),
-                                                    ),
-                                                    if (tatcasanpham[index]
-                                                            .status ==
-                                                        "Đang xử lý")
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            CartApi.huydon(
-                                                                tatcasanpham[
-                                                                        index]
-                                                                    .id,
-                                                                context);
-                                                          },
-                                                          child:
-                                                              Text("HỦY ĐƠN")),
-                                                  ],
-                                                ),
-                                              ),
+                                              Text(
+                                                  "${tatcasanpham[index].name}"),
+                                              Text(Apihelper.money(
+                                                  tatcasanpham[index]
+                                                      .total_price)),
                                             ],
                                           ),
                                         ),
-                                      );
-                                    }),
-                                onRefresh: refresh);
-                          }
-                      }
-                    } else {
-                      return Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                refresh;
+                                        Container(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            "${tatcasanpham[index].phone}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.pink,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Container(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            "${tatcasanpham[index].address}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.pink,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Container(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            "${tatcasanpham[index].note}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.pink,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 20, bottom: 20),
+                                                child: Text(
+                                                  "${tatcasanpham[index].status}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.pink,
+                                                  ),
+                                                ),
+                                              ),
+                                              if (tatcasanpham[index].status ==
+                                                  "Đang xử lý")
+                                                TextButton(
+                                                  onPressed: () {
+                                                    if (isConfirmationShown) {
+                                                      CartApi.huydon(
+                                                          tatcasanpham[index]
+                                                              .id,
+                                                          context);
+                                                    } else {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                "Xác nhận hủy đơn"),
+                                                            content: Text(
+                                                                "Bạn có chắc chắn muốn hủy đơn đặt món ăn này?"),
+                                                            actions: [
+                                                              TextButton(
+                                                                child:
+                                                                    Text("Hủy"),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop(); // Đóng hộp thoại
+                                                                },
+                                                              ),
+                                                              TextButton(
+                                                                child: Text(
+                                                                    "Xác nhận"),
+                                                                onPressed: () {
+                                                                  setState(() {
+                                                                    isConfirmationShown =
+                                                                        true;
+                                                                  });
+                                                                  CartApi.huydon(
+                                                                      tatcasanpham[
+                                                                              index]
+                                                                          .id,
+                                                                      context);
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop(); // Đóng hộp thoại
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                  child: Text("HỦY ĐƠN"),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               },
-                              child: Text("Refresh"),
                             ),
-                          ],
-                        ),
-                      );
+                            onRefresh: refresh,
+                          );
+                        }
                     }
-                  }),
+                  } else {
+                    return Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: () {
+                              refresh;
+                            },
+                            child: Text("Refresh"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),

@@ -1,6 +1,6 @@
 # TripletFood - Ứng dụng đặt món ăn trực tuyến
 
-TripletFood là một ứng dụng di động cho phép khách hàng đặt món ăn từ nhà hàng và quản lý thông tin món ăn, đơn hàng từ trang admin. Ứng dụng này được phát triển bằng framework Flutter và sử dụng MySQL làm cơ sở dữ liệu phía backend. Trang admin được xây dựng thêm bằng ReactJS và sắp tới sẽ phát triển thêm trang dành cho User.
+TripletFood là một ứng dụng di động cho phép khách hàng đặt món ăn từ nhà hàng và quản lý thông tin món ăn, đơn đặt món từ trang admin. Ứng dụng này được phát triển bằng framework Flutter và sử dụng MySQL làm cơ sở dữ liệu phía backend. Trang admin được xây dựng thêm bằng ReactJS và sắp tới sẽ phát triển thêm trang dành cho User.
 
 ## Chức năng
 
@@ -10,7 +10,7 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 - Tìm kiếm sản phẩm
 - Xem menu, giá cả và thông tin chi tiết về mỗi món ăn
 - Thêm và đặt món ăn
-- Theo dõi đơn hàng và cập nhật trạng thái đơn hàng
+- Theo dõi đơn đặt món và cập nhật trạng thái đơn đặt món
 - Cập nhật thông tin cá nhân
 - Đánh giá và nhận xét về nhà hàng và món ăn (Sẽ cải tiến)
 <div>
@@ -33,7 +33,7 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 - Đăng nhập vào trang admin
 - Quản lý danh mục món ăn
 - Quản lý danh sách món ăn
-- Quản lý đơn hàng và cập nhật trạng thái đơn hàng
+- Quản lý đơn đặt món và cập nhật trạng thái đơn đặt món
 - Quản lý khách hàng
 - Xem thông báo và thông tin thống kê
 

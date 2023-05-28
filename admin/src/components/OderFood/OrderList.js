@@ -69,7 +69,7 @@ const OrderList = () => {
             case 3:
                 return (
                     <div>
-                        <p>Đơn hàng đã hủy</p>
+                        <p>Đơn đặt món đã hủy</p>
                         <Button variant="info" onClick={() => handleUpdateStatus(id, 0)}>Đặt lại</Button>
                     </div>
                 );

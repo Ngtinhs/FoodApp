@@ -209,12 +209,42 @@ class ShoppingController extends Controller
         }
         return response()->json($order,200);
     }
-    public function huydon(Request $request){
-        $order= Order::find($request->order_id);
-        $order->status = 3;
-        $order->save();
-        return response()->json($order,200);
+    public function huydon(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'order_id' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 401);
     }
+
+    $order = Order::find($request->order_id);
+
+    if (!$order) {
+        return response()->json(['message' => 'Order not found'], 404);
+    }
+
+    // Kiểm tra trạng thái của đơn hàng
+    if ($order->status != 0) {
+        return response()->json(['message' => 'Cannot cancel the order'], 400);
+    }
+
+    $order->status = 3;
+    $order->save();
+
+    // Cập nhật lại số lượng sản phẩm đã hủy
+    $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+    foreach ($orderDetails as $item) {
+        $product = Product::find($item->product_id);
+        $product->increment('quantity', $item->quantity);
+        $product->save();
+    }
+
+    return response()->json($order, 200);
+}
+
     public function  orderdetail ($id){
         $order_detai = OrderDetail::where('order_id',$id)->get();
         $total = 0 ;
