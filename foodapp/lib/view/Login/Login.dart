@@ -4,6 +4,7 @@ import 'package:foodapp/api/AuthApi.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/view/Admin/HomeAdmin/MainAdmin.dart';
 import 'package:foodapp/view/Home/home.dart';
+import 'package:foodapp/view/Login/Forget.dart';
 import 'package:foodapp/view/Login/Register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -141,6 +142,18 @@ class _Login extends State<Login> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Register()));
+                        },
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blueAccent),
+                        )),
+                    TextButton(
+                        child: Text("Quên mật khẩu"),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgetPassword()));
                         },
                         style: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all<Color>(

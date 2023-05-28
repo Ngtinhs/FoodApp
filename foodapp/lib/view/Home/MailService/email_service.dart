@@ -51,4 +51,20 @@ class EmailService {
       print('Error sending email: $e');
     }
   }
+
+  static Future<void> sendResetPasswordEmail(
+      String recipientEmail, String verificationCode) async {
+    final message = Message()
+      ..from = Address('contact.tripletfood@gmail.com')
+      ..recipients.add(recipientEmail)
+      ..subject = 'Mã xác nhận'
+      ..text = 'Mã xác nhận: $verificationCode';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Email sent: ${sendReport.toString()}');
+    } catch (e) {
+      print('Error sending email: $e');
+    }
+  }
 }

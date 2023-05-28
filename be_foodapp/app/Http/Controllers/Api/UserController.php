@@ -204,5 +204,15 @@ public function updateUser(Request $request, $id)
     return response()->json(['message' => 'User updated successfully'], 200);
 }
 
+public function getPasswordByEmail($email)
+{
+    $user = User::where('email', $email)->first();
+
+    if ($user) {
+        return response()->json(['password' => $user->password]);
+    } else {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+}
 
 }
