@@ -35,4 +35,20 @@ class EmailService {
       print('Error sending email: $e');
     }
   }
+
+  static Future<void> sendOrderInfoEmails(
+      String recipientEmail, String orderDetails) async {
+    final message = Message()
+      ..from = Address('contact.tripletfood@gmail.com')
+      ..recipients.add('tripletfood.vn@gmail.com')
+      ..subject = 'Đơn đặt món mới'
+      ..text = '$orderDetails';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Email sent: ${sendReport.toString()}');
+    } catch (e) {
+      print('Error sending email: $e');
+    }
+  }
 }
