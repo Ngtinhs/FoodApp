@@ -9,21 +9,24 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  GoogleMapController? mapController;
-  String? selectedAddress;
-  bool locationPermissionGranted = false;
-  TextEditingController searchController = TextEditingController();
+  GoogleMapController? mapController; // Điều khiển Google Map
+  String? selectedAddress; // Địa chỉ đã chọn
+  bool locationPermissionGranted =
+      false; // Quyền truy cập vị trí đã được cấp hay chưa
+  TextEditingController searchController =
+      TextEditingController(); // Controller cho ô tìm kiếm
 
   @override
   void initState() {
     super.initState();
-    checkLocationPermission();
+    checkLocationPermission(); // Kiểm tra quyền truy cập vị trí khi khởi tạo
   }
 
   void checkLocationPermission() async {
     // Kiểm tra quyền truy cập định vị
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      // Nếu không bật định vị, hiển thị thông báo
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -41,9 +44,11 @@ class _MapScreenState extends State<MapScreen> {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
+        // Nếu không có quyền truy cập vị trí, yêu cầu quyền
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied ||
             permission == LocationPermission.deniedForever) {
+          // Nếu không được cấp quyền, hiển thị thông báo
           showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
@@ -60,6 +65,7 @@ class _MapScreenState extends State<MapScreen> {
           );
         } else if (permission == LocationPermission.always ||
             permission == LocationPermission.whileInUse) {
+          // Nếu được cấp quyền, cập nhật biến locationPermissionGranted và lấy vị trí hiện tại
           setState(() {
             locationPermissionGranted = true;
           });
@@ -67,6 +73,7 @@ class _MapScreenState extends State<MapScreen> {
         }
       } else if (permission == LocationPermission.always ||
           permission == LocationPermission.whileInUse) {
+        // Nếu đã được cấp quyền truy cập vị trí, cập nhật biến locationPermissionGranted và lấy vị trí hiện tại
         setState(() {
           locationPermissionGranted = true;
         });
@@ -105,6 +112,7 @@ class _MapScreenState extends State<MapScreen> {
           selectedAddress = address;
         });
       } else {
+        // Nếu không tìm thấy địa chỉ, hiển thị thông báo
         showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -120,6 +128,7 @@ class _MapScreenState extends State<MapScreen> {
         );
       }
     } else {
+      // Nếu không có địa chỉ được nhập, hiển thị thông báo
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
