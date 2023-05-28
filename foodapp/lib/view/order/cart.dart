@@ -4,6 +4,7 @@ import 'package:foodapp/api/CartApi.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
 import 'package:foodapp/model/Cart.dart';
+import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/order/formcheckout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,6 +79,7 @@ class _CartListState extends State<CartList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Row(
             children: [
               Text("Giỏ hàng"),
@@ -332,6 +334,30 @@ class _CartListState extends State<CartList> {
                     },
                   ),
                 ))),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: InkWell(
+                child: Container(
+                  // height: constraints.maxHeight / 2,
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  decoration:
+                      BoxDecoration(color: Color.fromRGBO(59, 185, 52, 1)),
+                  child: Center(
+                      child: Text(
+                    "Quay về trang chủ",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  )),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+                },
+              ),
+            ),
             if (checkcart == true)
               Align(
                 alignment: Alignment.bottomCenter,
