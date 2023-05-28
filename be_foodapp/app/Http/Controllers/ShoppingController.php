@@ -130,31 +130,40 @@ class ShoppingController extends Controller
         return response()->json("khong ton tai", 404);
 
     }
- public function order(Request $request){
-     $validator = Validator::make($request->all(), [
-         'user_id'=>'required',
-         'name'=>'required',
-         'phone'=>'required',
-         'address'=>'required',
-         'note'=>'required',
-     ]);
-     if ($validator->fails()) {
-         return response()->json($validator->errors(), 401);
-     }
-     $cart = Shopping::where('user_id',$request->user_id)->get();
-     if($cart->count()==0)  return response()->json("giohangrong", 404);
+    public function order(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+            'note' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 401);
+        }
+    
+        $cart = Shopping::where('user_id', $request->user_id)->get();
+    
+        if ($cart->count() == 0) {
+            return response()->json("giohangrong", 404);
+        }
+    
         $total = 0;
         $order = new Order();
         $order->name = $request->name;
         $order->phone = $request->phone;
         $order->address = $request->address;
         $order->note = $request->note;
-        $order->status =0;
-        $order->total_price =0;
+        $order->status = 0;
+        $order->total_price = 0;
         $order->user_id = $request->user_id;
         $order->save();
-     foreach ($cart as $item){
+    
+        foreach ($cart as $item) {
             $total += $item->total;
+    
             $order_detail = new OrderDetail();
             $order_detail->product_id = $item->product_id;
             $order_detail->order_id = $order->id;
@@ -163,12 +172,21 @@ class ShoppingController extends Controller
             $order_detail->quantity = $item->quantity;
             $order_detail->image = $item->image;
             $order_detail->save();
+    
+            // Giảm số lượng sản phẩm trong giỏ hàng từ cơ sở dữ liệu
+            $product = Product::find($item->product_id);
+            $product->decrement('quantity', $item->quantity);
+            $product->save();
+    
             $item->delete();
-     }
-     $order->total_price = $total;
-     $order->save();
-     return response()->json("datthanhcong", 200);
+        }
+    
+        $order->total_price = $total;
+        $order->save();
+    
+        return response()->json("datthanhcong", 200);
     }
+    
     public function listorder($id,$status){
         if($status=="4"){
             $order = Order::where('user_id',$id)->get();
