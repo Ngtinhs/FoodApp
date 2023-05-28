@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/CartApi.dart';
 import 'package:foodapp/config/apihelper.dart';
@@ -127,7 +128,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                                             BorderRadius
                                                                 .circular(10),
                                                         image: DecorationImage(
-                                                            image: NetworkImage(
+                                                            image: CachedNetworkImageProvider(
                                                                 "${Apihelper.image_base}/product/${muanhieu[index].image}"),
                                                             fit: BoxFit.cover)),
                                                   ),
