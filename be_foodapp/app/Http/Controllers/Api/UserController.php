@@ -204,5 +204,38 @@ public function updateUser(Request $request, $id)
     return response()->json(['message' => 'User updated successfully'], 200);
 }
 
+public function getPasswordByEmail($email)
+{
+    $user = User::where('email', $email)->first();
+
+    if ($user) {
+        return response()->json(['password' => $user->password]);
+    } else {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+}
+
+public function updatePassword(Request $request, $email)
+{
+    $validator = Validator::make($request->all(), [
+        'password' => 'required'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 401);
+    }
+
+    $user = User::where('email', $email)->first();
+
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    $user->password = bcrypt($request->password);
+    $user->save();
+
+    return response()->json(['message' => 'Password updated successfully'], 200);
+}
+
 
 }

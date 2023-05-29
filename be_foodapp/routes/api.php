@@ -98,6 +98,10 @@ Route::delete('/users/{id}', '\App\Http\Controllers\Api\UserController@deleteUse
 Route::put('/users/{id}', '\App\Http\Controllers\Api\UserController@updateUser');
 
 
+Route::put('/user/{email}', '\App\Http\Controllers\Api\UserController@updatePassword');
+
+
+
 
 // Product
 Route::group(['prefix' => 'product'], function () {
