@@ -9,6 +9,11 @@ class ManageCategory extends StatefulWidget {
   _ManageCategoryState createState() => _ManageCategoryState();
 }
 
+enum SortType {
+  Newest,
+  Oldest,
+}
+
 class _ManageCategoryState extends State<ManageCategory> {
   List<Map<String, dynamic>> categories = [];
   Map<String, dynamic>? selectedCategory;
@@ -18,6 +23,7 @@ class _ManageCategoryState extends State<ManageCategory> {
   String newCategoryName = '';
   String newCategoryImage = '';
   String selectedImageName = '';
+  SortType currentSort = SortType.Newest;
 
   @override
   void initState() {
@@ -25,14 +31,20 @@ class _ManageCategoryState extends State<ManageCategory> {
     fetchCategories();
   }
 
-  void fetchCategories() async {
+  void fetchCategories({SortType sortType = SortType.Newest}) async {
     try {
       final response =
           await http.get(Uri.parse('http://10.0.2.2:8000/api/categories'));
       if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> fetchedCategories =
+            List<Map<String, dynamic>>.from(jsonDecode(response.body));
         setState(() {
-          categories =
-              List<Map<String, dynamic>>.from(jsonDecode(response.body));
+          if (sortType == SortType.Newest) {
+            categories = fetchedCategories.reversed.toList();
+          } else {
+            categories = fetchedCategories;
+          }
+          currentSort = sortType;
         });
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -48,7 +60,7 @@ class _ManageCategoryState extends State<ManageCategory> {
           Uri.parse('http://10.0.2.2:8000/api/categories/delete/$categoryId'));
       if (response.statusCode == 200) {
         print(jsonDecode(response.body)['message']);
-        fetchCategories();
+        fetchCategories(sortType: currentSort);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -248,6 +260,24 @@ class _ManageCategoryState extends State<ManageCategory> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quản lý danh mục món ăn'),
+        actions: [
+          PopupMenuButton<SortType>(
+            icon: Icon(Icons.sort),
+            onSelected: (SortType result) {
+              fetchCategories(sortType: result);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
+              const PopupMenuItem<SortType>(
+                value: SortType.Newest,
+                child: Text('Mới nhất'),
+              ),
+              const PopupMenuItem<SortType>(
+                value: SortType.Oldest,
+                child: Text('Cũ nhất'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: categories.length,

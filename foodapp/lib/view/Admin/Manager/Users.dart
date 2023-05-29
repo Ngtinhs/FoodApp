@@ -7,6 +7,11 @@ class ManageUsers extends StatefulWidget {
   _ManageUsersState createState() => _ManageUsersState();
 }
 
+enum SortType {
+  Newest,
+  Oldest,
+}
+
 class _ManageUsersState extends State<ManageUsers> {
   List<Map<String, dynamic>> users = [];
   Map<String, dynamic>? selectedUser;
@@ -15,6 +20,7 @@ class _ManageUsersState extends State<ManageUsers> {
   String updatedEmail = '';
   String updatedPhone = '';
   String updatedAddress = '';
+  SortType currentSort = SortType.Newest;
 
   @override
   void initState() {
@@ -22,13 +28,21 @@ class _ManageUsersState extends State<ManageUsers> {
     fetchUsers();
   }
 
-  void fetchUsers() async {
+  void fetchUsers({SortType sortType = SortType.Newest}) async {
     try {
       final response =
           await http.get(Uri.parse('http://10.0.2.2:8000/api/users'));
       if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> fetchedUsers =
+            List<Map<String, dynamic>>.from(jsonDecode(response.body));
+
         setState(() {
-          users = List<Map<String, dynamic>>.from(jsonDecode(response.body));
+          if (sortType == SortType.Newest) {
+            users = fetchedUsers.reversed.toList();
+          } else {
+            users = fetchedUsers;
+          }
+          currentSort = sortType;
         });
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -45,7 +59,7 @@ class _ManageUsersState extends State<ManageUsers> {
       if (response.statusCode == 200) {
         print(jsonDecode(response.body)['message']);
 
-        fetchUsers();
+        fetchUsers(sortType: currentSort);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -215,6 +229,24 @@ class _ManageUsersState extends State<ManageUsers> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quản lý người dùng'),
+        actions: [
+          PopupMenuButton<SortType>(
+            icon: Icon(Icons.sort),
+            onSelected: (SortType result) {
+              fetchUsers(sortType: result);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
+              const PopupMenuItem<SortType>(
+                value: SortType.Newest,
+                child: Text('Mới nhất'),
+              ),
+              const PopupMenuItem<SortType>(
+                value: SortType.Oldest,
+                child: Text('Cũ nhất'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: users.length,
