@@ -185,30 +185,78 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
-                      height: 200,
-                      width: 200,
-                      child: Image.asset('assets/image/petlogo.png'),
+                      padding: EdgeInsets.symmetric(vertical: 25),
+                      width: 400,
+                      height: 70,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            color: Color.fromRGBO(59, 185, 52, 1),
+                          ),
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 16.0),
+                    Container(
+                      padding: EdgeInsets.all(16.0),
+                      child: Image.asset('assets/image/petlogo.png',
+                          height: 200, width: 200),
+                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: TextFormField(
                         controller: emailController,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                        ),
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          contentPadding:
+                              EdgeInsets.only(bottom: -9, left: 13, right: 13),
+                          hintText: "Email",
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'Roboto',
+                            fontSize: 13,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(59, 185, 52, 1),
+                                width: 2.0),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: checkEmailExists,
-                      child: Text('Gửi mã xác nhận'),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                        onPressed: checkEmailExists,
+                        child: Text(
+                          'Gửi mã xác nhận',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 50, right: 50),
+                          backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+                          shape: StadiumBorder(),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 16.0),
                     Visibility(
@@ -219,15 +267,48 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
                             child: TextFormField(
                               controller: codeController,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
+                              ),
                               decoration: InputDecoration(
-                                labelText: 'Mã xác nhận',
+                                contentPadding: EdgeInsets.only(
+                                    bottom: -9, left: 13, right: 13),
+                                hintText: "Mã xác nhận",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromRGBO(59, 185, 52, 1),
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
                               ),
                             ),
                           ),
                           SizedBox(height: 16.0),
-                          ElevatedButton(
-                            onPressed: checkConfirmationCode,
-                            child: Text('Xác minh mã'),
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            child: ElevatedButton(
+                              onPressed: checkConfirmationCode,
+                              child: Text(
+                                'Xác minh mã',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.only(
+                                    top: 10, bottom: 10, left: 50, right: 50),
+                                backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+                                shape: StadiumBorder(),
+                              ),
+                            ),
                           ),
                         ],
                       ),
