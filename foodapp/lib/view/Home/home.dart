@@ -317,6 +317,12 @@ class _Home extends State<Home> {
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
+                  Tab(
+                    child: Text(
+                      "Khuyến mãi",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
                 ],
               ),
             ),

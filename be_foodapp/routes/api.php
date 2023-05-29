@@ -36,6 +36,22 @@ Route::group(['prefix' => 'categories'], function () {
     Route::delete('delete/{id}', [\App\Http\Controllers\Api\CategoriesController::class, 'delete']);
 });
 
+
+// Coupon
+Route::group(['prefix' => 'coupon'], function () {
+    // Create a coupon
+    Route::post('create', [\App\Http\Controllers\Api\CouponController::class, 'insert']);
+
+    // Get all coupon
+    Route::get('/', [\App\Http\Controllers\Api\CouponController::class, 'index']);
+
+    // Update a coupon
+    Route::put('update/{id}', [\App\Http\Controllers\Api\CouponController::class, 'update']);
+
+    // Delete a coupon
+    Route::delete('delete/{id}', [\App\Http\Controllers\Api\CouponController::class, 'delete']);
+});
+
 // Cart
 Route::group(['prefix' => 'cart'], function () {
     // Get cart
@@ -68,10 +84,10 @@ Route::group(['prefix' => 'cart'], function () {
 
     Route::get('doanhthungay', [\App\Http\Controllers\ShoppingController::class, 'calculateDailyRevenue']);
 
-
-
-
 });
+
+
+
 
 // List orders
 Route::get('/listorder/{id}/{status}', [\App\Http\Controllers\ShoppingController::class, 'listorder']);
@@ -201,6 +217,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         // Delete a specific message
         Route::post('delete/{id}', 'App\Http\Controllers\Api\MessageController@delete');
     });
+    
 });
 
 // Public routes
@@ -208,4 +225,7 @@ Route::group(['prefix' => 'posts'], function () {
     // Get all posts
     Route::get('/', '\App\Http\Controllers\Api\PostController@index');
 });
+
+
+
 
