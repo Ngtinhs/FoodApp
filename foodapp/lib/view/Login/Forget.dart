@@ -165,46 +165,78 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Quên mật khẩu'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
+      body: Container(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 25),
+              width: 400,
+              height: 70,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Color.fromRGBO(59, 185, 52, 1),
+                  ),
                 ),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: checkEmailExists,
-                child: Text('Gửi mã xác nhận'),
-              ),
-              SizedBox(height: 16.0),
-              Visibility(
-                visible: emailExists,
+            ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    TextField(
-                      controller: codeController,
-                      decoration: InputDecoration(
-                        labelText: 'Mã xác nhận',
+                    Container(
+                      height: 200,
+                      width: 200,
+                      child: Image.asset('assets/image/petlogo.png'),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                        ),
                       ),
                     ),
                     SizedBox(height: 16.0),
                     ElevatedButton(
-                      onPressed: checkConfirmationCode,
-                      child: Text('Xác minh mã'),
+                      onPressed: checkEmailExists,
+                      child: Text('Gửi mã xác nhận'),
+                    ),
+                    SizedBox(height: 16.0),
+                    Visibility(
+                      visible: emailExists,
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: TextFormField(
+                              controller: codeController,
+                              decoration: InputDecoration(
+                                labelText: 'Mã xác nhận',
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed: checkConfirmationCode,
+                            child: Text('Xác minh mã'),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
