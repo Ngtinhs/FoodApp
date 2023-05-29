@@ -189,27 +189,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 25),
-                      width: 400,
-                      height: 70,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: Color.fromRGBO(59, 185, 52, 1),
-                          ),
-                        ),
+                    Center(
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        child: Image.asset('assets/image/petlogo.png'),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      child: Image.asset('assets/image/petlogo.png',
-                          height: 200, width: 200),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
