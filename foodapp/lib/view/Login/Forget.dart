@@ -1,7 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:foodapp/view/Home/MailService/email_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:random_string/random_string.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -9,33 +11,154 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  ForgetState _forgetState = ForgetState.enterEmail;
-  String _email = '';
-  String _verificationCode = '';
+  TextEditingController emailController = TextEditingController();
+  TextEditingController codeController = TextEditingController();
+  String confirmationCode = '';
+  bool emailExists = false;
+  bool codeCorrect = false;
 
-  void _sendVerificationCode() {
-    // Tạo mã xác nhận ngẫu nhiên
-    String verificationCode = _generateRandomCode();
+  void checkEmailExists() async {
+    String url = 'http://10.0.2.2:8000/api/users';
+    var response = await http.get(Uri.parse(url));
+    var data = jsonDecode(response.body);
 
-    // Gọi phương thức sendResetPasswordEmail từ EmailService để gửi email với mã xác nhận
-    EmailService.sendResetPasswordEmail(_email, verificationCode);
+    for (var user in data) {
+      if (user['email'] == emailController.text) {
+        setState(() {
+          emailExists = true;
+        });
+        break;
+      }
+    }
 
-    // Chuyển sang trạng thái nhập mã xác nhận
-    setState(() {
-      _forgetState = ForgetState.enterVerificationCode;
-      _verificationCode = verificationCode;
-    });
+    if (!emailExists) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Không tìm thấy email'),
+            content: Text(
+                'Địa chỉ email đã nhập không tồn tại trong hệ thống của chúng tôi.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      var bytes = utf8.encode(emailController.text);
+      var digest = sha256.convert(bytes);
+      confirmationCode = digest.toString().substring(0, 6);
+
+      EmailService.sendConfirmationCode(emailController.text, confirmationCode);
+    }
   }
 
-  void _resetPassword() {
-    // Kiểm tra xem mã xác nhận có khớp với mã đã gửi đi không
-    if (_verificationCode == 'mã_xác_nhận') {
-      // Tạo mật khẩu mới ngẫu nhiên
-      String newPassword = _generateRandomPassword();
-      // Gửi mật khẩu mới đến email
-      EmailService.sendResetPasswordEmail(_email, newPassword);
-      // Chuyển sang trang đăng nhập (có thể sử dụng Navigator để điều hướng)
-      // ...
+  void checkConfirmationCode() {
+    var inputCode = codeController.text;
+
+    if (inputCode == confirmationCode) {
+      setState(() {
+        codeCorrect = true;
+      });
+      generateNewPassword(); // Tạo mật khẩu mới khi xác nhận mã thành công
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Mã xác nhận không tồn tại'),
+            content: Text('Vui lòng nhập mã xác nhận hợp lệ'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void generateNewPassword() async {
+    var newPassword = randomAlphaNumeric(8);
+
+    if (codeCorrect) {
+      String url = 'http://10.0.2.2:8000/api/user/${emailController.text}';
+      var response = await http.put(
+        Uri.parse(url),
+        body: {
+          'password': newPassword,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        EmailService.sendResetPasswordEmail(emailController.text, newPassword);
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Mật khẩu được cập nhật'),
+              content: Text(
+                  'Mật khẩu của bạn đã được cập nhật thành công. Mật khẩu mới của bạn đã được gửi đến email của bạn.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Lỗi'),
+              content: Text('Không thể cập nhật mật khẩu. Vui lòng thử lại.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Mã không hợp lệ'),
+            content: Text('Vui lòng nhập mã xác nhận hợp lệ.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -45,86 +168,45 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       appBar: AppBar(
         title: Text('Quên mật khẩu'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            if (_forgetState == ForgetState.enterEmail)
-              Column(
-                children: [
-                  TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        _email = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Email'),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: _sendVerificationCode,
-                    child: Text('Gửi mã xác nhận'),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                ),
               ),
-            if (_forgetState == ForgetState.enterVerificationCode)
-              Column(
-                children: [
-                  TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        _verificationCode = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Mã xác nhận'),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: _resetPassword,
-                    child: Text('Đặt lại mật khẩu'),
-                  ),
-                ],
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: checkEmailExists,
+                child: Text('Gửi mã xác nhận'),
               ),
-          ],
+              SizedBox(height: 16.0),
+              Visibility(
+                visible: emailExists,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: codeController,
+                      decoration: InputDecoration(
+                        labelText: 'Mã xác nhận',
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: checkConfirmationCode,
+                      child: Text('Xác minh mã'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  // Phương thức tạo mã xác nhận ngẫu nhiên
-  String _generateRandomCode() {
-    const chars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random();
-    final codeLength = 6;
-
-    String code = '';
-
-    for (var i = 0; i < codeLength; i++) {
-      code += chars[random.nextInt(chars.length)];
-    }
-
-    return code;
-  }
-
-  // Phương thức tạo mật khẩu ngẫu nhiên
-  String _generateRandomPassword() {
-    const chars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random();
-    final passwordLength = 10;
-
-    String password = '';
-
-    for (var i = 0; i < passwordLength; i++) {
-      password += chars[random.nextInt(chars.length)];
-    }
-
-    return password;
-  }
-}
-
-enum ForgetState {
-  enterEmail,
-  enterVerificationCode,
 }
