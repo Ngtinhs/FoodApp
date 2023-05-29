@@ -23,6 +23,7 @@ class _CheckoutState extends State<Checkout> {
   TextEditingController note = new TextEditingController();
   TextEditingController promoCodeController = TextEditingController();
   String promoCode = '';
+  bool isPromoCodeApplied = false;
 
   void checktotal() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -45,12 +46,13 @@ class _CheckoutState extends State<Checkout> {
         (coupon) => coupon['code'] == promoCodeController.text,
         orElse: () => null,
       );
-      if (foundCoupon != null) {
+      if (foundCoupon != null && !isPromoCodeApplied) {
         // Mã khuyến mãi tồn tại
         final promotionPercentage = foundCoupon['promotion'] as int;
         // Cập nhật tổng tiền dựa trên giảm giá phần trăm
         setState(() {
           total_cart = (total_cart * (100 - promotionPercentage) / 100).round();
+          isPromoCodeApplied = true;
         });
       } else {
         // Mã khuyến mãi không tồn tại
@@ -139,7 +141,7 @@ class _CheckoutState extends State<Checkout> {
         appBar: AppBar(
           title: Row(
             children: [
-              Text("Form checkout"),
+              Text("Thông tin đặt món"),
             ],
           ),
           backgroundColor: Color.fromRGBO(59, 185, 52, 1),
@@ -158,7 +160,7 @@ class _CheckoutState extends State<Checkout> {
                       BoxDecoration(color: Color.fromRGBO(59, 185, 52, 1)),
                   child: Center(
                       child: Text(
-                    "TIẾN HÀNH ĐẶT HÀNG",
+                    "TIẾN HÀNH ĐẶT MÓN",
                     style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -215,7 +217,7 @@ class _CheckoutState extends State<Checkout> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "THÔNG TIN ĐẶT HÀNG",
+                            "THÔNG TIN ĐẶT MÓN",
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 20,
@@ -223,7 +225,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                         ),
                         SizedBox(
-                          height: 40,
+                          height: 10,
                         ),
                         TextFormField(
                           controller: namec,
@@ -253,7 +255,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         TextFormField(
                           controller: phone,
@@ -284,7 +286,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         TextFormField(
                           controller: address,
@@ -314,7 +316,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         TextFormField(
                           controller: note,
@@ -344,7 +346,7 @@ class _CheckoutState extends State<Checkout> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         TextFormField(
                           controller: promoCodeController,
