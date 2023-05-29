@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+enum SortType {
+  Newest,
+  Oldest,
+}
+
 class ManageOrders extends StatefulWidget {
   @override
   _ManageOrdersState createState() => _ManageOrdersState();
@@ -16,13 +21,27 @@ class _ManageOrdersState extends State<ManageOrders> {
     fetchOrders();
   }
 
-  Future<void> fetchOrders() async {
+  Future<void> fetchOrders({SortType sortType = SortType.Newest}) async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/cart/allorders'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8000/api/cart/allorders'),
+      );
       if (response.statusCode == 200) {
+        List<dynamic> fetchedOrders = json.decode(response.body);
+
+        // Sắp xếp danh sách đơn đặt hàng dựa trên sortType (nếu được cung cấp)
+        fetchedOrders.sort((a, b) {
+          if (sortType == SortType.Newest) {
+            return DateTime.parse(b['created_at'])
+                .compareTo(DateTime.parse(a['created_at']));
+          } else {
+            return DateTime.parse(a['created_at'])
+                .compareTo(DateTime.parse(b['created_at']));
+          }
+        });
+
         setState(() {
-          orders = json.decode(response.body);
+          orders = fetchedOrders;
         });
       } else {
         print('Failed to fetch orders. Error: ${response.statusCode}');
@@ -118,6 +137,24 @@ class _ManageOrdersState extends State<ManageOrders> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quản lý đơn đặt món'),
+        actions: [
+          PopupMenuButton<SortType>(
+            icon: Icon(Icons.sort),
+            onSelected: (SortType sortType) {
+              fetchOrders(sortType: sortType);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
+              const PopupMenuItem<SortType>(
+                value: SortType.Newest,
+                child: Text('Mới nhất'),
+              ),
+              const PopupMenuItem<SortType>(
+                value: SortType.Oldest,
+                child: Text('Cũ nhất'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: orders.length,

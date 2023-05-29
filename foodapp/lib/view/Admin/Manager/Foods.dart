@@ -9,6 +9,11 @@ class ManageFood extends StatefulWidget {
   _ManageFoodState createState() => _ManageFoodState();
 }
 
+enum SortType {
+  Newest,
+  Oldest,
+}
+
 class _ManageFoodState extends State<ManageFood> {
   List<Map<String, dynamic>> foods = [];
   Map<String, dynamic>? selectedFood;
@@ -27,6 +32,7 @@ class _ManageFoodState extends State<ManageFood> {
   String newFoodDetail = '';
   String newFoodQuantity = '';
   String selectedImageName = '';
+  SortType currentSort = SortType.Newest;
 
   @override
   void initState() {
@@ -35,13 +41,20 @@ class _ManageFoodState extends State<ManageFood> {
     fetchCategories();
   }
 
-  void fetchFoods() async {
+  void fetchFoods({SortType sortType = SortType.Newest}) async {
     try {
       final response = await http
           .get(Uri.parse('http://10.0.2.2:8000/api/product/tatcasanpham'));
       if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> fetchedFoods =
+            List<Map<String, dynamic>>.from(jsonDecode(response.body));
         setState(() {
-          foods = List<Map<String, dynamic>>.from(jsonDecode(response.body));
+          if (sortType == SortType.Newest) {
+            foods = fetchedFoods.reversed.toList();
+          } else {
+            foods = fetchedFoods;
+          }
+          currentSort = sortType;
         });
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -57,7 +70,7 @@ class _ManageFoodState extends State<ManageFood> {
           .delete(Uri.parse('http://10.0.2.2:8000/api/product/delete/$foodId'));
       if (response.statusCode == 200) {
         print(jsonDecode(response.body)['message']);
-        fetchFoods();
+        fetchFoods(sortType: currentSort);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -354,6 +367,24 @@ class _ManageFoodState extends State<ManageFood> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quản lý món ăn'),
+        actions: [
+          PopupMenuButton<SortType>(
+            icon: Icon(Icons.sort),
+            onSelected: (SortType result) {
+              fetchFoods(sortType: result);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
+              const PopupMenuItem<SortType>(
+                value: SortType.Newest,
+                child: Text('Mới nhất'),
+              ),
+              const PopupMenuItem<SortType>(
+                value: SortType.Oldest,
+                child: Text('Cũ nhất'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: foods.length,
