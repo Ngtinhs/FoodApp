@@ -55,4 +55,60 @@ class UserApi {
       print(statusres.statusCode.toString());
     }
   }
+
+  static Future<List<Map<String, dynamic>>> fetchUsers() async {
+    try {
+      final response = await http.get(Uri.parse("${Apihelper.url_base}/users"));
+      if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> fetchedUsers =
+            List<Map<String, dynamic>>.from(jsonDecode(response.body));
+
+        return fetchedUsers;
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+
+    return [];
+  }
+
+  static Future<bool> deleteUser(int userId) async {
+    try {
+      final response =
+          await http.delete(Uri.parse('${Apihelper.url_base}/users/$userId'));
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body)['message']);
+        return true;
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+
+    return false;
+  }
+
+  static Future<bool> updateUser(
+      int userId, Map<String, dynamic> userData) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${Apihelper.url_base}/users/$userId'),
+        body: jsonEncode(userData),
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body)['message']);
+        return true;
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+
+    return false;
+  }
 }
