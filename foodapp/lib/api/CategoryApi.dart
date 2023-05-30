@@ -20,7 +20,7 @@ class CategoryApi {
   static Future<List<Map<String, dynamic>>> fetchCategories() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/categories'));
+          await http.get(Uri.parse('${Apihelper.url_base}/categories'));
       if (response.statusCode == 200) {
         final List<Map<String, dynamic>> fetchedCategories =
             List<Map<String, dynamic>>.from(jsonDecode(response.body));
@@ -38,7 +38,7 @@ class CategoryApi {
   static Future<bool> deleteCategory(int categoryId) async {
     try {
       final response = await http.delete(
-          Uri.parse('http://10.0.2.2:8000/api/categories/delete/$categoryId'));
+          Uri.parse('${Apihelper.url_base}/categories/delete/$categoryId'));
       if (response.statusCode == 200) {
         print(jsonDecode(response.body)['message']);
         return true;
@@ -63,7 +63,7 @@ class CategoryApi {
       try {
         final response = await http.put(
           Uri.parse(
-              'http://10.0.2.2:8000/api/categories/update/${selectedCategory['id']}'),
+              '${Apihelper.url_base}/categories/update/${selectedCategory['id']}'),
           body: jsonEncode(categoryData),
           headers: {'Content-Type': 'application/json'},
         );
@@ -91,7 +91,7 @@ class CategoryApi {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/api/categories/create'),
+        Uri.parse('${Apihelper.url_base}/categories/create'),
       );
 
       request.fields['name'] = newCategoryName;
