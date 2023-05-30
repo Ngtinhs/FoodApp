@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:foodapp/api/UserApi.dart';
 
 class ManageUsers extends StatefulWidget {
   @override
@@ -29,42 +28,50 @@ class _ManageUsersState extends State<ManageUsers> {
   }
 
   void fetchUsers({SortType sortType = SortType.Newest}) async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/users'));
-      if (response.statusCode == 200) {
-        final List<Map<String, dynamic>> fetchedUsers =
-            List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    final fetchedUsers = await UserApi.fetchUsers();
 
-        setState(() {
-          if (sortType == SortType.Newest) {
-            users = fetchedUsers.reversed.toList();
-          } else {
-            users = fetchedUsers;
-          }
-          currentSort = sortType;
-        });
+    setState(() {
+      if (sortType == SortType.Newest) {
+        users = fetchedUsers.reversed.toList();
       } else {
-        print('Request failed with status: ${response.statusCode}');
+        users = fetchedUsers;
       }
-    } catch (error) {
-      print('Error: $error');
-    }
+      currentSort = sortType;
+    });
   }
 
   void deleteUser(int userId) async {
-    try {
-      final response = await http
-          .delete(Uri.parse('http://10.0.2.2:8000/api/users/$userId'));
-      if (response.statusCode == 200) {
-        print(jsonDecode(response.body)['message']);
+    final success = await UserApi.deleteUser(userId);
 
-        fetchUsers(sortType: currentSort);
-      } else {
-        print('Request failed with status: ${response.statusCode}');
+    if (success) {
+      fetchUsers(sortType: currentSort);
+    }
+  }
+
+  void updateUser() async {
+    if (selectedUser != null) {
+      final userData = {
+        'name': updatedName,
+        'email': updatedEmail,
+        'phone': updatedPhone,
+        'address': updatedAddress,
+      };
+
+      final success = await UserApi.updateUser(selectedUser?['id'], userData);
+
+      if (success) {
+        final updatedUsers = users.map<Map<String, dynamic>>((user) {
+          if (user['id'] == selectedUser?['id']) {
+            return {...user, ...userData};
+          }
+          return user;
+        }).toList();
+
+        setState(() {
+          users = updatedUsers;
+          closeModal();
+        });
       }
-    } catch (error) {
-      print('Error: $error');
     }
   }
 
@@ -88,44 +95,6 @@ class _ManageUsersState extends State<ManageUsers> {
       updatedAddress = '';
       showModal = false;
     });
-  }
-
-  void updateUser() async {
-    if (selectedUser != null) {
-      final userData = {
-        'name': updatedName,
-        'email': updatedEmail,
-        'phone': updatedPhone,
-        'address': updatedAddress,
-      };
-
-      try {
-        final response = await http.put(
-          Uri.parse('http://10.0.2.2:8000/api/users/${selectedUser?['id']}'),
-          body: jsonEncode(userData),
-          headers: {'Content-Type': 'application/json'},
-        );
-        if (response.statusCode == 200) {
-          print(jsonDecode(response.body)['message']);
-
-          final updatedUsers = users.map<Map<String, dynamic>>((user) {
-            if (user['id'] == selectedUser?['id']) {
-              return {...user, ...userData};
-            }
-            return user;
-          }).toList();
-
-          setState(() {
-            users = updatedUsers;
-            closeModal();
-          });
-        } else {
-          print('Request failed with status: ${response.statusCode}');
-        }
-      } catch (error) {
-        print('Error: $error');
-      }
-    }
   }
 
   void _showEditDialog(BuildContext context, Map<String, dynamic> user) {
