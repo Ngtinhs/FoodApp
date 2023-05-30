@@ -52,6 +52,23 @@ Route::group(['prefix' => 'coupon'], function () {
     Route::delete('delete/{id}', [\App\Http\Controllers\Api\CouponController::class, 'delete']);
 });
 
+
+
+// Review
+Route::group(['prefix' => 'review'], function () {
+    // Get all Review
+    Route::get('/', [\App\Http\Controllers\Api\ReviewController::class, 'index']);
+    // Create a Review
+    Route::post('create', [\App\Http\Controllers\Api\ReviewController::class, 'create']);
+
+
+    // Update a Review
+    Route::put('update/{id}', [\App\Http\Controllers\Api\ReviewController::class, 'update']);
+
+    // Delete a Review
+    Route::delete('delete/{id}', [\App\Http\Controllers\Api\ReviewController::class, 'delete']);
+});
+
 // Cart
 Route::group(['prefix' => 'cart'], function () {
     // Get cart
