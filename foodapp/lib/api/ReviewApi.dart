@@ -1,9 +1,10 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:foodapp/config/apihelper.dart';
+import 'package:http/http.dart' as http;
 import 'package:foodapp/model/Review.dart';
 
 class ReviewApi {
-  static const String apiUrl = 'http://localhost:8000/api/review/';
+  static String apiUrl = '${Apihelper.url_base}/review/';
 
   static Future<List<Review>> getAllReviews() async {
     final response = await http.get(Uri.parse(apiUrl));
