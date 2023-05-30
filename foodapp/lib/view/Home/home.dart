@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/api/CategoryApi.dart';
+import 'package:foodapp/api/Coupon.dart';
 import 'package:foodapp/api/ProductApi.dart';
 import 'package:foodapp/config/apihelper.dart';
 import 'package:foodapp/config/pref.dart';
 import 'package:foodapp/model/Category.dart';
+import 'package:foodapp/model/Coupon.dart';
 import 'package:foodapp/model/Product.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:foodapp/view/Product/detailproduct.dart';
@@ -23,6 +25,7 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   late CategoryApi categoryapi = new CategoryApi();
   late ProductApi productapi = new ProductApi();
+  late CouponApi couponapi = new CouponApi();
 
   late Pref pref = new Pref();
   late bool login;
@@ -56,6 +59,7 @@ class _Home extends State<Home> {
   }
 
   late Future<List<Category>> categories = categoryapi.getCategories();
+  late Future<List<Coupon>> coupon = couponapi.getCoupon();
   late Future<List<Product>> muanhieu = productapi.muanhieu();
   late Future<List<Product>> tatcasanpham = productapi.tatcasanpham();
   late Future<List<Product>> sanphammoi = productapi.getProductnew();
@@ -91,17 +95,25 @@ class _Home extends State<Home> {
     return tatcasanpham;
   }
 
+  Future<List<Coupon>> refreshcoupon() async {
+    setState(() {
+      coupon = couponapi.getCoupon();
+    });
+    return coupon;
+  }
+
   @override
   initState() {
     checklogin();
     refreshCate();
     refreshProductnew();
+    refreshcoupon();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
             drawer: Drawer(
               child: ListView(
@@ -319,7 +331,7 @@ class _Home extends State<Home> {
                   ),
                   Tab(
                     child: Text(
-                      "Khuyến mãi",
+                      "Coupon",
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -599,6 +611,154 @@ class _Home extends State<Home> {
                               );
                             }
                           }),
+                    ),
+                  ],
+                ),
+              ),
+
+              //Khuyến mãi
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(7),
+                      child: Text(
+                        "DANH SÁCH MÃ GIẢM GIÁ",
+                        style: TextStyle(
+                          color: Color.fromRGBO(0, 128, 0, 1.0),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 800,
+                      child: FutureBuilder(
+                        future: coupon,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Coupon>> snapshot) {
+                          if (snapshot.hasData) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.none:
+                              case ConnectionState.waiting:
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              default:
+                                if (snapshot.hasError) {
+                                  return Text("Error Data");
+                                } else {
+                                  List<Coupon>? coupon = snapshot.data;
+                                  return RefreshIndicator(
+                                    child: GridView.builder(
+                                      itemCount: coupon!.length,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5.0,
+                                        mainAxisSpacing: 10,
+                                      ),
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return Container(
+                                          padding: EdgeInsets.only(top: 5),
+                                          decoration: BoxDecoration(
+                                            color: Color.fromRGBO(186, 186, 186,
+                                                0.12549019607843137),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 60,
+                                                child: Icon(Icons.card_giftcard,
+                                                    size: 40),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 15,
+                                                    right: 15,
+                                                    top: 10),
+                                                child: Text(
+                                                  "Mã giảm giá: ${coupon[index].code}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  "Số lượng: ${coupon[index].count}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.pink,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.local_offer,
+                                                        color: Colors.pink),
+                                                    SizedBox(width: 5),
+                                                    Text(
+                                                      "Khuyến mãi: ${coupon[index].promotion}%",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.pink,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 15),
+                                                child: Text(
+                                                  "Mô tả: ${coupon[index].description}",
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    onRefresh: refreshcoupon,
+                                  );
+                                }
+                            }
+                          } else {
+                            return Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 30),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      refreshtatca();
+                                    },
+                                    child: Text("Refresh"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
