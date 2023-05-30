@@ -4,6 +4,7 @@ import 'package:foodapp/view/Admin/Manager/Foods.dart';
 import 'package:foodapp/view/Admin/Manager/ManageOrders.dart';
 import 'package:foodapp/view/Admin/Manager/Users.dart';
 import 'package:foodapp/view/Admin/Manager/Revenue.dart';
+import 'package:foodapp/view/Admin/Manager/Coupons.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -101,6 +102,29 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 8),
                 Text(
                   'Quản lý người dùng',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ManageCoupon()),
+              );
+            },
+            child: Column(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.amberAccent,
+                  radius: 40,
+                  child: Icon(Icons.local_offer, size: 40),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Quản lý khuyến mãi',
                   style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
