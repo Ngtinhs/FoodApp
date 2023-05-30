@@ -51,7 +51,6 @@ class HomeScreen extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: Colors.green,
                   radius: 40,
-                  child: Icon(Icons.restaurant_menu, size: 40),
                 ),
                 SizedBox(height: 8),
                 Text(
