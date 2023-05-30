@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:foodapp/api/categoryApi.dart';
 
 class ManageCategory extends StatefulWidget {
   @override
@@ -32,40 +31,23 @@ class _ManageCategoryState extends State<ManageCategory> {
   }
 
   void fetchCategories({SortType sortType = SortType.Newest}) async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/categories'));
-      if (response.statusCode == 200) {
-        final List<Map<String, dynamic>> fetchedCategories =
-            List<Map<String, dynamic>>.from(jsonDecode(response.body));
-        setState(() {
-          if (sortType == SortType.Newest) {
-            categories = fetchedCategories.reversed.toList();
-          } else {
-            categories = fetchedCategories;
-          }
-          currentSort = sortType;
-        });
+    final fetchedCategories = await CategoryApi.fetchCategories();
+
+    setState(() {
+      if (sortType == SortType.Newest) {
+        categories = fetchedCategories.reversed.toList();
       } else {
-        print('Request failed with status: ${response.statusCode}');
+        categories = fetchedCategories;
       }
-    } catch (error) {
-      print('Error: $error');
-    }
+      currentSort = sortType;
+    });
   }
 
   void deleteCategory(int categoryId) async {
-    try {
-      final response = await http.delete(
-          Uri.parse('http://10.0.2.2:8000/api/categories/delete/$categoryId'));
-      if (response.statusCode == 200) {
-        print(jsonDecode(response.body)['message']);
-        fetchCategories(sortType: currentSort);
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error: $error');
+    final success = await CategoryApi.deleteCategory(categoryId);
+
+    if (success) {
+      fetchCategories(sortType: currentSort);
     }
   }
 
@@ -88,83 +70,35 @@ class _ManageCategoryState extends State<ManageCategory> {
   }
 
   void updateCategory() async {
-    if (selectedCategory != null) {
-      final categoryData = {
-        'name': updatedName,
-        'image': updatedImage,
-      };
+    final success = await CategoryApi.updateCategory(
+        selectedCategory, updatedName, updatedImage);
 
-      try {
-        final response = await http.put(
-          Uri.parse(
-              'http://10.0.2.2:8000/api/categories/update/${selectedCategory?['id']}'),
-          body: jsonEncode(categoryData),
-          headers: {'Content-Type': 'application/json'},
-        );
-        if (response.statusCode == 200) {
-          print(jsonDecode(response.body)['message']);
-
-          final updatedCategories =
-              categories.map<Map<String, dynamic>>((category) {
-            if (category['id'] == selectedCategory?['id']) {
-              return {...category, ...categoryData};
-            }
-            return category;
-          }).toList();
-
-          setState(() {
-            categories = updatedCategories;
-            closeModal();
-          });
-        } else {
-          print('Request failed with status: ${response.statusCode}');
+    if (success) {
+      final updatedCategories =
+          categories.map<Map<String, dynamic>>((category) {
+        if (category['id'] == selectedCategory?['id']) {
+          return {...category, 'name': updatedName, 'image': updatedImage};
         }
-      } catch (error) {
-        print('Error: $error');
-      }
+        return category;
+      }).toList();
+
+      setState(() {
+        categories = updatedCategories;
+        closeModal();
+      });
     }
   }
 
   void createCategory() async {
-    final categoryData = {
-      'name': newCategoryName,
-      'image': newCategoryImage,
-    };
+    final success =
+        await CategoryApi.createCategory(newCategoryName, newCategoryImage);
 
-    try {
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://10.0.2.2:8000/api/categories/create'),
-      );
-
-      request.fields['name'] = newCategoryName;
-
-      if (newCategoryImage.isNotEmpty) {
-        final imageBytes = await File(newCategoryImage).readAsBytes();
-        final imageName = '${DateTime.now().millisecondsSinceEpoch}-image.jpg';
-        final image = http.MultipartFile.fromBytes(
-          'image',
-          imageBytes,
-          filename: imageName,
-        );
-        request.files.add(image);
-      }
-
-      final response = await request.send();
-      final responseData = await response.stream.bytesToString();
-
-      if (response.statusCode == 200) {
-        print(jsonDecode(responseData)['message']);
-        fetchCategories();
-        setState(() {
-          newCategoryName = '';
-          newCategoryImage = '';
-        });
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error: $error');
+    if (success) {
+      fetchCategories();
+      setState(() {
+        newCategoryName = '';
+        newCategoryImage = '';
+      });
     }
   }
 
