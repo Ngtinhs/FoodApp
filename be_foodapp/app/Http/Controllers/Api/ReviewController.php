@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Model\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 
 class ReviewController extends Controller
 {
@@ -16,10 +19,30 @@ class ReviewController extends Controller
      */
     // Get all coupons
     public function index()
-    {
-        $reviews = Review::all();
-        return response()->json($reviews);
-    }
+{
+    $reviews = Review::all();
+
+    $transformedReviews = $reviews->map(function ($review) {
+        $user = User::find($review->user_id);
+        $userName = $user ? $user->name : null;
+
+        $createdAt = Carbon::parse($review->created_at);
+        CarbonInterval::setLocale('vi'); // Thiết lập locale tiếng Việt
+
+        $timeAgo = $createdAt->locale('vi')->diffForHumans(); // Sử dụng locale tiếng Việt và tính toán khoảng thời gian
+
+        return [
+            'id' => $review->id,
+            'product_id' => $review->product_id,
+            'user_id' => $userName,
+            'comment' => $review->comment,
+            'created_at' => $timeAgo,
+            'updated_at' => $timeAgo,
+        ];
+    });
+
+    return response()->json($transformedReviews);
+}
 
     public function create(Request $request)
     {

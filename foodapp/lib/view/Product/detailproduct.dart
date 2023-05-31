@@ -6,6 +6,8 @@ import 'package:foodapp/config/pref.dart';
 import 'package:foodapp/model/Product.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:foodapp/api/ReviewApi.dart';
+import 'package:foodapp/model/Review.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
@@ -23,6 +25,7 @@ class _ProductDetailState extends State<ProductDetail> {
   late String name;
   late String image;
   bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
+  List<Review> reviews = [];
 
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -37,6 +40,21 @@ class _ProductDetailState extends State<ProductDetail> {
       setState(() {
         login = false;
       });
+    }
+  }
+
+  void getReviews() async {
+    try {
+      List<Review> fetchedReviews = await ReviewApi.getAllReviews();
+      List<Review> productReviews = fetchedReviews
+          .where((review) => review.productId == product.id)
+          .toList();
+      setState(() {
+        reviews = productReviews;
+      });
+    } catch (error) {
+      print('Error getting reviews: $error');
+      // Xử lý lỗi khi không thể lấy danh sách đánh giá
     }
   }
 
@@ -56,6 +74,7 @@ class _ProductDetailState extends State<ProductDetail> {
   void initState() {
     super.initState();
     checklogin();
+    getReviews();
 
     // Kiểm tra số lượng sản phẩm và cập nhật giá trị cho biến isOutOfStock
     if (product.quantity == 0) {
@@ -83,8 +102,8 @@ class _ProductDetailState extends State<ProductDetail> {
             children: [
               Center(
                 child: CachedNetworkImage(
-                    imageUrl:
-                        "${Apihelper.image_base}/product/${product.image}"),
+                  imageUrl: "${Apihelper.image_base}/product/${product.image}",
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -143,43 +162,69 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  child: ElevatedButton.icon(
-                    icon: Icon(
-                      Icons.add_shopping_cart,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      if (!isOutOfStock) {
-                        CartApi.insert(product.id, context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isOutOfStock
-                          ? Colors.grey
-                          : Color.fromRGBO(59, 185, 52, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                    label: Text(
-                      isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Raleway',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+              if (reviews.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
+                  child: Text(
+                    'Đánh giá món ăn:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
+              if (reviews.isNotEmpty)
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: reviews.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                          'Người đánh giá: ${reviews[index].userId.toString()}'),
+                      subtitle: Text(
+                          'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
+                    );
+                  },
+                ),
+              if (reviews.isEmpty)
+                Padding(
+                  padding: EdgeInsets.all(8.0), // Lề 8 điểm cho tất cả các cạnh
+                  child: Text(
+                    'Không có đánh giá',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        height: 60,
+        child: ElevatedButton.icon(
+          icon: Icon(
+            Icons.add_shopping_cart,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if (!isOutOfStock) {
+              CartApi.insert(product.id, context);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                isOutOfStock ? Colors.grey : Color.fromRGBO(59, 185, 52, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+          label: Text(
+            isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Raleway',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
