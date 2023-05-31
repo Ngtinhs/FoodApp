@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 
 class ReviewController extends Controller
 {
@@ -26,14 +27,16 @@ class ReviewController extends Controller
         $userName = $user ? $user->name : null;
 
         $createdAt = Carbon::parse($review->created_at);
-        $timeAgo = $createdAt->diffForHumans(); // Tính thời gian theo định dạng "Vừa xong", "10 phút trước", ...
+        CarbonInterval::setLocale('vi'); // Thiết lập locale tiếng Việt
+
+        $timeAgo = $createdAt->locale('vi')->diffForHumans(); // Sử dụng locale tiếng Việt và tính toán khoảng thời gian
 
         return [
             'id' => $review->id,
             'product_id' => $review->product_id,
             'user_id' => $userName,
             'comment' => $review->comment,
-            'created_at' => $timeAgo, // Sử dụng thời gian tính toán thay vì giá trị ban đầu
+            'created_at' => $timeAgo,
             'updated_at' => $timeAgo,
         ];
     });

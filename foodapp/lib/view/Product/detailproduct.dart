@@ -180,7 +180,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       title: Text(
                           'Người đánh giá: ${reviews[index].userId.toString()}'),
                       subtitle: Text(
-                          'Bình luận: ${reviews[index].comment}\nNgày đánh giá: ${reviews[index].created_at}'),
+                          'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
                     );
                   },
                 ),
