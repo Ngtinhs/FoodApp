@@ -27,6 +27,7 @@ class _ProductDetailState extends State<ProductDetail> {
   bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
   List<Review> reviews = [];
   String sortBy = "mới nhất"; // Biến để theo dõi lựa chọn sắp xếp đánh giá
+  TextEditingController reviewController = TextEditingController();
 
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -92,9 +93,9 @@ class _ProductDetailState extends State<ProductDetail> {
     ]; // Tạo một bản sao của danh sách đánh giá
 
     if (sortBy == "mới nhất") {
-      sortedReviews.sort((a, b) => b.created_at.compareTo(a.created_at));
+      sortedReviews.sort((a, b) => b.created_at?.compareTo(a.created_at!) ?? 0);
     } else if (sortBy == "cũ nhất") {
-      sortedReviews.sort((a, b) => a.created_at.compareTo(b.created_at));
+      sortedReviews.sort((a, b) => a.created_at?.compareTo(b.created_at!) ?? 0);
     }
 
     return Scaffold(
@@ -195,8 +196,13 @@ class _ProductDetailState extends State<ProductDetail> {
                                       Text("Chi tiết món ăn:",
                                           style: TextStyle(fontSize: 16)),
                                       SizedBox(height: 5),
-                                      Text(product.detail,
-                                          style: TextStyle(fontSize: 14)),
+                                      Text(
+                                        product.detail,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.5)),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -226,13 +232,66 @@ class _ProductDetailState extends State<ProductDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (reviews.isNotEmpty)
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 8, top: 15, bottom: 10),
-                                    child: Text('Đánh giá món ăn:',
-                                        style: TextStyle(fontSize: 16)),
-                                  ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Text('Đánh giá món ăn:',
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: reviewController,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                bottom: -9,
+                                                left: 13,
+                                                right: 13),
+                                            hintText: "Nhập đánh giá",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontFamily: 'Roboto',
+                                                fontSize: 13),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      59, 185, 52, 1),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // Các xử lý khi nhấn nút đăng
+                                        },
+                                        child: Text('Đăng'),
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromRGBO(59, 185, 52, 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 if (reviews.isNotEmpty)
                                   ListView.builder(
                                     shrinkWrap: true,
@@ -243,7 +302,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         elevation: 3, // Độ nổi của card
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                              10), // Bo góc của card
+                                              2), // Bo góc của card
                                         ),
                                         child: ListTile(
                                           title: Text(
@@ -297,9 +356,9 @@ class _ProductDetailState extends State<ProductDetail> {
           style: ElevatedButton.styleFrom(
             backgroundColor:
                 isOutOfStock ? Colors.grey : Color.fromRGBO(59, 185, 52, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(18.0),
+            // ),
           ),
           label: Text(
             isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
