@@ -61,6 +61,7 @@ class _Home extends State<Home> {
   late Future<List<Category>> categories = categoryapi.getCategories();
   late Future<List<Coupon>> coupon = couponapi.getCoupon();
   late Future<List<Product>> muanhieu = productapi.muanhieu();
+  late Future<List<Product>> datnhieu = productapi.datnhieu();
   late Future<List<Product>> tatcasanpham = productapi.tatcasanpham();
   late Future<List<Product>> sanphammoi = productapi.getProductnew();
   TextEditingController search = new TextEditingController();
@@ -84,6 +85,13 @@ class _Home extends State<Home> {
   Future<List<Product>> refreshmuanhieu() async {
     setState(() {
       muanhieu = productapi.muanhieu();
+    });
+    return sanphammoi;
+  }
+
+  Future<List<Product>> refreshdatnhieu() async {
+    setState(() {
+      datnhieu = productapi.datnhieu();
     });
     return sanphammoi;
   }
@@ -341,7 +349,7 @@ class _Home extends State<Home> {
             body: TabBarView(children: [
               Container(
                 width: 360,
-                // height: 580,
+                height: 580,
                 child: SingleChildScrollView(
                     // physics: ScrollPhysics(),
                     child: ConstrainedBox(
@@ -379,7 +387,7 @@ class _Home extends State<Home> {
                     Container(
                       height: 600,
                       child: FutureBuilder(
-                          future: muanhieu,
+                          future: datnhieu,
                           builder: (BuildContext context,
                               AsyncSnapshot<List<Product>> snapshot) {
                             if (snapshot.hasData) {
@@ -393,10 +401,10 @@ class _Home extends State<Home> {
                                   if (snapshot.hasError) {
                                     return Text("Error Data");
                                   } else {
-                                    List<Product>? muanhieu = snapshot.data;
+                                    List<Product>? datnhieu = snapshot.data;
                                     return RefreshIndicator(
                                         child: GridView.builder(
-                                            itemCount: muanhieu!.length,
+                                            itemCount: datnhieu!.length,
                                             gridDelegate:
                                                 SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 2,
@@ -412,7 +420,7 @@ class _Home extends State<Home> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               ProductDetail(
-                                                                muanhieu[index],
+                                                                datnhieu[index],
                                                               )));
                                                 },
                                                 child: Container(
@@ -435,7 +443,7 @@ class _Home extends State<Home> {
                                                         child:
                                                             CachedNetworkImage(
                                                           imageUrl:
-                                                              "${Apihelper.image_base}/product/${muanhieu[index].image}",
+                                                              "${Apihelper.image_base}/product/${datnhieu[index].image}",
                                                         ),
                                                       ),
                                                       Container(
@@ -445,13 +453,13 @@ class _Home extends State<Home> {
                                                                 right: 15,
                                                                 top: 10),
                                                         child: Text(
-                                                            muanhieu[index]
+                                                            datnhieu[index]
                                                                 .name),
                                                       ),
                                                       Container(
                                                           child: Text(
                                                         Apihelper.money(
-                                                            muanhieu[index]
+                                                            datnhieu[index]
                                                                 .price),
                                                         style: TextStyle(
                                                             fontWeight:
@@ -463,7 +471,7 @@ class _Home extends State<Home> {
                                                 ),
                                               );
                                             }),
-                                        onRefresh: refreshmuanhieu);
+                                        onRefresh: refreshdatnhieu);
                                   }
                               }
                             } else {

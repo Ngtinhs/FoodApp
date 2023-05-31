@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 class Review {
-  int id;
+  int? id; // Sửa đổi: Cho phép giá trị null
   int productId;
   String userId;
   String comment;
-  String created_at;
+  String? created_at; // Sửa đổi: Cho phép giá trị null
 
   Review({
-    required this.id,
+    this.id, // Sửa đổi: Cho phép giá trị null
     required this.productId,
     required this.userId,
     required this.comment,
-    required this.created_at,
+    this.created_at, // Sửa đổi: Cho phép giá trị null
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
