@@ -26,6 +26,7 @@ class _ProductDetailState extends State<ProductDetail> {
   late String image;
   bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
   List<Review> reviews = [];
+  String sortBy = "mới nhất"; // Biến để theo dõi lựa chọn sắp xếp đánh giá
 
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -86,6 +87,16 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    List<Review> sortedReviews = [
+      ...reviews
+    ]; // Tạo một bản sao của danh sách đánh giá
+
+    if (sortBy == "mới nhất") {
+      sortedReviews.sort((a, b) => b.created_at.compareTo(a.created_at));
+    } else if (sortBy == "cũ nhất") {
+      sortedReviews.sort((a, b) => a.created_at.compareTo(b.created_at));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -94,107 +105,180 @@ class _ProductDetailState extends State<ProductDetail> {
           ],
         ),
         backgroundColor: Color.fromRGBO(59, 185, 52, 1),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: CachedNetworkImage(
-                  imageUrl: "${Apihelper.image_base}/product/${product.image}",
-                ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              setState(() {
+                sortBy = value;
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: "mới nhất",
+                child: Text('Mới nhất'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  product.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
-                  ),
-                ),
+              PopupMenuItem<String>(
+                value: "cũ nhất",
+                child: Text('Cũ nhất'),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 5),
-                child: Text(
-                  Apihelper.money(product.price),
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.deepOrangeAccent,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Danh mục món ăn: "),
-                    Text(product.category),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Chi tiết món ăn: "),
-                    Flexible(
-                      child: Text(
-                        product.detail,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Số lượng có sẳn: "),
-                    Flexible(
-                      child: Text(
-                        product.quantity.toString(),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (reviews.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                  child: Text(
-                    'Đánh giá món ăn:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              if (reviews.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: reviews.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                          'Người đánh giá: ${reviews[index].userId.toString()}'),
-                      subtitle: Text(
-                          'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
-                    );
-                  },
-                ),
-              if (reviews.isEmpty)
-                Padding(
-                  padding: EdgeInsets.all(8.0), // Lề 8 điểm cho tất cả các cạnh
-                  child: Text(
-                    'Không có đánh giá',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
             ],
+            icon: Icon(Icons.sort),
           ),
-        ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Center(
+            child: CachedNetworkImage(
+              imageUrl: "${Apihelper.image_base}/product/${product.image}",
+              height: 170,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              product.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 5),
+            child: Text(
+              Apihelper.money(product.price),
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.deepOrangeAccent,
+              ),
+            ),
+          ),
+          Expanded(
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(text: 'Chi tiết'),
+                      Tab(text: 'Đánh giá'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        SingleChildScrollView(
+                          child: Container(
+                            // Nội dung tab "Chi tiết"
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Row(
+                                    children: [
+                                      Text("Danh mục món ăn: ",
+                                          style: TextStyle(fontSize: 16)),
+                                      Text(product.category),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Chi tiết món ăn:",
+                                          style: TextStyle(fontSize: 16)),
+                                      SizedBox(height: 5),
+                                      Text(product.detail,
+                                          style: TextStyle(fontSize: 14)),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Row(
+                                    children: [
+                                      Text("Số lượng có sẳn: ",
+                                          style: TextStyle(fontSize: 16)),
+                                      Flexible(
+                                        child: Text(
+                                          product.quantity.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          child: Container(
+                            // Nội dung tab "Đánh giá"
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (reviews.isNotEmpty)
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 8, top: 15, bottom: 10),
+                                    child: Text('Đánh giá món ăn:',
+                                        style: TextStyle(fontSize: 16)),
+                                  ),
+                                if (reviews.isNotEmpty)
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: sortedReviews.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                        elevation: 3, // Độ nổi của card
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              10), // Bo góc của card
+                                        ),
+                                        child: ListTile(
+                                          title: Text(
+                                            'Nội dung: ${sortedReviews[index].comment.toString()}',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          subtitle: Text(
+                                            'Tên: ${sortedReviews[index].userId}\n Thời gian: ${sortedReviews[index].created_at}',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                if (reviews.isEmpty)
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Không có đánh giá',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         color: Colors.white,
