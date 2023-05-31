@@ -26,7 +26,9 @@ class ProductController extends Controller
            ->orderBy('products.created_at','desc')
            ->select('products.id','products.name','products.image','products.price','products.detail','products.quantity','categories.name as category','categories.id as category_id')->take(10)->get();
        return response()->json($product,200);
-   } public function tatcasanpham(){
+   } 
+   
+   public function tatcasanpham(){
        $product = Product::
            join('categories','products.categories_id','=','categories.id')
            ->orderBy('products.created_at','desc')

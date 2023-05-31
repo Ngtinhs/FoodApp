@@ -7,7 +7,7 @@ TripletFood là một ứng dụng di động cho phép khách hàng đặt món
 ### Trang khách hàng
 
 - Đăng nhập và đăng ký tài khoản
-- Tìm kiếm sản phẩm
+- Tìm kiếm món ăn
 - Xem menu, giá cả và thông tin chi tiết về mỗi món ăn
 - Thêm và đặt món ăn
 - Theo dõi đơn đặt món và cập nhật trạng thái đơn đặt món

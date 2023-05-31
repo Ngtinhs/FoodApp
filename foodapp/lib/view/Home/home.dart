@@ -65,7 +65,7 @@ class _Home extends State<Home> {
   late Future<List<Product>> tatcasanpham = productapi.tatcasanpham();
   late Future<List<Product>> sanphammoi = productapi.getProductnew();
   TextEditingController search = new TextEditingController();
-  //refresh danh mục sản phẩm
+  //refresh danh mục món ăn
   Future<List<Category>> refreshCate() async {
     setState(() {
       categories = categoryapi.getCategories();
@@ -74,7 +74,7 @@ class _Home extends State<Home> {
     return categories;
   }
 
-  //refresh sản phẩm mới
+  //refresh món ăn mới
   Future<List<Product>> refreshProductnew() async {
     setState(() {
       sanphammoi = productapi.getProductnew();
@@ -121,7 +121,7 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
             drawer: Drawer(
               child: ListView(
@@ -327,13 +327,7 @@ class _Home extends State<Home> {
                   ),
                   Tab(
                     child: Text(
-                      "Bán chạy",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "Sản phẩm",
+                      "Món ăn",
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -373,132 +367,8 @@ class _Home extends State<Home> {
                   ),
                 )),
               ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Text("MÓN ĂN BÁN CHẠY",
-                          style: TextStyle(
-                              color: Color.fromRGBO(0, 128, 0, 1.0),
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Container(
-                      height: 600,
-                      child: FutureBuilder(
-                          future: datnhieu,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Product>> snapshot) {
-                            if (snapshot.hasData) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.none:
-                                case ConnectionState.waiting:
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                default:
-                                  if (snapshot.hasError) {
-                                    return Text("Error Data");
-                                  } else {
-                                    List<Product>? datnhieu = snapshot.data;
-                                    return RefreshIndicator(
-                                        child: GridView.builder(
-                                            itemCount: datnhieu!.length,
-                                            gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              crossAxisSpacing: 5.0,
-                                              mainAxisSpacing: 10,
-                                            ),
-                                            itemBuilder:
-                                                (BuildContext context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ProductDetail(
-                                                                datnhieu[index],
-                                                              )));
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                      EdgeInsets.only(top: 5),
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          186,
-                                                          186,
-                                                          186,
-                                                          0.12549019607843137),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20))),
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                        height: 100,
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              "${Apihelper.image_base}/product/${datnhieu[index].image}",
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 15,
-                                                                right: 15,
-                                                                top: 10),
-                                                        child: Text(
-                                                            datnhieu[index]
-                                                                .name),
-                                                      ),
-                                                      Container(
-                                                          child: Text(
-                                                        Apihelper.money(
-                                                            datnhieu[index]
-                                                                .price),
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.pink),
-                                                      ))
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                        onRefresh: refreshdatnhieu);
-                                  }
-                              }
-                            } else {
-                              return Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        refreshProductnew();
-                                      },
-                                      child: Text("Refresh"),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          }),
-                    ),
-                  ],
-                ),
-              ),
+
+              // Tất cả món ăn
               SingleChildScrollView(
                 child: Column(
                   children: [
