@@ -23,6 +23,16 @@ class ProductApi {
     return Product.listProduct(response.body);
   }
 
+  Future<List<Product>> datnhieu() async {
+    String myurl = '${Apihelper.url_base}/product/datnhieu';
+    var response = await http.get(Uri.parse(myurl));
+    if (response.statusCode == 200) {
+      print("get");
+      print(response.body);
+    }
+    return Product.listProduct(response.body);
+  }
+
   Future<List<Product>> tatcasanpham() async {
     String myurl = '${Apihelper.url_base}/product/tatcasanpham';
     var response = await http.get(Uri.parse(myurl));

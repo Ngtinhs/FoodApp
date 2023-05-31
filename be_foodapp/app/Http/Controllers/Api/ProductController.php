@@ -140,17 +140,21 @@ class ProductController extends Controller
    public function datnhieu()
    {
        $orderedProducts = DB::table('order_details')
-           ->select('product_id')
+           ->select('product_id', DB::raw('COUNT(*) as count'))
            ->groupBy('product_id')
            ->havingRaw('COUNT(*) > 0')
+           ->orderByDesc('count')
            ->get();
-
+   
        $productIds = $orderedProducts->pluck('product_id');
-
+   
        $products = DB::table('products')
            ->whereIn('id', $productIds)
+           ->orderByRaw(DB::raw("FIELD(id, " . $productIds->join(',') . ")"))
            ->get();
-
+   
        return response()->json($products);
    }
+   
+
 }
