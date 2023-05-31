@@ -26,6 +26,7 @@ class _ProductDetailState extends State<ProductDetail> {
   late String image;
   bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
   List<Review> reviews = [];
+  String sortBy = "mới nhất"; // Biến để theo dõi lựa chọn sắp xếp đánh giá
 
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -86,16 +87,51 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    List<Review> sortedReviews = [
+      ...reviews
+    ]; // Tạo một bản sao của danh sách đánh giá
+
+    if (sortBy == "mới nhất") {
+      sortedReviews.sort((a, b) => b.created_at.compareTo(a.created_at));
+    } else if (sortBy == "cũ nhất") {
+      sortedReviews.sort((a, b) => a.created_at.compareTo(b.created_at));
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('TabBar Demo'),
+        title: Row(
+          children: [
+            Text("Chi tiết món ăn"),
+          ],
+        ),
+        backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              setState(() {
+                sortBy = value;
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: "mới nhất",
+                child: Text('Mới nhất'),
+              ),
+              PopupMenuItem<String>(
+                value: "cũ nhất",
+                child: Text('Cũ nhất'),
+              ),
+            ],
+            icon: Icon(Icons.sort),
+          ),
+        ],
       ),
       body: Column(
         children: [
           Center(
             child: CachedNetworkImage(
               imageUrl: "${Apihelper.image_base}/product/${product.image}",
-              height: 200,
+              height: 170,
             ),
           ),
           Padding(
@@ -143,7 +179,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                       left: 8, top: 15, bottom: 10),
                                   child: Row(
                                     children: [
-                                      Text("Danh mục món ăn: "),
+                                      Text("Danh mục món ăn: ",
+                                          style: TextStyle(fontSize: 16)),
                                       Text(product.category),
                                     ],
                                   ),
@@ -155,11 +192,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("Chi tiết món ăn:"),
+                                      Text("Chi tiết món ăn:",
+                                          style: TextStyle(fontSize: 16)),
                                       SizedBox(height: 5),
-                                      Text(
-                                        product.detail,
-                                      ),
+                                      Text(product.detail,
+                                          style: TextStyle(fontSize: 14)),
                                     ],
                                   ),
                                 ),
@@ -168,7 +205,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                       left: 8, top: 15, bottom: 10),
                                   child: Row(
                                     children: [
-                                      Text("Số lượng có sẳn: "),
+                                      Text("Số lượng có sẳn: ",
+                                          style: TextStyle(fontSize: 16)),
                                       Flexible(
                                         child: Text(
                                           product.quantity.toString(),
@@ -192,23 +230,31 @@ class _ProductDetailState extends State<ProductDetail> {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         left: 8, top: 15, bottom: 10),
-                                    child: Text(
-                                      'Đánh giá món ăn:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    child: Text('Đánh giá món ăn:',
+                                        style: TextStyle(fontSize: 16)),
                                   ),
                                 if (reviews.isNotEmpty)
                                   ListView.builder(
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
-                                    itemCount: reviews.length,
+                                    itemCount: sortedReviews.length,
                                     itemBuilder: (context, index) {
-                                      return ListTile(
-                                        title: Text(
-                                            'Người đánh giá: ${reviews[index].userId.toString()}'),
-                                        subtitle: Text(
-                                            'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
+                                      return Card(
+                                        elevation: 3, // Độ nổi của card
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              10), // Bo góc của card
+                                        ),
+                                        child: ListTile(
+                                          title: Text(
+                                            'Nội dung: ${sortedReviews[index].comment.toString()}',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          subtitle: Text(
+                                            'Tên: ${sortedReviews[index].userId}\n Thời gian: ${sortedReviews[index].created_at}',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ),
                                       );
                                     },
                                   ),
