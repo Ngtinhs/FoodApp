@@ -6,6 +6,8 @@ import 'package:foodapp/config/pref.dart';
 import 'package:foodapp/model/Product.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:foodapp/api/ReviewApi.dart';
+import 'package:foodapp/model/Review.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
@@ -23,6 +25,7 @@ class _ProductDetailState extends State<ProductDetail> {
   late String name;
   late String image;
   bool isOutOfStock = false; // Thêm biến kiểm tra hết hàng
+  List<Review> reviews = [];
 
   void checklogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -37,6 +40,21 @@ class _ProductDetailState extends State<ProductDetail> {
       setState(() {
         login = false;
       });
+    }
+  }
+
+  void getReviews() async {
+    try {
+      List<Review> fetchedReviews = await ReviewApi.getAllReviews();
+      List<Review> productReviews = fetchedReviews
+          .where((review) => review.productId == product.id)
+          .toList();
+      setState(() {
+        reviews = productReviews;
+      });
+    } catch (error) {
+      print('Error getting reviews: $error');
+      // Xử lý lỗi khi không thể lấy danh sách đánh giá
     }
   }
 
@@ -56,6 +74,7 @@ class _ProductDetailState extends State<ProductDetail> {
   void initState() {
     super.initState();
     checklogin();
+    getReviews();
 
     // Kiểm tra số lượng sản phẩm và cập nhật giá trị cho biến isOutOfStock
     if (product.quantity == 0) {
@@ -143,6 +162,27 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
+              if (reviews.isNotEmpty)
+                Text(
+                  'Đánh giá sản phẩm:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              if (reviews.isNotEmpty)
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: reviews.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('Người đánh giá: ${reviews[index].userId}'),
+                      subtitle: Text('Bình luận: ${reviews[index].comment}'),
+                    );
+                  },
+                ),
+              if (reviews.isEmpty)
+                Text(
+                  'Không có đánh giá',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
