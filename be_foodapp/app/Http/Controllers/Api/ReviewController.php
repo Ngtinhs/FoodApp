@@ -7,6 +7,7 @@ use App\Models\Model\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class ReviewController extends Controller
 {
@@ -17,25 +18,28 @@ class ReviewController extends Controller
      */
     // Get all coupons
     public function index()
-    {
-        $reviews = Review::all();
+{
+    $reviews = Review::all();
 
     $transformedReviews = $reviews->map(function ($review) {
         $user = User::find($review->user_id);
         $userName = $user ? $user->name : null;
 
+        $createdAt = Carbon::parse($review->created_at);
+        $timeAgo = $createdAt->diffForHumans(); // Tính thời gian theo định dạng "Vừa xong", "10 phút trước", ...
+
         return [
             'id' => $review->id,
             'product_id' => $review->product_id,
-            'user_id' => $userName, // Tên người dùng thay vì ID
+            'user_id' => $userName,
             'comment' => $review->comment,
-            'created_at' => $review->created_at,
-            'updated_at' => $review->updated_at,
+            'created_at' => $timeAgo, // Sử dụng thời gian tính toán thay vì giá trị ban đầu
+            'updated_at' => $timeAgo,
         ];
     });
 
     return response()->json($transformedReviews);
-    }
+}
 
     public function create(Request $request)
     {
