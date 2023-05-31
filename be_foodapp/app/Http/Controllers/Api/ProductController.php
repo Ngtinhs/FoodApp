@@ -136,25 +136,27 @@ class ProductController extends Controller
    }
 
 
+ public function datnhieu()
+{
+    $orderedProducts = DB::table('order_details')
+        ->select('product_id', DB::raw('COUNT(*) as count'))
+        ->groupBy('product_id')
+        ->havingRaw('COUNT(*) > 0')
+        ->orderByDesc('count')
+        ->get();
 
-   public function datnhieu()
-   {
-       $orderedProducts = DB::table('order_details')
-           ->select('product_id', DB::raw('COUNT(*) as count'))
-           ->groupBy('product_id')
-           ->havingRaw('COUNT(*) > 0')
-           ->orderByDesc('count')
-           ->get();
-   
-       $productIds = $orderedProducts->pluck('product_id');
-   
-       $products = DB::table('products')
-           ->whereIn('id', $productIds)
-           ->orderByRaw(DB::raw("FIELD(id, " . $productIds->join(',') . ")"))
-           ->get();
-   
-       return response()->json($products);
-   }
-   
+    $productIds = $orderedProducts->pluck('product_id');
+
+    $products = DB::table('products')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->whereIn('products.id', $productIds)
+        ->select('products.id', 'products.name', 'products.categories_id', 'products.image', 'products.price', 'products.detail', 'products.quantity', 'products.created_at', 'products.updated_at', DB::raw('SUM(order_details.quantity) as so_luong_ban'))
+        ->groupBy('products.id', 'products.name', 'products.categories_id', 'products.image', 'products.price', 'products.detail', 'products.quantity', 'products.created_at', 'products.updated_at')
+        ->orderByRaw(DB::raw("FIELD(products.id, " . $productIds->join(',') . ")"))
+        ->get();
+
+    return response()->json($products);
+}
+
 
 }
