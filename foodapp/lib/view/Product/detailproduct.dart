@@ -88,113 +88,151 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Text("Chi tiết món ăn"),
-          ],
-        ),
-        backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+        title: Text('TabBar Demo'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: CachedNetworkImage(
-                  imageUrl: "${Apihelper.image_base}/product/${product.image}",
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  product.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 5),
-                child: Text(
-                  Apihelper.money(product.price),
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.deepOrangeAccent,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Danh mục món ăn: "),
-                    Text(product.category),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Chi tiết món ăn: "),
-                    Flexible(
-                      child: Text(
-                        product.detail,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                child: Row(
-                  children: [
-                    Text("Số lượng có sẳn: "),
-                    Flexible(
-                      child: Text(
-                        product.quantity.toString(),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (reviews.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
-                  child: Text(
-                    'Đánh giá món ăn:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              if (reviews.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: reviews.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                          'Người đánh giá: ${reviews[index].userId.toString()}'),
-                      subtitle: Text(
-                          'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
-                    );
-                  },
-                ),
-              if (reviews.isEmpty)
-                Padding(
-                  padding: EdgeInsets.all(8.0), // Lề 8 điểm cho tất cả các cạnh
-                  child: Text(
-                    'Không có đánh giá',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-            ],
+      body: Column(
+        children: [
+          Center(
+            child: CachedNetworkImage(
+              imageUrl: "${Apihelper.image_base}/product/${product.image}",
+              height: 200,
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              product.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 5),
+            child: Text(
+              Apihelper.money(product.price),
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.deepOrangeAccent,
+              ),
+            ),
+          ),
+          Expanded(
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(text: 'Chi tiết'),
+                      Tab(text: 'Đánh giá'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        SingleChildScrollView(
+                          child: Container(
+                            // Nội dung tab "Chi tiết"
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Row(
+                                    children: [
+                                      Text("Danh mục món ăn: "),
+                                      Text(product.category),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Chi tiết món ăn:"),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        product.detail,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 15, bottom: 10),
+                                  child: Row(
+                                    children: [
+                                      Text("Số lượng có sẳn: "),
+                                      Flexible(
+                                        child: Text(
+                                          product.quantity.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          child: Container(
+                            // Nội dung tab "Đánh giá"
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (reviews.isNotEmpty)
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 8, top: 15, bottom: 10),
+                                    child: Text(
+                                      'Đánh giá món ăn:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                if (reviews.isNotEmpty)
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: reviews.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(
+                                            'Người đánh giá: ${reviews[index].userId.toString()}'),
+                                        subtitle: Text(
+                                            'Bình luận: ${reviews[index].comment}\nThời gian: ${reviews[index].created_at}'),
+                                      );
+                                    },
+                                  ),
+                                if (reviews.isEmpty)
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Không có đánh giá',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         color: Colors.white,
