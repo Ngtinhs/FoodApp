@@ -102,8 +102,8 @@ class _ProductDetailState extends State<ProductDetail> {
             children: [
               Center(
                 child: CachedNetworkImage(
-                    imageUrl:
-                        "${Apihelper.image_base}/product/${product.image}"),
+                  imageUrl: "${Apihelper.image_base}/product/${product.image}",
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -170,6 +170,7 @@ class _ProductDetailState extends State<ProductDetail> {
               if (reviews.isNotEmpty)
                 ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: reviews.length,
                   itemBuilder: (context, index) {
                     return ListTile(
@@ -183,43 +184,39 @@ class _ProductDetailState extends State<ProductDetail> {
                   'Không có đánh giá',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  child: ElevatedButton.icon(
-                    icon: Icon(
-                      Icons.add_shopping_cart,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      if (!isOutOfStock) {
-                        CartApi.insert(product.id, context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isOutOfStock
-                          ? Colors.grey
-                          : Color.fromRGBO(59, 185, 52, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                    label: Text(
-                      isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Raleway',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        height: 60,
+        child: ElevatedButton.icon(
+          icon: Icon(
+            Icons.add_shopping_cart,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if (!isOutOfStock) {
+              CartApi.insert(product.id, context);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                isOutOfStock ? Colors.grey : Color.fromRGBO(59, 185, 52, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+          label: Text(
+            isOutOfStock ? "Hết món ăn" : "Thêm vào giỏ",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Raleway',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
