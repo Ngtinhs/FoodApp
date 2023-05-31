@@ -163,9 +163,12 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               if (reviews.isNotEmpty)
-                Text(
-                  'Đánh giá sản phẩm:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.only(left: 8, top: 15, bottom: 10),
+                  child: Text(
+                    'Đánh giá món ăn:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               if (reviews.isNotEmpty)
                 ListView.builder(
@@ -174,15 +177,20 @@ class _ProductDetailState extends State<ProductDetail> {
                   itemCount: reviews.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text('Người đánh giá: ${reviews[index].userId}'),
-                      subtitle: Text('Bình luận: ${reviews[index].comment}'),
+                      title: Text(
+                          'Người đánh giá: ${reviews[index].userId.toString()}'),
+                      subtitle: Text(
+                          'Bình luận: ${reviews[index].comment}\nNgày đánh giá: ${reviews[index].created_at}'),
                     );
                   },
                 ),
               if (reviews.isEmpty)
-                Text(
-                  'Không có đánh giá',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.all(8.0), // Lề 8 điểm cho tất cả các cạnh
+                  child: Text(
+                    'Không có đánh giá',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
             ],
           ),

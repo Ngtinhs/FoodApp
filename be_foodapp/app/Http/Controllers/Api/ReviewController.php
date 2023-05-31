@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Model\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,7 +19,22 @@ class ReviewController extends Controller
     public function index()
     {
         $reviews = Review::all();
-        return response()->json($reviews);
+
+    $transformedReviews = $reviews->map(function ($review) {
+        $user = User::find($review->user_id);
+        $userName = $user ? $user->name : null;
+
+        return [
+            'id' => $review->id,
+            'product_id' => $review->product_id,
+            'user_id' => $userName, // Tên người dùng thay vì ID
+            'comment' => $review->comment,
+            'created_at' => $review->created_at,
+            'updated_at' => $review->updated_at,
+        ];
+    });
+
+    return response()->json($transformedReviews);
     }
 
     public function create(Request $request)
