@@ -65,7 +65,7 @@ class ShoppingController extends Controller
             $cart->save();
             return response()->json($cart, 200);
         } else {
-            // Kiểm tra số lượng sản phẩm muốn thêm vào giỏ hàng
+            // Kiểm tra số lượng món ăn muốn thêm vào giỏ hàng
             // nếu lớn hơn số lượng có sẵn trong kho, trả về lỗi
             if (($cartproduct->quantity + 1) > $product->quantity) {
                 return response()->json(['message' => 'Hết món ăn'], 400);
@@ -186,7 +186,7 @@ class ShoppingController extends Controller
             $order_detail->image = $item->image;
             $order_detail->save();
     
-            // Giảm số lượng sản phẩm trong giỏ hàng từ cơ sở dữ liệu
+            // Giảm số lượng món ăn trong giỏ hàng từ cơ sở dữ liệu
             $product = Product::find($item->product_id);
             $product->decrement('quantity', $item->quantity);
             $product->save();
@@ -246,7 +246,7 @@ class ShoppingController extends Controller
     $order->status = 3;
     $order->save();
 
-    // Cập nhật lại số lượng sản phẩm đã hủy
+    // Cập nhật lại số lượng món ăn đã hủy
     $orderDetails = OrderDetail::where('order_id', $order->id)->get();
 
     foreach ($orderDetails as $item) {

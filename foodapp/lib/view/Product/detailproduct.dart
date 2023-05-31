@@ -78,7 +78,7 @@ class _ProductDetailState extends State<ProductDetail> {
     checklogin();
     getReviews();
 
-    // Kiểm tra số lượng sản phẩm và cập nhật giá trị cho biến isOutOfStock
+    // Kiểm tra số lượng món ăn và cập nhật giá trị cho biến isOutOfStock
     if (product.quantity == 0) {
       setState(() {
         isOutOfStock = true;
