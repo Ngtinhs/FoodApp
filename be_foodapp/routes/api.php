@@ -147,6 +147,9 @@ Route::group(['prefix' => 'product'], function () {
     // Get products by category
     Route::get('/muanhieu', [\App\Http\Controllers\Api\ProductController::class, 'muanhieu']);
 
+    //Đặt nhiều
+    Route::get('/datnhieu', [\App\Http\Controllers\Api\ProductController::class, 'datnhieu']);
+
     // Get all products (no category filter)
     Route::get('/tatcasanpham', [\App\Http\Controllers\Api\ProductController::class, 'tatcasanpham']);
 
