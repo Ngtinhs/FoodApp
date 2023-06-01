@@ -273,12 +273,16 @@ class _ManageFoodState extends State<ManageFood> {
                       value: selectedCategory,
                       onChanged: (newValue) {
                         setState(() {
-                          selectedCategory = newValue;
+                          if (newValue is int) {
+                            selectedCategory = categories[newValue];
+                          } else {
+                            selectedCategory = newValue as Map<String, dynamic>;
+                          }
                         });
                       },
                       items: categories.map((category) {
                         return DropdownMenuItem<dynamic>(
-                          value: category['id'],
+                          value: category,
                           child: Text(category['name']),
                         );
                       }).toList(),
