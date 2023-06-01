@@ -21,6 +21,9 @@ Route::post('/login', '\App\Http\Controllers\Api\UserController@login');
 // Register
 Route::post('/register', '\App\Http\Controllers\Api\UserController@register');
 
+//Login google
+Route::post('/google-login', '\App\Http\Controllers\Api\UserController@googleLogin');
+
 // Categories
 Route::group(['prefix' => 'categories'], function () {
     // Create a category

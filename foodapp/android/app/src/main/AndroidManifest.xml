@@ -13,6 +13,13 @@
         android:label="foodapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+<meta-data
+    android:name="com.google.android.gms.auth.api.signin.CLIENT_ID"
+    android:value="1022097154728-57iab6dtgmrgkb3mo3kb7c816clqbdid.apps.googleusercontent.com" />
+
+        <meta-data
+              android:name="com.google.android.gms.ads.APPLICATION_ID"
+             android:value="com.example.foodapp" />
          <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyBl4ciMX2Vza24-BgVfo67UY7DIkXPClzM" />
