@@ -7,6 +7,8 @@ import 'package:foodapp/model/Product.dart';
 import 'package:foodapp/view/Login/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:foodapp/api/ReviewApi.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:foodapp/model/Review.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -42,6 +44,34 @@ class _ProductDetailState extends State<ProductDetail> {
       setState(() {
         login = false;
       });
+    }
+  }
+
+  Future<void> postComment(int productId, int userId, String comment) async {
+    final url = 'http://10.0.2.2:8000/api/review/create';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'product_id': productId.toString(),
+          'user_id': userId.toString(),
+          'comment': comment,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Xử lý thành công
+        print('Đăng bình luận thành công');
+        // Lấy danh sách đánh giá mới sau khi đăng bình luận thành công
+        getReviews();
+      } else {
+        // Xử lý lỗi
+        print('Đăng bình luận thất bại. Mã lỗi: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Xử lý lỗi kết nối
+      print('Đã xảy ra lỗi: $error');
     }
   }
 
@@ -249,7 +279,6 @@ class _ProductDetailState extends State<ProductDetail> {
                                             fontSize: 13,
                                             fontWeight: FontWeight.normal,
                                           ),
-                                          obscureText: true,
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.only(
                                                 bottom: -9,
@@ -280,8 +309,19 @@ class _ProductDetailState extends State<ProductDetail> {
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          // Các xử lý khi nhấn nút đăng
+                                        onPressed: () async {
+                                          if (reviewController
+                                              .text.isNotEmpty) {
+                                            // Lấy thông tin người dùng từ SharedPreferences
+                                            final prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            final userId =
+                                                prefs.getInt('id') ?? 0;
+
+                                            postComment(product.id, userId,
+                                                reviewController.text);
+                                          }
                                         },
                                         child: Text('Đăng'),
                                         style: TextButton.styleFrom(
