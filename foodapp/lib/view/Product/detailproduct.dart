@@ -60,14 +60,17 @@ class _ProductDetailState extends State<ProductDetail> {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         // Xử lý thành công
         print('Đăng bình luận thành công');
         // Lấy danh sách đánh giá mới sau khi đăng bình luận thành công
         getReviews();
+        // Xóa nội dung trong ô nhập đánh giá
+        reviewController.clear();
       } else {
         // Xử lý lỗi
         print('Đăng bình luận thất bại. Mã lỗi: ${response.statusCode}');
+        getReviews();
       }
     } catch (error) {
       // Xử lý lỗi kết nối
@@ -122,10 +125,14 @@ class _ProductDetailState extends State<ProductDetail> {
       ...reviews
     ]; // Tạo một bản sao của danh sách đánh giá
 
-    if (sortBy == "mới nhất") {
-      sortedReviews.sort((a, b) => b.created_at?.compareTo(a.created_at!) ?? 0);
-    } else if (sortBy == "cũ nhất") {
-      sortedReviews.sort((a, b) => a.created_at?.compareTo(b.created_at!) ?? 0);
+    if (reviews.isNotEmpty) {
+      if (sortBy == "mới nhất") {
+        sortedReviews
+            .sort((a, b) => b.created_at?.compareTo(a.created_at!) ?? 0);
+      } else if (sortBy == "cũ nhất") {
+        sortedReviews
+            .sort((a, b) => a.created_at?.compareTo(b.created_at!) ?? 0);
+      }
     }
 
     return Scaffold(
