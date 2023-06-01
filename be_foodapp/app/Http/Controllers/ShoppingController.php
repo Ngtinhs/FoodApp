@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Model\Order;
 use App\Models\Model\OrderDetail;
 use App\Models\Model\Product;
+use App\Models\Model\Coupon;
 use App\Models\Model\Shopping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -195,6 +196,15 @@ class ShoppingController extends Controller
         }
     
         $order->total_price = $total;
+    
+        if ($request->has('coupon_code')) {
+            $coupon = DB::table('coupons')->where('code', $request->coupon_code)->first();
+            if ($coupon) {
+                // Giảm giá trị của trường 'count' đi 1
+                DB::table('coupons')->where('id', $coupon->id)->decrement('count');
+            }
+        }
+    
         $order->save();
     
         return response()->json("datthanhcong", 200);
