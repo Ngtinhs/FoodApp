@@ -238,4 +238,46 @@ public function updatePassword(Request $request, $email)
 }
 
 
+public function googleLogin(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'token' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 401);
+    }
+
+    $client = new \Google_Client(['client_id' => '1022097154728-57iab6dtgmrgkb3mo3kb7c816clqbdid.apps.googleusercontent.com']);
+    $payload = $client->verifyIdToken($request->token);
+
+    if ($payload) {
+        $user = User::where('email', $payload['email'])->first();
+
+        if (!$user) {
+            // Người dùng chưa tồn tại trong cơ sở dữ liệu, tạo tài khoản mới
+            $user = new User();
+            $user->name = $payload['name'];
+            $user->email = $payload['email'];
+            // Đặt mật khẩu ngẫu nhiên cho người dùng (không sử dụng mật khẩu để đăng nhập)
+            $user->password = Hash::make(str_random(16));
+            $user->save();
+        }
+
+        // Tạo token và trả về thông tin người dùng đã đăng nhập thành công
+        $token = $user->createToken('Client')->accessToken;
+        $success['token'] = $token;
+        $success['users'] = $user;
+        $success['id'] = $user->id;
+        $success['name'] = $user->name;
+        $success['role'] = $user->role;
+        $success['image'] = $user->image;
+
+        return response()->json($success, $this->successStatus);
+    } else {
+        return response()->json(['error' => 'Invalid Google token'], 401);
+    }
+}
+
+
 }

@@ -7,6 +7,7 @@ import 'package:foodapp/view/Home/home.dart';
 import 'package:foodapp/view/Login/Forget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key});
@@ -18,6 +19,8 @@ class _Login extends State<Login> {
   AuthApi authApi = new AuthApi();
   TextEditingController emailcontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,34 +121,51 @@ class _Login extends State<Login> {
                     Container(
                       margin: EdgeInsets.only(top: 20),
                       child: TextButton(
-                          onPressed: () {
-                            print("Da");
-                            signIn(
-                                emailcontroller.text, passwordcontroller.text);
-                          },
-                          child: Text(
-                            "ĐĂNG NHẬP",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 50, right: 50),
-                              backgroundColor: Color.fromRGBO(59, 185, 52, 1),
-                              shape: StadiumBorder())),
+                        onPressed: () {
+                          print("Da");
+                          signIn(emailcontroller.text, passwordcontroller.text);
+                        },
+                        child: Text(
+                          "ĐĂNG NHẬP",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.only(
+                                top: 10, bottom: 10, left: 50, right: 50),
+                            backgroundColor: Color.fromRGBO(59, 185, 52, 1),
+                            shape: StadiumBorder()),
+                      ),
                     ),
                     TextButton(
-                        child: Text("Quên mật khẩu"),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgetPassword()));
-                        },
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                              Colors.blueAccent),
-                        ))
+                      child: Text("Đăng nhập với Google"),
+                      onPressed: () {
+                        _googleSignIn.signIn().then((userData) {
+                          if (userData != null) {
+                            googleLogin(userData);
+                          }
+                        }).catchError((error) {
+                          debugPrint('Google Sign-In Error: $error');
+                        });
+                      },
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blueAccent),
+                      ),
+                    ),
+                    TextButton(
+                      child: Text("Quên mật khẩu"),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPassword()));
+                      },
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blueAccent),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -194,24 +214,65 @@ class _Login extends State<Login> {
     }
   }
 
+  void googleLogin(GoogleSignInAccount userData) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var jsonResponse = null;
+
+    GoogleSignInAuthentication googleAuth = await userData.authentication;
+
+    var response = await http.post(
+      Uri.parse('${Apihelper.url_base}/google-login'),
+      body: {
+        'token': googleAuth.idToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        // Gán vai trò mặc định là 2 cho tài khoản mới
+        jsonResponse['role'] = 2;
+
+        pref.setString('name', jsonResponse['name']);
+        pref.setString('email', jsonResponse['email']);
+
+        if (jsonResponse['role'] == 1) {
+          // Nếu role là 1, chuyển hướng đến trang MainAdmin
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainAdmin()),
+          );
+        } else {
+          // Nếu role là 2 hoặc bất kỳ giá trị khác, chuyển hướng đến trang Home
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        }
+      }
+    } else {
+      setState(() {});
+      _showDialog();
+    }
+  }
+
   void _showDialog() {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text('Failed'),
-            content: new Text('Check your email or password'),
-            actions: <Widget>[
-              new ElevatedButton(
-                child: new Text(
-                  'Close',
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text('Failed'),
+          content: new Text('Check your email or password'),
+          actions: <Widget>[
+            new ElevatedButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
