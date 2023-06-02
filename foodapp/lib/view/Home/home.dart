@@ -341,32 +341,23 @@ class _Home extends State<Home> {
               ),
             ),
             body: TabBarView(children: [
-              Container(
-                width: 360,
-                height: 580,
-                child: SingleChildScrollView(
-                    // physics: ScrollPhysics(),
-                    child: ConstrainedBox(
-                  constraints: BoxConstraints(),
+              SingleChildScrollView(
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 10),
-                        child: Text(
-                          "DANH MỤC MÓN ĂN",
-                          style: TextStyle(
-                              color: Color.fromRGBO(0, 128, 0, 1.0),
-                              fontSize: 15),
-                        ),
-                      ),
-                      Container(
-                          width: 360, height: 380, child: buildFutureBuilder()),
-                    ],
+                // mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(7),
+                    child: Text(
+                      "DANH MỤC MÓN ĂN",
+                      style: TextStyle(
+                          color: Color.fromRGBO(0, 128, 0, 1.0), fontSize: 15),
+                    ),
                   ),
-                )),
-              ),
+                  Container(
+                      width: 360, height: 500, child: buildFutureBuilder()),
+                ],
+              )),
 
               // Tất cả món ăn
               SingleChildScrollView(
@@ -374,14 +365,16 @@ class _Home extends State<Home> {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(7),
-                      child: Text("TẤT CẢ MÓN ĂN",
-                          style: TextStyle(
-                              color: Color.fromRGBO(0, 128, 0, 1.0),
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "TẤT CẢ MÓN ĂN",
+                        style: TextStyle(
+                            color: Color.fromRGBO(0, 128, 0, 1.0),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Container(
-                      height: 600,
+                      height: 500,
                       child: FutureBuilder(
                           future: tatcasanpham,
                           builder: (BuildContext context,
